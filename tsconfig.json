@@ -1,0 +1,20 @@
+{
+  "compilerOptions": {
+    "strict": true,
+    "declaration": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "jsx": "react",
+    "baseUrl": "./",
+    "paths": {
+      "@@/*": [".dumi/tmp/*"],
+      "liteflow-editor-client": ["src"],
+      "liteflow-editor-client/*": ["src/*", "*"]
+    }
+  },
+  "include": [
+    ".dumirc.ts",
+    "src/**/*",
+    "typings.d.ts"
+  ]
+}

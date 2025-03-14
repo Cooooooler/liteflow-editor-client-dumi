@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>Chain</title>
+    <g stroke="#FF4D4F" stroke-width="1.6" fill="none" fill-rule="evenodd">
+        <polygon stroke-width="1.6" points="12 5 22 12.5 12 20 2 12.5"></polygon>
+        <g id="编组" transform="translate(6.5, 7) scale(0.6)" stroke-width="3.2">
+          <line x1="4.15384615" y1="9" x2="13.6158601" y2="9" id="路径-3"></line>
+          <line x1="8.88485313" y1="13.731007" x2="8.88485313" y2="4.26899303" id="路径-3备份"></line>
+        </g>
+    </g>
+</svg>

@@ -1,0 +1,108 @@
+{
+  "name": "liteflow-editor-client",
+  "version": "1.0.14",
+  "description": "LiteFlow EL-Expression Visual Editor",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "start": "npm run dev",
+    "dev": "dumi dev",
+    "build": "father build",
+    "build:watch": "father dev",
+    "docs:build": "dumi build",
+    "docs:preview": "dumi preview",
+    "prepare": "husky install && dumi setup",
+    "doctor": "father doctor",
+    "lint": "npm run lint:es && npm run lint:css",
+    "lint:css": "stylelint \"{src,test}/**/*.{css,less}\"",
+    "lint:es": "eslint \"{src,test}/**/*.{js,jsx,ts,tsx}\"",
+    "prepublishOnly": "father doctor && npm run build"
+  },
+  "authors": [
+    "luxuni"
+  ],
+  "license": "MIT",
+  "files": [
+    "dist"
+  ],
+  "commitlint": {
+    "extends": [
+      "@commitlint/config-conventional"
+    ]
+  },
+  "lint-staged": {
+    "*.{md,json}": [
+      "prettier --write --no-error-on-unmatched-pattern"
+    ],
+    "*.{css,less}": [
+      "stylelint --fix",
+      "prettier --write"
+    ],
+    "*.{js,jsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{ts,tsx}": [
+      "eslint --fix",
+      "prettier --parser=typescript --write"
+    ]
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "peerDependencies": {
+    "react": ">=16.9.0",
+    "react-dom": ">=16.9.0"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^17.1.2",
+    "@commitlint/config-conventional": "^17.1.0",
+    "@types/react": "^18.0.0",
+    "@types/react-dom": "^18.0.0",
+    "@umijs/lint": "^4.0.0",
+    "dumi": "^2.4.13",
+    "eslint": "^8.23.0",
+    "father": "^4.1.0",
+    "husky": "^8.0.1",
+    "lint-staged": "^13.0.3",
+    "prettier": "^2.7.1",
+    "prettier-plugin-organize-imports": "^3.0.0",
+    "prettier-plugin-packagejson": "^2.2.18",
+    "stylelint": "^14.9.1",
+    "@types/lodash": "^4.17.15",
+    "@umijs/preset-react": "1.x",
+    "@umijs/test": "^4.4.5",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "typescript": "^5.7.3",
+    "yorkie": "^2.0.0"
+  },
+  "dependencies": {
+    "@ant-design/cssinjs": "^1.23.0",
+    "@ant-design/icons": "^5.6.1",
+    "@antv/layout": "^0.3.25",
+    "@antv/x6": "^2.18.1",
+    "@antv/x6-plugin-clipboard": "^2.1.6",
+    "@antv/x6-plugin-dnd": "^2.1.1",
+    "@antv/x6-plugin-history": "^2.2.4",
+    "@antv/x6-plugin-keyboard": "^2.2.3",
+    "@antv/x6-plugin-minimap": "^2.0.7",
+    "@antv/x6-plugin-scroller": "^2.0.10",
+    "@antv/x6-plugin-selection": "^2.2.2",
+    "@antv/x6-plugin-snapline": "^2.1.7",
+    "@antv/x6-react-components": "^2.0.8",
+    "@antv/x6-react-shape": "^2.2.3",
+    "@ctrl/tinycolor": "^4.1.0",
+    "ahooks": "^3.8.4",
+    "antd": "^5.24.1",
+    "antd-style": "^3.7.1",
+    "classnames": "^2.5.1",
+    "form-render": "^2.5.2",
+    "lodash": "^4.17.21",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-json-view": "^1.21.3",
+    "styled-components": "^6.1.15",
+    "umi-request": "^1.4.0"
+  }
+}
