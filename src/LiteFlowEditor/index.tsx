@@ -10,7 +10,6 @@ import GraphContext from 'liteflow-editor-client/LiteFlowEditor/context/GraphCon
 import { useModel } from 'liteflow-editor-client/LiteFlowEditor/hooks';
 import { history } from 'liteflow-editor-client/LiteFlowEditor/hooks/useHistory';
 import { setModel } from 'liteflow-editor-client/LiteFlowEditor/hooks/useModel';
-import styles from 'liteflow-editor-client/LiteFlowEditor/index.module.less';
 import ELBuilder from 'liteflow-editor-client/LiteFlowEditor/model/builder';
 import Breadcrumb from 'liteflow-editor-client/LiteFlowEditor/panels/breadcrumb';
 import FlowGraphContextMenu from 'liteflow-editor-client/LiteFlowEditor/panels/flowGraph/contextMenu';
@@ -20,6 +19,7 @@ import Layout from 'liteflow-editor-client/LiteFlowEditor/panels/layout';
 import SettingBar from 'liteflow-editor-client/LiteFlowEditor/panels/settingBar';
 import SideBar from 'liteflow-editor-client/LiteFlowEditor/panels/sideBar';
 import ToolBar from 'liteflow-editor-client/LiteFlowEditor/panels/toolBar';
+import { createStyles } from 'liteflow-editor-client/LiteFlowEditor/styles';
 import React, {
   forwardRef,
   useEffect,
@@ -34,6 +34,10 @@ interface ILiteFlowEditorProps {
    * 样式类
    */
   className?: string;
+  /**
+   * style
+   */
+  style?: React.CSSProperties;
   /**
    * 生成图示例事件
    * @param graph 图实例
@@ -78,12 +82,43 @@ const defaultPadInfo: IPadInfo = {
   visible: false,
 };
 
+const useStyles = createStyles(({ css }) => {
+  return {
+    editorContainer: css`
+      width: 100%;
+      height: 100%;
+    `,
+    editorGraph: css`
+      width: 100%;
+      height: 100%;
+
+      .liteflow-edge-add-button {
+        display: none;
+        pointer-events: all !important;
+        margin: 0;
+        border: dashed 1px #feb663;
+        color: #feb663;
+      }
+
+      .x6-edge:hover .liteflow-edge-add-button {
+        display: block;
+      }
+    `,
+    editorMiniMap: css`
+      .x6-widget-minimap-viewport {
+        border: 1px solid #e0e0e0;
+      }
+    `,
+  };
+});
+
 const LiteFlowEditor = forwardRef<React.FC, ILiteFlowEditorProps>(function (
   props,
   ref,
 ) {
-  const { className, onReady, widgets, children } = props;
+  const { className, style, onReady, widgets, children } = props;
 
+  const { styles } = useStyles();
   const widgetList = useMemo(
     () => widgets || [ConnectStatus, ChainManager],
     [widgets],
@@ -190,38 +225,40 @@ const LiteFlowEditor = forwardRef<React.FC, ILiteFlowEditorProps>(function (
 
   return (
     // <ThemeProvider appearance={'dark'}>
-    <GraphContext.Provider
-      value={{
-        graph: flowGraph!,
-        graphWrapper: wrapperRef,
-        model: null,
-        currentEditor,
-      }}
-    >
-      <Layout
-        flowGraph={flowGraph}
-        SideBar={SideBar}
-        ToolBar={ToolBar}
-        SettingBar={SettingBar}
-        widgets={widgetList}
+    <div className={classNames(className)} style={style}>
+      <GraphContext.Provider
+        value={{
+          graph: flowGraph!,
+          graphWrapper: wrapperRef,
+          model: null,
+          currentEditor,
+        }}
       >
-        <div
-          className={classNames(styles.liteflowEditorContainer, className)}
-          ref={wrapperRef}
+        <Layout
+          flowGraph={flowGraph}
+          SideBar={SideBar}
+          ToolBar={ToolBar}
+          SettingBar={SettingBar}
+          widgets={widgetList}
         >
-          <div className={styles.liteflowEditorGraph} ref={graphRef} />
-          <div className={styles.liteflowEditorMiniMap} ref={miniMapRef} />
-          {flowGraph && <Breadcrumb flowGraph={flowGraph} />}
-          {flowGraph && (
-            <FlowGraphContextMenu {...contextMenuInfo} flowGraph={flowGraph} />
-          )}
-          {flowGraph && (
-            <FlowGraphContextPad {...contextPadInfo} flowGraph={flowGraph} />
-          )}
-          {children}
-        </div>
-      </Layout>
-    </GraphContext.Provider>
+          <div className={styles.editorContainer} ref={wrapperRef}>
+            <div className={styles.editorGraph} ref={graphRef} />
+            <div className={styles.editorMiniMap} ref={miniMapRef} />
+            {flowGraph && <Breadcrumb flowGraph={flowGraph} />}
+            {flowGraph && (
+              <FlowGraphContextMenu
+                {...contextMenuInfo}
+                flowGraph={flowGraph}
+              />
+            )}
+            {flowGraph && (
+              <FlowGraphContextPad {...contextPadInfo} flowGraph={flowGraph} />
+            )}
+            {children}
+          </div>
+        </Layout>
+      </GraphContext.Provider>
+    </div>
     // </ThemeProvider>
   );
 });

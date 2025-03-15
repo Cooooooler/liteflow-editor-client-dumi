@@ -20,13 +20,3 @@ features:
     emoji: 🚀
     description: 对EL表达式进行了可扩展建模
 ---
-
-```jsx
-import LiteFlowEditor from './demo';
-
-export default () => (
-  <div style={{height: '100vh', background: 'white'}}>
-    <LiteFlowEditor />
-  </div>
-)
-```

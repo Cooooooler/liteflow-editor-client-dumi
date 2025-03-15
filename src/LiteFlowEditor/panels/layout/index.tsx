@@ -1,9 +1,9 @@
 import { Graph } from '@antv/x6';
 import { SplitBox } from '@antv/x6-react-components';
 import '@antv/x6-react-components/es/split-box/style/index.css';
-import React, { ReactNode } from 'react';
 import { useGraphWrapper } from 'liteflow-editor-client/LiteFlowEditor/hooks';
 import { createStyles } from 'liteflow-editor-client/LiteFlowEditor/styles';
+import React, { ReactNode } from 'react';
 
 interface ISubComponentProps {
   flowGraph: Graph;
@@ -27,11 +27,88 @@ const useStyles = createStyles(({ token, css }) => {
       height: 100%;
       width: 100%;
       border: 1px solid ${token.colorBorder};
+
+      .x6-widget-transform {
+        border-color: rgba(0, 0, 0, 0.3);
+        border-style: dashed;
+        background-color: rgba(0, 0, 0, 0.14);
+        border-radius: 0;
+        padding: 6px;
+        margin: -7px 0 0 -7px;
+        .x6-widget-transform-resize {
+          width: 6px;
+          height: 6px;
+          border-radius: 0;
+          border-color: rgba(0, 0, 0, 0.3);
+          // border: 0 none;
+          box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.15);
+        }
+        .x6-widget-transform-cursor-nw {
+          top: -6px;
+          left: -6px;
+        }
+        .x6-widget-transform-cursor-n {
+          margin-left: -3px;
+          top: -6px;
+        }
+        .x6-widget-transform-cursor-ne {
+          top: -6px;
+          right: -6px;
+        }
+        .x6-widget-transform-cursor-e {
+          margin-top: -3px;
+          right: -6px;
+        }
+        .x6-widget-transform-cursor-se {
+          right: -6px;
+          bottom: -6px;
+        }
+        .x6-widget-transform-cursor-s {
+          margin-left: -3px;
+          bottom: -6px;
+        }
+        .x6-widget-transform-cursor-sw {
+          left: -6px;
+          bottom: -6px;
+        }
+        .x6-widget-transform-cursor-w {
+          left: -6px;
+          margin-top: -3px;
+        }
+      }
+      .x6-widget-dnd.dragging {
+        pointer-events: none;
+      }
+      .x6-edge path:nth-child(2) {
+        stroke: #c1c1c1;
+        stroke-width: 1px;
+      }
+      .x6-edge:hover,
+      .x6-edge.edge-moving,
+      .x6-edge.x6-edge-selected {
+        path:nth-child(2) {
+          stroke: #feb663;
+          stroke-width: 3px;
+        }
+      }
+      .x6-node {
+        & > text {
+          pointer-events: none;
+        }
+      }
+      .react-json-view {
+        .collapsed-icon,
+        .expanded-icon {
+          svg {
+            vertical-align: middle !important;
+          }
+        }
+      }
     `,
-    editorBarContainer:css`
+    editorBarContainer: css`
       height: 100%;
       overflow: auto;
-    `
+    `,
   };
 });
 
@@ -66,9 +143,7 @@ const Layout: React.FC<IProps> = (props) => {
         primary="first"
         onResizing={handleResize}
       >
-        <div className={styles.editorBarContainer}>
-          {sideBar}
-        </div>
+        <div className={styles.editorBarContainer}>{sideBar}</div>
         <SplitBox
           split={'vertical'}
           minSize={50}
