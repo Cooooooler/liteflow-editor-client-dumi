@@ -14,6 +14,7 @@ export interface IGraphContext {
     toJSON(): Record<string, any>;
     fromJSON(data: Record<string, any>): void;
   };
+  getChainPage?: (data?: any) => Promise<any>;
 }
 
 const defaultValue: IGraphContext = {} as any;

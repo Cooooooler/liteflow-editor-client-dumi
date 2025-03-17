@@ -11,7 +11,6 @@ import { useModel } from 'liteflow-editor-client/LiteFlowEditor/hooks';
 import {
   deleteChain,
   getChainById,
-  getChainPage,
   updateChain,
 } from 'liteflow-editor-client/LiteFlowEditor/services/api';
 import { createStyles } from 'liteflow-editor-client/LiteFlowEditor/styles';
@@ -36,11 +35,12 @@ const ChainManager: FC = () => {
   const [chains, setChains] = useState<Array<Chain>>([]);
   const [currentChain, setCurrentChain] = useState<Chain>();
   const { styles } = useStyles();
+  const { getChainPage } = useContext(GraphContext);
 
   const getChainList = useCallback(async () => {
     const {
       data: { data },
-    } = await getChainPage();
+    } = await getChainPage?.();
     if (data && data.length) {
       setChains(data);
     }
@@ -83,41 +83,43 @@ const ChainManager: FC = () => {
   };
 
   return (
-    <div className={styles.wrapper}>
-      <Select
-        value={currentChain?.id}
-        placeholder="请选择接口数据"
-        style={{ width: 200 }}
-        options={chains.map(({ chainDesc, id }) => ({
-          label: chainDesc,
-          value: id,
-        }))}
-        onChange={handleOnChange}
-      />
-      <Tooltip title="保存当前修改">
-        <>
-          <LoadingButton
+    !!chains.length && (
+      <div className={styles.wrapper}>
+        <Select
+          value={currentChain?.id}
+          placeholder="请选择接口数据"
+          style={{ width: 200 }}
+          options={chains.map((chain) => ({
+            label: chain.chainDesc,
+            value: chain.id ?? void 0,
+          }))}
+          onChange={handleOnChange}
+        />
+        <Tooltip title="保存当前修改">
+          <>
+            <LoadingButton
+              type="primary"
+              requestApi={handleSave}
+              disabled={!chains.length || !currentChain?.id}
+              icon={<SaveOutlined />}
+            >
+              保存
+            </LoadingButton>
+          </>
+        </Tooltip>
+        <Tooltip title="删除当前记录">
+          <Button
             type="primary"
-            requestApi={handleSave}
+            danger
+            onClick={handleDelete}
             disabled={!chains.length || !currentChain?.id}
-            icon={<SaveOutlined />}
           >
-            保存
-          </LoadingButton>
-        </>
-      </Tooltip>
-      <Tooltip title="删除当前记录">
-        <Button
-          type="primary"
-          danger
-          onClick={handleDelete}
-          disabled={!chains.length || !currentChain?.id}
-        >
-          <DeleteOutlined /> 删除
-        </Button>
-      </Tooltip>
-      <AddChain onChange={getChainList} />
-    </div>
+            <DeleteOutlined /> 删除
+          </Button>
+        </Tooltip>
+        <AddChain onChange={getChainList} />
+      </div>
+    )
   );
 };
 

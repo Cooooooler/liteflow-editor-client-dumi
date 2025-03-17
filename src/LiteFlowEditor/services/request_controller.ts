@@ -30,7 +30,7 @@ const requestController = extend({
   timeout: 10000, // 请求超时时间
   headers: {
     'Content-Type': 'application/json',
-    Authorization: process.env.DUMI_APP_A!,
+    Authorization: 'token:6329c2b26a8c4f5eaa17dfd76502e988',
   },
   errorHandler: (error) => {
     // 统一的错误处理

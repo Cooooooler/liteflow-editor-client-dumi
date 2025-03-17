@@ -53,6 +53,8 @@ interface ILiteFlowEditorProps {
    */
   children?: React.ReactNode;
 
+  getChainPage?: (data?: any) => Promise<any>;
+
   /**
    * 其他可扩展属性
    */
@@ -116,7 +118,7 @@ const LiteFlowEditor = forwardRef<React.FC, ILiteFlowEditorProps>(function (
   props,
   ref,
 ) {
-  const { className, style, onReady, widgets, children } = props;
+  const { className, style, onReady, widgets, children, getChainPage } = props;
 
   const { styles } = useStyles();
   const widgetList = useMemo(
@@ -232,6 +234,7 @@ const LiteFlowEditor = forwardRef<React.FC, ILiteFlowEditorProps>(function (
           graphWrapper: wrapperRef,
           model: null,
           currentEditor,
+          getChainPage,
         }}
       >
         <Layout
