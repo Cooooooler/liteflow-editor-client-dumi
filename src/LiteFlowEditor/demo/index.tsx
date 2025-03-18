@@ -1,3 +1,8 @@
+/**
+ * title: 基础使用
+ * description: 指定高度即可开始使用，`api` 接口可以直接剥离。
+ */
+
 import { LiteFlowEditor } from 'liteflow-editor-client';
 import React, { FC } from 'react';
 import requestController from '../services/request_controller';
