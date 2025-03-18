@@ -3,7 +3,6 @@ import { Tag } from 'antd';
 import GraphContext from 'liteflow-editor-client/LiteFlowEditor/context/GraphContext';
 import { getDefChainPage } from 'liteflow-editor-client/LiteFlowEditor/services/api';
 import React, { useCallback, useContext, useState } from 'react';
-import './index.less';
 
 enum Status {
   connected = 'success',
@@ -38,11 +37,7 @@ const ConnectStatus: React.FC = () => {
   if (status === Status.pending) {
     tagText = '服务器连接中';
   }
-  return (
-    <span className="connect-status-container">
-      <Tag color={status}>{tagText}</Tag>
-    </span>
-  );
+  return <Tag color={status}>{tagText}</Tag>;
 };
 
 export default ConnectStatus;
