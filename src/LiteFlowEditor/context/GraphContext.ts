@@ -16,6 +16,10 @@ export interface IGraphContext {
   };
   getCmpList?: (data?: any) => Promise<any>;
   getChainPage?: (data?: any) => Promise<any>;
+  getChainById?: (data?: any) => Promise<any>;
+  addChain?: (data?: any) => Promise<any>;
+  updateChain?: (data?: any) => Promise<any>;
+  deleteChain?: (data?: any) => Promise<any>;
 }
 
 const defaultValue: IGraphContext = {} as any;

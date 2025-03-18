@@ -57,6 +57,14 @@ interface ILiteFlowEditorProps {
 
   getChainPage?: (data?: any) => Promise<any>;
 
+  getChainById?: (data?: any) => Promise<any>;
+
+  addChain?: (data?: any) => Promise<any>;
+
+  updateChain?: (data?: any) => Promise<any>;
+
+  deleteChain?: (data?: any) => Promise<any>;
+
   /**
    * 其他可扩展属性
    */
@@ -128,6 +136,10 @@ const LiteFlowEditor = forwardRef<React.FC, ILiteFlowEditorProps>(function (
     children,
     getCmpList,
     getChainPage,
+    getChainById,
+    addChain,
+    updateChain,
+    deleteChain,
   } = props;
 
   const { styles } = useStyles();
@@ -246,6 +258,10 @@ const LiteFlowEditor = forwardRef<React.FC, ILiteFlowEditorProps>(function (
           currentEditor,
           getCmpList,
           getChainPage,
+          getChainById,
+          addChain,
+          updateChain,
+          deleteChain,
         }}
       >
         <Layout

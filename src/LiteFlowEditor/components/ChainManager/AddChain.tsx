@@ -2,9 +2,10 @@ import { PlusOutlined } from '@ant-design/icons';
 import { Button, Modal, Tooltip } from 'antd';
 import FormRender, { Schema, useForm } from 'form-render';
 import { LoadingButton } from 'liteflow-editor-client/LiteFlowEditor/components';
-import { addChain } from 'liteflow-editor-client/LiteFlowEditor/services/api';
+import GraphContext from 'liteflow-editor-client/LiteFlowEditor/context/GraphContext';
+import { addDefChain } from 'liteflow-editor-client/LiteFlowEditor/services/api';
 import { handleDesc } from 'liteflow-editor-client/LiteFlowEditor/utils';
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 
 export type Chain = {
   id: number;
@@ -21,6 +22,8 @@ interface IProps {
 
 const ChainSettings: React.FC<IProps> = ({ disabled, onChange, className }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const { addChain } = useContext(GraphContext);
+  const addChainApi = addChain ?? addDefChain;
   const form = useForm();
 
   const showModal = () => {
@@ -53,7 +56,7 @@ const ChainSettings: React.FC<IProps> = ({ disabled, onChange, className }) => {
   const handleOk = async () => {
     const { chainName, chainDesc } = await form.validateFields();
     if (chainName && chainDesc) {
-      const res = await addChain({
+      const res = await addChainApi({
         chainDesc,
         chainName,
       });

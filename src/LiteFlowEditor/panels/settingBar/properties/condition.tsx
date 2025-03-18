@@ -4,6 +4,7 @@ import { ConditionTypeEnum } from 'liteflow-editor-client/LiteFlowEditor/constan
 import GraphContext from 'liteflow-editor-client/LiteFlowEditor/context/GraphContext';
 import { history } from 'liteflow-editor-client/LiteFlowEditor/hooks/useHistory';
 import ELNode from 'liteflow-editor-client/LiteFlowEditor/model/node';
+import { getDefCmpList } from 'liteflow-editor-client/LiteFlowEditor/services/api';
 import React, {
   useCallback,
   useContext,
@@ -30,6 +31,7 @@ const WHEN_ANY_FALSE: boolean = false;
 const ConditionPropertiesEditor: React.FC<IProps> = (props) => {
   const { model } = props;
   const { getCmpList } = useContext(GraphContext);
+  const getCmpListApi = getCmpList ?? getDefCmpList;
   const [cmpList, setCmpList] = useState<any[]>([]);
   const properties = model.getProperties();
 
@@ -111,7 +113,7 @@ const ConditionPropertiesEditor: React.FC<IProps> = (props) => {
   }, [model.id]);
 
   const getCmpListCallBack = useCallback(async () => {
-    const { data } = await getCmpList?.({ type: model.type });
+    const { data } = await getCmpListApi({ type: model.type });
     if (data && data.length) {
       setCmpList(data);
     }

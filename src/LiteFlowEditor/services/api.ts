@@ -1,20 +1,20 @@
 import requestController from 'liteflow-editor-client/LiteFlowEditor/services/request_controller';
 
-export const getCmpList = (params?: any) => {
+export const getDefCmpList = (params?: any) => {
   return requestController('/lon/api/v2/aiqa/chat/cmpManager/getCmpList', {
     method: 'GET',
     params,
   });
 };
 
-export const getChainPage = (data?: any) => {
+export const getDefChainPage = (data?: any) => {
   return requestController('/lon/api/v2/aiqa/mgr/liteflowChain/getPage', {
     method: 'POST',
     data: data ?? {},
   });
 };
 
-export const getChainById = (data?: any) => {
+export const getDefChainById = (data?: any) => {
   return requestController(
     '/lon/api/v2/aiqa/mgr/liteflowChain/getLiteflowChain',
     {
@@ -24,7 +24,7 @@ export const getChainById = (data?: any) => {
   );
 };
 
-export const addChain = (data?: any) => {
+export const addDefChain = (data?: any) => {
   return requestController(
     '/lon/api/v2/aiqa/mgr/liteflowChain/addLiteflowChain',
     {
@@ -34,7 +34,7 @@ export const addChain = (data?: any) => {
   );
 };
 
-export const updateChain = (data?: any) => {
+export const updateDefChain = (data?: any) => {
   return requestController(
     '/lon/api/v2/aiqa/mgr/liteflowChain/updateLiteflowChain',
     {
@@ -44,7 +44,7 @@ export const updateChain = (data?: any) => {
   );
 };
 
-export const deleteChain = (data?: any) => {
+export const deleteDefChain = (data?: any) => {
   return requestController(
     '/lon/api/v2/aiqa/mgr/liteflowChain/deleteLiteflowChain',
     {

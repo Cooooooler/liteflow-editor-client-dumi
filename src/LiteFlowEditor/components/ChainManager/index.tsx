@@ -9,9 +9,10 @@ import type { IGraphContext } from 'liteflow-editor-client/LiteFlowEditor/contex
 import { GraphContext } from 'liteflow-editor-client/LiteFlowEditor/context/GraphContext';
 import { useModel } from 'liteflow-editor-client/LiteFlowEditor/hooks';
 import {
-  deleteChain,
-  getChainById,
-  updateChain,
+  deleteDefChain,
+  getDefChainById,
+  getDefChainPage,
+  updateDefChain,
 } from 'liteflow-editor-client/LiteFlowEditor/services/api';
 import { createStyles } from 'liteflow-editor-client/LiteFlowEditor/styles';
 import {
@@ -35,12 +36,16 @@ const ChainManager: FC = () => {
   const [chains, setChains] = useState<Array<Chain>>([]);
   const [currentChain, setCurrentChain] = useState<Chain>();
   const { styles } = useStyles();
-  const { getChainPage } = useContext(GraphContext);
-
+  const { getChainPage, getChainById, updateChain, deleteChain } =
+    useContext(GraphContext);
+  const getChainPageApi = getChainPage ?? getDefChainPage;
+  const getChainByIdApi = getChainById ?? getDefChainById;
+  const updateChainApi = updateChain ?? updateDefChain;
+  const deleteChainApi = deleteChain ?? deleteDefChain;
   const getChainList = useCallback(async () => {
     const {
       data: { data },
-    } = await getChainPage?.();
+    } = await getChainPageApi();
     if (data && data.length) {
       setChains(data);
     }
@@ -53,13 +58,13 @@ const ChainManager: FC = () => {
   const { currentEditor } = useContext<IGraphContext>(GraphContext);
   const handleOnChange = async (id: number) => {
     setCurrentChain(chains.find((chain) => chain.id === id));
-    const { data } = await getChainById({ id });
+    const { data } = await getChainByIdApi({ id });
     const chainDsl = safeParse(data?.chainDsl);
     currentEditor.fromJSON(chainDsl);
   };
 
   const handleSave = async () => {
-    const res = await updateChain({
+    const res = await updateChainApi({
       ...currentChain,
       chainDsl: safeStringify(currentEditor.toJSON()),
       // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -73,7 +78,7 @@ const ChainManager: FC = () => {
       title: '操作确认',
       content: '请确认是否删除当前记录？',
       async onOk() {
-        const res = await deleteChain({ ids: [currentChain?.id] });
+        const res = await deleteChainApi({ ids: [currentChain?.id] });
         handleDesc(res);
         setCurrentChain(undefined);
         currentEditor.fromJSON({});
