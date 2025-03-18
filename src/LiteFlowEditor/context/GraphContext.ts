@@ -14,6 +14,7 @@ export interface IGraphContext {
     toJSON(): Record<string, any>;
     fromJSON(data: Record<string, any>): void;
   };
+  getCmpList?: (data?: any) => Promise<any>;
   getChainPage?: (data?: any) => Promise<any>;
 }
 

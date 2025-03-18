@@ -1,7 +1,7 @@
 import { useAsyncEffect } from 'ahooks';
 import { Tag } from 'antd';
-import { getChainPage } from 'liteflow-editor-client/LiteFlowEditor/services/api';
-import React, { useCallback, useState } from 'react';
+import GraphContext from 'liteflow-editor-client/LiteFlowEditor/context/GraphContext';
+import React, { useCallback, useContext, useState } from 'react';
 import './index.less';
 
 enum Status {
@@ -13,9 +13,9 @@ enum Status {
 const ConnectStatus: React.FC = () => {
   const [status, setStatus] = useState<Status>(Status.pending);
 
-  // @ts-ignore
+  const { getChainPage } = useContext(GraphContext);
   const syncServer = useCallback(async () => {
-    const res = await getChainPage().catch(() => {
+    const res = await getChainPage?.().catch(() => {
       setStatus(Status.disconnected);
     });
     if (res?.data?.data && res?.data?.data.length) {
@@ -25,7 +25,6 @@ const ConnectStatus: React.FC = () => {
     }
   }, [setStatus]);
 
-  // @ts-ignore
   useAsyncEffect(async () => {
     await syncServer();
   }, []);

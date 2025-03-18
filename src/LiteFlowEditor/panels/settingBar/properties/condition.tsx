@@ -1,10 +1,16 @@
 import { useAsyncEffect } from 'ahooks';
 import FormRender, { Schema, useForm, WatchProperties } from 'form-render';
 import { ConditionTypeEnum } from 'liteflow-editor-client/LiteFlowEditor/constant';
+import GraphContext from 'liteflow-editor-client/LiteFlowEditor/context/GraphContext';
 import { history } from 'liteflow-editor-client/LiteFlowEditor/hooks/useHistory';
 import ELNode from 'liteflow-editor-client/LiteFlowEditor/model/node';
-import { getCmpList } from 'liteflow-editor-client/LiteFlowEditor/services/api';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import styles from './index.module.less';
 
 interface IProps {
@@ -23,6 +29,7 @@ const WHEN_ANY_FALSE: boolean = false;
 
 const ConditionPropertiesEditor: React.FC<IProps> = (props) => {
   const { model } = props;
+  const { getCmpList } = useContext(GraphContext);
   const [cmpList, setCmpList] = useState<any[]>([]);
   const properties = model.getProperties();
 
@@ -104,7 +111,7 @@ const ConditionPropertiesEditor: React.FC<IProps> = (props) => {
   }, [model.id]);
 
   const getCmpListCallBack = useCallback(async () => {
-    const { data } = await getCmpList({ type: model.type });
+    const { data } = await getCmpList?.({ type: model.type });
     if (data && data.length) {
       setCmpList(data);
     }

@@ -1,9 +1,15 @@
 import { useAsyncEffect } from 'ahooks';
 import FormRender, { Schema, useForm, WatchProperties } from 'form-render';
+import GraphContext from 'liteflow-editor-client/LiteFlowEditor/context/GraphContext';
 import { history } from 'liteflow-editor-client/LiteFlowEditor/hooks/useHistory';
 import ELNode from 'liteflow-editor-client/LiteFlowEditor/model/node';
-import { getCmpList } from 'liteflow-editor-client/LiteFlowEditor/services/api';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import styles from './index.module.less';
 
 interface IProps {
@@ -17,26 +23,9 @@ type FormValuesType = {
   maxWaitSeconds: string;
 };
 
-const handleConfig = (config: string[]) => {
-  const obj: Record<string, boolean> = {};
-  config.forEach((item) => {
-    obj[item] = true;
-  });
-  return obj;
-};
-
-const handleConfigValue = (config: Record<string, boolean>) => {
-  const arr: string[] = [];
-  Object.keys(config).forEach((key) => {
-    if (config[key]) {
-      arr.push(key);
-    }
-  });
-  return arr;
-};
-
 const ComponentPropertiesEditor: React.FC<IProps> = (props) => {
   const { model } = props;
+  const { getCmpList } = useContext(GraphContext);
   const [cmpList, setCmpList] = useState<any[]>([]);
   const properties = model.getProperties();
 
@@ -77,28 +66,6 @@ const ComponentPropertiesEditor: React.FC<IProps> = (props) => {
     [cmpList],
   );
 
-  // const handleOnChange = debounce(async () => {
-  //   try {
-  //     const changedValues = await form.validateFields();
-  //     const { id, config, ...rest } = changedValues;
-  //     const { highlight = false } = handleConfig(config);
-  //
-  //     model.id = id;
-  //     model.highlight = highlight;
-  //     model.setProperties({ ...properties, ...rest });
-  //     history.push(undefined, { silent: true });
-  //     // history.push();
-  //     // 以下是对AntV X6视图层进行临时修改
-  //     const modelNode = model.getStartNode();
-  //     const originSize = modelNode.getSize();
-  //     const body = modelNode.getAttrs()?.body;
-  //     modelNode
-  //       .updateAttrs({ label: { text: id }, body: { ...body, highlight } })
-  //       .setSize(originSize); // 解决由于文本修改导致的尺寸错误
-  //   } catch (errorInfo) {
-  //     console.log('Failed:', errorInfo);
-  //   }
-  // }, 200);
   const form = useForm();
 
   const watch: WatchProperties = {
@@ -133,7 +100,7 @@ const ComponentPropertiesEditor: React.FC<IProps> = (props) => {
   }, [model.id]);
 
   const getCmpListCallBack = useCallback(async () => {
-    const { data } = await getCmpList({ type: model.type });
+    const { data } = await getCmpList?.({ type: model.type });
     if (data && data.length) {
       setCmpList(data);
     }

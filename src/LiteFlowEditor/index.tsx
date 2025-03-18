@@ -53,6 +53,8 @@ interface ILiteFlowEditorProps {
    */
   children?: React.ReactNode;
 
+  getCmpList?: (data?: any) => Promise<any>;
+
   getChainPage?: (data?: any) => Promise<any>;
 
   /**
@@ -118,7 +120,15 @@ const LiteFlowEditor = forwardRef<React.FC, ILiteFlowEditorProps>(function (
   props,
   ref,
 ) {
-  const { className, style, onReady, widgets, children, getChainPage } = props;
+  const {
+    className,
+    style,
+    onReady,
+    widgets,
+    children,
+    getCmpList,
+    getChainPage,
+  } = props;
 
   const { styles } = useStyles();
   const widgetList = useMemo(
@@ -234,6 +244,7 @@ const LiteFlowEditor = forwardRef<React.FC, ILiteFlowEditorProps>(function (
           graphWrapper: wrapperRef,
           model: null,
           currentEditor,
+          getCmpList,
           getChainPage,
         }}
       >
