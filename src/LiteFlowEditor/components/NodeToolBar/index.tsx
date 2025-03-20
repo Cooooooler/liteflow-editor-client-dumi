@@ -5,10 +5,11 @@ import Icon, {
   PlusSquareOutlined,
 } from '@ant-design/icons';
 import { Node } from '@antv/x6';
-import { Modal, Tooltip } from 'antd';
+import { Dropdown, Modal, Tooltip } from 'antd';
 import classNames from 'classnames';
 import { history } from 'liteflow-editor-client/LiteFlowEditor/hooks/useHistory';
 import { INodeData } from 'liteflow-editor-client/LiteFlowEditor/model/node';
+import getContextPadMenu from 'liteflow-editor-client/LiteFlowEditor/panels/flowGraph/contextPad/ContextPadMenu';
 import { createStyles } from 'liteflow-editor-client/LiteFlowEditor/styles';
 import IndicatorIcons from 'liteflow-editor-client/LiteFlowEditor/svg_components/IndicatorIcons';
 import { debounce } from 'lodash';
@@ -163,41 +164,6 @@ const NodeToolBar: React.FC<{ node: Node }> = (props) => {
       collapse: false,
     },
   } = node.getData<INodeData>() || {};
-  const showContextPad = debounce((info: any) => {
-    node.model?.graph?.trigger('graph:showContextPad', info);
-  }, 100);
-  const onPrepend = (event: any) => {
-    showContextPad({
-      x: event.clientX,
-      y: event.clientY,
-      node,
-      scene: 'prepend',
-      title: '前面插入节点',
-      edge: null,
-    });
-  };
-  const onAppend = (event: any) => {
-    showContextPad({
-      x: event.clientX,
-      y: event.clientY,
-      node,
-      scene: 'append',
-      title: '后面插入节点',
-      edge: null,
-    });
-  };
-  const onReplace = (event: any) => {
-    node.model?.graph?.select(model.getNodes());
-    node.model?.graph?.trigger('model:select', model);
-    showContextPad({
-      x: event.clientX,
-      y: event.clientY,
-      node,
-      scene: 'replace',
-      title: '替换当前节点',
-      edge: null,
-    });
-  };
   const onDelete = debounce(() => {
     node.model?.graph?.select(model.selectNodes());
     node.model?.graph?.trigger('model:select', model);
@@ -221,53 +187,84 @@ const NodeToolBar: React.FC<{ node: Node }> = (props) => {
   return (
     <div className={classNames(styles.nodeToolBar)}>
       {toolbar.prepend && (
-        <div
-          className={classNames(
-            styles.addNodePrepend,
-            'liteflow-add-node-prepend',
-          )}
-          onClick={onPrepend}
+        <Dropdown
+          menu={{
+            items: getContextPadMenu({
+              node,
+              scene: 'prepend',
+              title: '前面插入节点',
+            }),
+          }}
+          trigger={['click']}
         >
-          <Tooltip title="前面插入节点">
-            <div
-              className={classNames(
-                styles.addNodePrependIcon,
-                'liteflow-add-node-prepend-icon',
-              )}
-            >
-              <Icon component={IndicatorIcons} />
-            </div>
-          </Tooltip>
-        </div>
+          <div
+            className={classNames(
+              styles.addNodePrepend,
+              'liteflow-add-node-prepend',
+            )}
+          >
+            <Tooltip title="前面插入节点">
+              <div
+                className={classNames(
+                  styles.addNodePrependIcon,
+                  'liteflow-add-node-prepend-icon',
+                )}
+              >
+                <Icon component={IndicatorIcons} />
+              </div>
+            </Tooltip>
+          </div>
+        </Dropdown>
       )}
       {toolbar.append && (
-        <div
-          className={classNames(
-            styles.addNodeAppend,
-            'liteflow-add-node-append',
-          )}
-          onClick={onAppend}
+        <Dropdown
+          menu={{
+            items: getContextPadMenu({
+              node,
+              scene: 'append',
+              title: '后面插入节点',
+            }),
+          }}
+          trigger={['click']}
         >
-          <Tooltip title="后面插入节点">
-            <div
-              className={classNames(
-                styles.addNodeAppendIcon,
-                'liteflow-add-node-append-icon',
-              )}
-            >
-              <Icon component={IndicatorIcons} />
-            </div>
-          </Tooltip>
-        </div>
+          <div
+            className={classNames(
+              styles.addNodeAppend,
+              'liteflow-add-node-append',
+            )}
+          >
+            <Tooltip title="后面插入节点">
+              <div
+                className={classNames(
+                  styles.addNodeAppendIcon,
+                  'liteflow-add-node-append-icon',
+                )}
+              >
+                <Icon component={IndicatorIcons} />
+              </div>
+            </Tooltip>
+          </div>
+        </Dropdown>
       )}
       {(toolbar.replace || toolbar.delete) && (
         <div className={classNames(styles.topToolBar, 'liteflow-top-toolBar')}>
           {
-            <div className={classNames(styles.toolBarBtn)} onClick={onReplace}>
-              <Tooltip title="替换当前节点">
-                <EditOutlined />
-              </Tooltip>
-            </div>
+            <Dropdown
+              menu={{
+                items: getContextPadMenu({
+                  node,
+                  scene: 'replace',
+                  title: '替换当前节点',
+                }),
+              }}
+              trigger={['click']}
+            >
+              <div className={classNames(styles.toolBarBtn)}>
+                <Tooltip title="替换当前节点">
+                  <EditOutlined />
+                </Tooltip>
+              </div>
+            </Dropdown>
           }
           {
             <div

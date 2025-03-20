@@ -3,14 +3,48 @@ import { Graph } from '@antv/x6';
 import { Breadcrumb } from 'antd';
 import { getIconByType } from 'liteflow-editor-client/LiteFlowEditor/cells';
 import ELNode from 'liteflow-editor-client/LiteFlowEditor/model/node';
+import { createStyles } from 'liteflow-editor-client/LiteFlowEditor/styles';
 import React, { useEffect, useReducer, useState } from 'react';
-import styles from './index.module.less';
 
 interface IProps {
   flowGraph: Graph;
 }
 
+const useStyles = createStyles(({ token, css }) => {
+  return {
+    editorBreadcrumb: css`
+      position: absolute;
+      left: 8px;
+      bottom: 12px;
+      height: 36px;
+      padding: 6px;
+      border-radius: 2px;
+      background-color: #fff;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
+      user-select: none;
+
+      :global {
+        .ant-breadcrumb-link {
+          cursor: pointer;
+          color: rgba(0, 0, 0, 0.65);
+        }
+      }
+    `,
+    breadcrumbItem: css`
+      display: flex;
+      align-items: center;
+    `,
+    editorBreadcrumbIcon: css`
+      width: 16px;
+      height: 16px;
+      margin-right: 4px;
+      margin-top: -4px;
+    `,
+  };
+});
+
 const BreadcrumbPath: React.FC<IProps> = (props) => {
+  const { styles } = useStyles();
   const { flowGraph } = props;
 
   const [selectedModel, setSelectedModel] = useState<ELNode | null>(null);
@@ -50,7 +84,7 @@ const BreadcrumbPath: React.FC<IProps> = (props) => {
   };
 
   return (
-    <div className={styles.liteflowEditorBreadcrumb}>
+    <div className={styles.editorBreadcrumb}>
       <Breadcrumb
         items={[
           {
@@ -68,11 +102,8 @@ const BreadcrumbPath: React.FC<IProps> = (props) => {
             return {
               key: elNodeModel.ids ?? index,
               title: (
-                <div onClick={handleClick} className={styles.breadcrumb_item}>
-                  <img
-                    className={styles.liteflowEditorBreadcrumbIcon}
-                    src={icon}
-                  />
+                <div onClick={handleClick} className={styles.breadcrumbItem}>
+                  <img className={styles.editorBreadcrumbIcon} src={icon} />
                   <span>{elNodeModel.type}</span>
                 </div>
               ),

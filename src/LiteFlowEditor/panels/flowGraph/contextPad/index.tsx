@@ -11,6 +11,7 @@ import useClickAway from 'liteflow-editor-client/LiteFlowEditor/hooks/useClickAw
 import { history } from 'liteflow-editor-client/LiteFlowEditor/hooks/useHistory';
 import ELBuilder from 'liteflow-editor-client/LiteFlowEditor/model/builder';
 import { INodeData } from 'liteflow-editor-client/LiteFlowEditor/model/node';
+import { createStyles } from 'liteflow-editor-client/LiteFlowEditor/styles';
 import React, { useCallback, useRef } from 'react';
 import styles from './index.module.less';
 
@@ -33,6 +34,39 @@ const groups = [
   OTHER_GROUP,
 ];
 
+const useStyles = createStyles(({ token, css }) => {
+  return {
+    editorContextPad: css`
+      z-index: ${token.zIndexBase};
+      position: fixed;
+      min-width: 200px;
+      box-shadow: ${token.boxShadow};
+      background: ${token.colorBgContainer};
+    `,
+    editorContextPadHeader: css`
+      display: flex;
+      align-items: stretch;
+      line-height: 20px;
+      margin: 10px 12px;
+    `,
+    editorContextPadTitle: css`
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      font-size: ${token.fontSize}px;
+    `,
+    editorContextPadSearch: css`
+      margin: 10px 12px;
+    `,
+    editorContextPadResults: css`
+      margin: 7px 3px 7px 12px;
+      max-height: 280px;
+      overflow: auto;
+      padding-right: 9px;
+    `,
+  };
+});
+
 const FlowGraphContextPad: React.FC<IProps> = (props) => {
   const menuRef = useRef(null);
   const {
@@ -46,12 +80,13 @@ const FlowGraphContextPad: React.FC<IProps> = (props) => {
     title = '插入节点',
   } = props;
 
-  useClickAway(() => onClickAway(), menuRef);
-
   const onClickAway = useCallback(
     () => flowGraph.trigger('graph:hideContextPad'),
     [flowGraph],
   );
+
+  useClickAway(() => onClickAway(), menuRef);
+
   const onClickMenu = useCallback(
     (cellType: LiteFlowNode) => {
       if (edge) {

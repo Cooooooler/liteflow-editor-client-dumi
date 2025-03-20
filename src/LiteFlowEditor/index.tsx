@@ -232,7 +232,6 @@ const LiteFlowEditor = forwardRef<React.FC, ILiteFlowEditorProps>(function (
     if (flowGraph) {
       flowGraph.on('graph:showContextMenu', showHandler);
       flowGraph.on('graph:hideContextMenu', hideHandler);
-      flowGraph.on('graph:showContextPad', showContextPad);
       flowGraph.on('graph:hideContextPad', hideContextPad);
       flowGraph.on('model:change', handleModelChange);
     }
@@ -240,7 +239,6 @@ const LiteFlowEditor = forwardRef<React.FC, ILiteFlowEditorProps>(function (
       if (flowGraph) {
         flowGraph.off('graph:showContextMenu', showHandler);
         flowGraph.off('graph:hideContextMenu', hideHandler);
-        flowGraph.off('graph:showContextPad', showContextPad);
         flowGraph.off('graph:hideContextPad', hideContextPad);
         flowGraph.off('model:change', handleModelChange);
       }

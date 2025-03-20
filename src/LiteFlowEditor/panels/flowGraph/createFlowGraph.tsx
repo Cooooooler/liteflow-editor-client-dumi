@@ -6,12 +6,15 @@ import { MiniMap } from '@antv/x6-plugin-minimap';
 import { Scroller } from '@antv/x6-plugin-scroller';
 import { Selection } from '@antv/x6-plugin-selection';
 import { Snapline } from '@antv/x6-plugin-snapline';
-import { Button } from 'antd';
-import { debounce } from 'lodash';
+import { Button, Dropdown, Tooltip } from 'antd';
+import {
+  MAX_ZOOM,
+  MIN_ZOOM,
+} from 'liteflow-editor-client/LiteFlowEditor/constant';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { MAX_ZOOM, MIN_ZOOM } from 'liteflow-editor-client/LiteFlowEditor/constant';
 
+import getContextPadMenu from 'liteflow-editor-client/LiteFlowEditor/panels/flowGraph/contextPad/ContextPadMenu';
 import {
   LITEFLOW_ANCHOR,
   LITEFLOW_ROUTER,
@@ -29,31 +32,27 @@ const createFlowChart = (
     onEdgeLabelRendered: (args) => {
       const { edge, selectors, label } = args;
       const content = selectors.foContent as HTMLElement;
+      console.log(content);
       if (content) {
         const root = ReactDOM.createRoot(content);
-        content.style.display = 'flex';
-        content.style.alignItems = 'center';
-        content.style.justifyContent = 'center';
-        content.style.overflow = 'hidden';
+
         if (label?.attrs?.label.text === '+') {
-          const showContextPad = debounce((info: any) => {
-            flowGraph.trigger('graph:showContextPad', info);
-          }, 100);
-          const handleOnClick = (event: any) => {
-            showContextPad({
-              x: event.clientX,
-              y: event.clientY,
-              edge,
-            });
-          };
           root.render(
-            <Button
-              size="small"
-              onClick={handleOnClick}
-              className="liteflow-edge-add-button"
+            <Dropdown
+              menu={{
+                items: getContextPadMenu({
+                  edge,
+                  flowGraph,
+                }),
+              }}
+              trigger={['click']}
             >
-              +
-            </Button>,
+              <Tooltip title="插入节点">
+                <Button size="small" className="liteflow-edge-add-button">
+                  +
+                </Button>
+              </Tooltip>
+            </Dropdown>,
           );
         } else {
           content.appendChild(
