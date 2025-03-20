@@ -65,6 +65,55 @@ const useStyles = createStyles(({ token, css }) => {
   };
 });
 
+interface IPanelContentProps {
+  dnd: Dnd;
+  cellTypes: LiteFlowNode[];
+}
+
+const View: React.FC<any> = (props) => {
+  const { node, icon, ...rest } = props;
+  const { styles } = useStyles();
+  return (
+    <div className={styles.shapeWrapper} {...rest}>
+      <img className={styles.shapeSvg} src={icon}></img>
+    </div>
+  );
+};
+
+const PanelContent: React.FC<IPanelContentProps> = (props) => {
+  const { dnd, cellTypes } = props;
+  const { styles } = useStyles();
+  const onMouseDown = (evt: any, node: LiteFlowNode) => {
+    dnd.start(Node.create({ shape: node.shape, data: { node } }), evt);
+  };
+  return (
+    <div className={styles.editorSideBarPanelContent}>
+      {cellTypes.map((cellType, index) => {
+        return (
+          <div
+            key={index}
+            className={classNames(styles.editorSideBarCellContainer, {
+              [styles.disabled]: cellType.disabled,
+            })}
+          >
+            <View
+              icon={cellType.icon}
+              onMouseDown={(evt: any) => {
+                if (!cellType.disabled) {
+                  onMouseDown(evt, cellType);
+                }
+              }}
+            />
+            <Text className={styles.editorSideBarCellText}>
+              {cellType.label}
+            </Text>
+          </div>
+        );
+      })}
+    </div>
+  );
+};
+
 const SideBar: React.FC<ISideBarProps> = (props) => {
   const { flowGraph } = props;
   const { styles } = useStyles();
@@ -167,55 +216,6 @@ const SideBar: React.FC<ISideBarProps> = (props) => {
         children: <PanelContent dnd={dnd} cellTypes={group.cellTypes} />,
       }))}
     />
-  );
-};
-
-const View: React.FC<any> = (props) => {
-  const { node, icon, ...rest } = props;
-  const { styles } = useStyles();
-  return (
-    <div className={styles.shapeWrapper} {...rest}>
-      <img className={styles.shapeSvg} src={icon}></img>
-    </div>
-  );
-};
-
-interface IPanelContentProps {
-  dnd: Dnd;
-  cellTypes: LiteFlowNode[];
-}
-
-const PanelContent: React.FC<IPanelContentProps> = (props) => {
-  const { dnd, cellTypes } = props;
-  const { styles } = useStyles();
-  const onMouseDown = (evt: any, node: LiteFlowNode) => {
-    dnd.start(Node.create({ shape: node.shape, data: { node } }), evt);
-  };
-  return (
-    <div className={styles.editorSideBarPanelContent}>
-      {cellTypes.map((cellType, index) => {
-        return (
-          <div
-            key={index}
-            className={classNames(styles.editorSideBarCellContainer, {
-              [styles.disabled]: cellType.disabled,
-            })}
-          >
-            <View
-              icon={cellType.icon}
-              onMouseDown={(evt: any) => {
-                if (!cellType.disabled) {
-                  onMouseDown(evt, cellType);
-                }
-              }}
-            />
-            <Text className={styles.editorSideBarCellText}>
-              {cellType.label}
-            </Text>
-          </div>
-        );
-      })}
-    </div>
   );
 };
 
