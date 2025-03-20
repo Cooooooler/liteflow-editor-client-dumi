@@ -13,7 +13,6 @@ import { setModel } from 'liteflow-editor-client/LiteFlowEditor/hooks/useModel';
 import ELBuilder from 'liteflow-editor-client/LiteFlowEditor/model/builder';
 import Breadcrumb from 'liteflow-editor-client/LiteFlowEditor/panels/breadcrumb';
 import FlowGraphContextMenu from 'liteflow-editor-client/LiteFlowEditor/panels/flowGraph/contextMenu';
-import FlowGraphContextPad from 'liteflow-editor-client/LiteFlowEditor/panels/flowGraph/contextPad';
 import createFlowGraph from 'liteflow-editor-client/LiteFlowEditor/panels/flowGraph/createFlowGraph';
 import Layout from 'liteflow-editor-client/LiteFlowEditor/panels/layout';
 import SettingBar from 'liteflow-editor-client/LiteFlowEditor/panels/settingBar';
@@ -154,8 +153,6 @@ const LiteFlowEditor = forwardRef<React.FC, ILiteFlowEditorProps>(function (
   const [flowGraph, setFlowGraph] = useState<Graph>();
   const [contextMenuInfo, setContextMenuInfo] =
     useState<IMenuInfo>(defaultMenuInfo);
-  const [contextPadInfo, setContextPadInfo] =
-    useState<IPadInfo>(defaultPadInfo);
 
   const currentEditor = {
     getGraphInstance() {
@@ -209,14 +206,6 @@ const LiteFlowEditor = forwardRef<React.FC, ILiteFlowEditorProps>(function (
       flowGraph?.unlockScroller();
       setContextMenuInfo({ ...contextMenuInfo, visible: false });
     };
-    const showContextPad = (info: IPadInfo) => {
-      flowGraph?.lockScroller();
-      setContextPadInfo({ ...info, visible: true });
-    };
-    const hideContextPad = () => {
-      flowGraph?.unlockScroller();
-      setContextPadInfo({ ...contextPadInfo, visible: false });
-    };
     const handleModelChange = () => {
       if (flowGraph) {
         // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -232,14 +221,12 @@ const LiteFlowEditor = forwardRef<React.FC, ILiteFlowEditorProps>(function (
     if (flowGraph) {
       flowGraph.on('graph:showContextMenu', showHandler);
       flowGraph.on('graph:hideContextMenu', hideHandler);
-      flowGraph.on('graph:hideContextPad', hideContextPad);
       flowGraph.on('model:change', handleModelChange);
     }
     return () => {
       if (flowGraph) {
         flowGraph.off('graph:showContextMenu', showHandler);
         flowGraph.off('graph:hideContextMenu', hideHandler);
-        flowGraph.off('graph:hideContextPad', hideContextPad);
         flowGraph.off('model:change', handleModelChange);
       }
     };
@@ -278,9 +265,6 @@ const LiteFlowEditor = forwardRef<React.FC, ILiteFlowEditorProps>(function (
                 {...contextMenuInfo}
                 flowGraph={flowGraph}
               />
-            )}
-            {flowGraph && (
-              <FlowGraphContextPad {...contextPadInfo} flowGraph={flowGraph} />
             )}
             {children}
           </div>
