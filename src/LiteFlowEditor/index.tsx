@@ -198,6 +198,9 @@ const LiteFlowEditor = forwardRef<React.FC, ILiteFlowEditorProps>(function (
 
   // NOTE: listen toggling context menu event
   useEffect(() => {
+    const style = document.createElement('style');
+    style.innerHTML = `.x6-widget-dnd{pointer-events: none !important;}`;
+    document.head.appendChild(style);
     const showHandler = (info: IMenuInfo) => {
       flowGraph?.lockScroller();
       setContextMenuInfo({ ...info, visible: true });
