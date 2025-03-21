@@ -32,7 +32,6 @@ const createFlowChart = (
     onEdgeLabelRendered: (args) => {
       const { edge, selectors, label } = args;
       const content = selectors.foContent as HTMLElement;
-      console.log(content);
       if (content) {
         const root = ReactDOM.createRoot(content);
 

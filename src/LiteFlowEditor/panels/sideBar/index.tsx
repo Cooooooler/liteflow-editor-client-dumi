@@ -71,7 +71,7 @@ interface IPanelContentProps {
 }
 
 const View: React.FC<any> = (props) => {
-  const { node, icon, ...rest } = props;
+  const { icon, ...rest } = props;
   const { styles } = useStyles();
   return (
     <div className={styles.shapeWrapper} {...rest}>
