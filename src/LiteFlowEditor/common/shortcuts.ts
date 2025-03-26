@@ -2,7 +2,6 @@ import { Graph } from '@antv/x6';
 import { Modal } from 'antd';
 import { MAX_ZOOM, MIN_ZOOM, ZOOM_STEP } from '../constant';
 import { history } from '../hooks/useHistory';
-import { useModel } from '../hooks/useModel';
 import { safeGet } from '../utils';
 import { getSelectedNodes } from '../utils/flowChartUtils';
 
@@ -11,12 +10,12 @@ interface Shortcut {
   handler: (flowGraph: Graph) => void;
 }
 
+// TODO: 快捷键实现
 export const shortcuts: { [key: string]: Shortcut } = {
   save: {
     keys: ['meta + s', 'ctrl + s'],
     handler() {
       console.log('save');
-      console.log(useModel().toJSON());
       return false;
     },
   },
@@ -35,7 +34,7 @@ export const shortcuts: { [key: string]: Shortcut } = {
     },
   },
   zoomIn: {
-    keys: ['meta + shift + +', 'ctrl + shift + +'],
+    keys: ['meta + shift + ]', 'ctrl + shift + ]'],
     handler(flowGraph: Graph) {
       const nextZoom = (flowGraph.zoom() + ZOOM_STEP).toPrecision(2);
       flowGraph.zoomTo(Number(nextZoom), { maxScale: MAX_ZOOM });
@@ -43,7 +42,7 @@ export const shortcuts: { [key: string]: Shortcut } = {
     },
   },
   zoomOut: {
-    keys: ['meta + shift + -', 'ctrl + shift + -'],
+    keys: ['meta + shift + [', 'ctrl + shift + ['],
     handler(flowGraph: Graph) {
       const nextZoom = (flowGraph.zoom() - ZOOM_STEP).toPrecision(2);
       flowGraph.zoomTo(Number(nextZoom), { minScale: MIN_ZOOM });
