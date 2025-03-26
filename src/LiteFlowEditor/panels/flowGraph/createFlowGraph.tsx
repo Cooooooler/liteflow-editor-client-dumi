@@ -144,7 +144,6 @@ const createFlowChart = (
     .use(
       new Clipboard({
         enabled: true,
-        useLocalStorage: true,
       }),
     )
     .use(

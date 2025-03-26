@@ -1,4 +1,4 @@
-import { Cell, Edge, Graph, Node } from '@antv/x6';
+import { Cell, Graph } from '@antv/x6';
 import classNames from 'classnames';
 import { forceLayout } from 'liteflow-editor-client/LiteFlowEditor/common/layout';
 import {
@@ -18,7 +18,10 @@ import Layout from 'liteflow-editor-client/LiteFlowEditor/panels/layout';
 import SettingBar from 'liteflow-editor-client/LiteFlowEditor/panels/settingBar';
 import SideBar from 'liteflow-editor-client/LiteFlowEditor/panels/sideBar';
 import ToolBar from 'liteflow-editor-client/LiteFlowEditor/panels/toolBar';
-import { createStyles } from 'liteflow-editor-client/LiteFlowEditor/styles';
+import {
+  createGlobalStyle,
+  createStyles,
+} from 'liteflow-editor-client/LiteFlowEditor/styles';
 import React, {
   forwardRef,
   useEffect,
@@ -77,22 +80,6 @@ const defaultMenuInfo: IMenuInfo = {
   visible: false,
 };
 
-interface IPadInfo {
-  x: number;
-  y: number;
-  edge?: Edge;
-  node?: Node;
-  scene?: IContextPadScene;
-  visible: boolean;
-}
-
-const defaultPadInfo: IPadInfo = {
-  x: 0,
-  y: 0,
-  scene: 'append',
-  visible: false,
-};
-
 const useStyles = createStyles(({ css }) => {
   return {
     editorContainer: css`
@@ -116,9 +103,14 @@ const useStyles = createStyles(({ css }) => {
       }
     `,
     editorMiniMap: css`
-      .x6-widget-minimap-viewport {
-        border: 1px solid #e0e0e0;
-      }
+      position: absolute;
+      right: 8px;
+      bottom: 12px;
+      padding: 6px;
+      border-radius: 2px;
+      background-color: #fff;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
+      user-select: none;
     `,
   };
 });
@@ -146,6 +138,12 @@ const LiteFlowEditor = forwardRef<React.FC, ILiteFlowEditorProps>(function (
     () => widgets || [ConnectStatus, ChainManager],
     [widgets],
   );
+
+  const GlobalStyles = createGlobalStyle`
+    .x6-widget-dnd {
+      pointer-events: none !important;
+    }
+  `;
 
   const wrapperRef = useRef<HTMLDivElement>(null);
   const graphRef = useRef<HTMLDivElement>(null);
@@ -198,9 +196,6 @@ const LiteFlowEditor = forwardRef<React.FC, ILiteFlowEditorProps>(function (
 
   // NOTE: listen toggling context menu event
   useEffect(() => {
-    const style = document.createElement('style');
-    style.innerHTML = `.x6-widget-dnd{pointer-events: none !important;}`;
-    document.head.appendChild(style);
     const showHandler = (info: IMenuInfo) => {
       flowGraph?.lockScroller();
       setContextMenuInfo({ ...info, visible: true });
@@ -236,8 +231,8 @@ const LiteFlowEditor = forwardRef<React.FC, ILiteFlowEditorProps>(function (
   }, [flowGraph]);
 
   return (
-    // <ThemeProvider appearance={'dark'}>
     <div className={classNames(className)} style={style}>
+      <GlobalStyles />
       <GraphContext.Provider
         value={{
           graph: flowGraph!,
@@ -274,7 +269,6 @@ const LiteFlowEditor = forwardRef<React.FC, ILiteFlowEditorProps>(function (
         </Layout>
       </GraphContext.Provider>
     </div>
-    // </ThemeProvider>
   );
 });
 

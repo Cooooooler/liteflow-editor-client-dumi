@@ -90,10 +90,9 @@ const useStyles = createStyles(({ token, css }) => {
       width: 50px;
       height: 24px;
       margin-left: -25px;
-      border-radius: 4px;
-      background-color: #fff;
-      box-shadow: 0 0 0 1px rgba(64, 87, 109, 0.07),
-        0 2px 12px rgba(53, 71, 90, 0.2);
+      border-radius: ${token.borderRadius}px;
+      background-color: ${token.colorBgContainer};
+      box-shadow: ${token.boxShadow};
     `,
     toolBarBtn: css`
       display: flex;
@@ -103,6 +102,7 @@ const useStyles = createStyles(({ token, css }) => {
       height: 20px;
       font-size: 16px;
       border: 1px solid transparent;
+      border-radius: ${token.borderRadius}px;
 
       &:hover {
         border: 1px solid #ccc;
@@ -112,16 +112,12 @@ const useStyles = createStyles(({ token, css }) => {
     deleteNode: css`
       position: relative;
       color: #f54a45;
-
-      &:before {
-        position: absolute;
-        top: 0;
-        left: -4px;
-        width: 1px;
-        height: 18px;
-        content: ' ';
-        border-left: solid 1px rgba(57, 76, 96, 0.15);
-      }
+    `,
+    verticalLine: css`
+      width: 2px;
+      height: 18px;
+      background-color: ${token.colorPrimaryBorder};
+      border-radius: ${token.borderRadius}px;
     `,
     bottomToolBar: css`
       display: flex;
@@ -266,6 +262,7 @@ const NodeToolBar: React.FC<{ node: Node }> = (props) => {
               </div>
             </Dropdown>
           }
+          <div className={styles.verticalLine} />
           {
             <div
               className={classNames(styles.toolBarBtn, styles.deleteNode)}

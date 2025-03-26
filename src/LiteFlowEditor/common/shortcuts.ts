@@ -1,5 +1,5 @@
 import { Graph } from '@antv/x6';
-import { message, Modal } from 'antd';
+import { Modal } from 'antd';
 import { MAX_ZOOM, MIN_ZOOM, ZOOM_STEP } from '../constant';
 import { history } from '../hooks/useHistory';
 import { useModel } from '../hooks/useModel';
@@ -50,28 +50,29 @@ export const shortcuts: { [key: string]: Shortcut } = {
       return false;
     },
   },
-  copy: {
-    keys: ['meta + c', 'ctrl + c'],
-    handler(flowGraph: Graph) {
-      const cells = flowGraph.getSelectedCells();
-      if (cells.length > 0) {
-        flowGraph.copy(cells);
-        message.success('复制成功');
-      }
-      return false;
-    },
-  },
-  paste: {
-    keys: ['meta + v', 'ctrl + v'],
-    handler(flowGraph: Graph) {
-      if (!flowGraph.isClipboardEmpty()) {
-        const cells = flowGraph.paste({ offset: 32 });
-        flowGraph.cleanSelection();
-        flowGraph.select(cells);
-      }
-      return false;
-    },
-  },
+  // 取消复制粘贴功能
+  // copy: {
+  //   keys: ['meta + c', 'ctrl + c'],
+  //   handler(flowGraph: Graph) {
+  //     const cells = flowGraph.getSelectedCells();
+  //     if (cells.length > 0) {
+  //       flowGraph.copy(cells);
+  //       message.success('复制成功');
+  //     }
+  //     return false;
+  //   },
+  // },
+  // paste: {
+  //   keys: ['meta + v', 'ctrl + v'],
+  //   handler(flowGraph: Graph) {
+  //     if (!flowGraph.isClipboardEmpty()) {
+  //       const cells = flowGraph.paste({ offset: 32 });
+  //       flowGraph.cleanSelection();
+  //       flowGraph.select(cells);
+  //     }
+  //     return false;
+  //   },
+  // },
   delete: {
     keys: ['backspace', 'del'],
     handler(flowGraph: Graph) {
