@@ -11,10 +11,9 @@ import {
   MAX_ZOOM,
   MIN_ZOOM,
 } from 'liteflow-editor-client/LiteFlowEditor/constant';
+import getContextPadMenu from 'liteflow-editor-client/LiteFlowEditor/panels/flowGraph/contextPad';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-
-import getContextPadMenu from 'liteflow-editor-client/LiteFlowEditor/panels/flowGraph/contextPad/ContextPadMenu';
 import {
   LITEFLOW_ANCHOR,
   LITEFLOW_ROUTER,

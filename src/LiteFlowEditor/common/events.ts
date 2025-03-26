@@ -1,12 +1,12 @@
-import {Graph, Rectangle } from '@antv/x6';
-import {getSelectedEdges} from "liteflow-editor-client/LiteFlowEditor/utils/flowChartUtils";
+import { Graph, Rectangle } from '@antv/x6';
+import { getSelectedEdges } from 'liteflow-editor-client/LiteFlowEditor/utils/flowChartUtils';
 
 export function findViewsFromPoint(flowGraph: Graph, x: number, y: number) {
   return flowGraph
     .getCells()
     .map((cell) => flowGraph.findViewByCell(cell))
     .filter((view) => {
-      if (view != null) {
+      if (view !== null) {
         let bBox = view.getBBox(view.container as any);
         if (bBox.height < 16) {
           bBox = Rectangle.create({
@@ -46,32 +46,18 @@ const registerEvents = (flowGraph: Graph): void => {
   flowGraph.on('node:dblclick', () => {
     flowGraph.trigger('graph:editNode');
   });
-  flowGraph.on('blank:contextmenu', (args) => {
-    const {
-      e: { clientX, clientY },
-    } = args;
+  flowGraph.on('blank:contextmenu', () => {
     flowGraph.cleanSelection();
-    flowGraph.trigger('graph:showContextMenu', {
-      x: clientX,
-      y: clientY,
-      scene: 'blank',
-    });
+    flowGraph.trigger('graph:showContextMenu', 'blank');
   });
   flowGraph.on('node:contextmenu', (args) => {
-    const {
-      e: { clientX, clientY },
-      node,
-    } = args;
+    const { node } = args;
     // NOTE: if the clicked node is not in the selected nodes, then clear selection
     if (!flowGraph.getSelectedCells().includes(node)) {
       flowGraph.cleanSelection();
       flowGraph.select(node);
     }
-    flowGraph.trigger('graph:showContextMenu', {
-      x: clientX,
-      y: clientY,
-      scene: 'node',
-    });
+    flowGraph.trigger('graph:showContextMenu', 'node');
   });
   flowGraph.on('blank:mousedown', () => {
     flowGraph.cleanSelection();

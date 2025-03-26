@@ -1,4 +1,5 @@
 import { Cell, Graph } from '@antv/x6';
+import { Dropdown } from 'antd';
 import classNames from 'classnames';
 import { forceLayout } from 'liteflow-editor-client/LiteFlowEditor/common/layout';
 import {
@@ -12,7 +13,7 @@ import { history } from 'liteflow-editor-client/LiteFlowEditor/hooks/useHistory'
 import { setModel } from 'liteflow-editor-client/LiteFlowEditor/hooks/useModel';
 import ELBuilder from 'liteflow-editor-client/LiteFlowEditor/model/builder';
 import Breadcrumb from 'liteflow-editor-client/LiteFlowEditor/panels/breadcrumb';
-import FlowGraphContextMenu from 'liteflow-editor-client/LiteFlowEditor/panels/flowGraph/contextMenu';
+import getContextMenu from 'liteflow-editor-client/LiteFlowEditor/panels/flowGraph/contextMenu';
 import createFlowGraph from 'liteflow-editor-client/LiteFlowEditor/panels/flowGraph/createFlowGraph';
 import Layout from 'liteflow-editor-client/LiteFlowEditor/panels/layout';
 import SettingBar from 'liteflow-editor-client/LiteFlowEditor/panels/settingBar';
@@ -73,12 +74,7 @@ interface ILiteFlowEditorProps {
   [key: string]: any;
 }
 
-const defaultMenuInfo: IMenuInfo = {
-  x: 0,
-  y: 0,
-  scene: 'blank',
-  visible: false,
-};
+const defaultMenuInfo: IMenuScene = 'blank';
 
 const useStyles = createStyles(({ css }) => {
   return {
@@ -124,7 +120,6 @@ const LiteFlowEditor = forwardRef<React.FC, ILiteFlowEditorProps>(function (
     style,
     onReady,
     widgets,
-    children,
     getCmpList,
     getChainPage,
     getChainById,
@@ -149,8 +144,8 @@ const LiteFlowEditor = forwardRef<React.FC, ILiteFlowEditorProps>(function (
   const graphRef = useRef<HTMLDivElement>(null);
   const miniMapRef = useRef<HTMLDivElement>(null);
   const [flowGraph, setFlowGraph] = useState<Graph>();
-  const [contextMenuInfo, setContextMenuInfo] =
-    useState<IMenuInfo>(defaultMenuInfo);
+  const [contextMenuScene, setContextMenuScene] =
+    useState<IMenuScene>(defaultMenuInfo);
 
   const currentEditor = {
     getGraphInstance() {
@@ -196,13 +191,13 @@ const LiteFlowEditor = forwardRef<React.FC, ILiteFlowEditorProps>(function (
 
   // NOTE: listen toggling context menu event
   useEffect(() => {
-    const showHandler = (info: IMenuInfo) => {
+    const showHandler = (info: IMenuScene) => {
       flowGraph?.lockScroller();
-      setContextMenuInfo({ ...info, visible: true });
+      setContextMenuScene(info);
     };
     const hideHandler = () => {
       flowGraph?.unlockScroller();
-      setContextMenuInfo({ ...contextMenuInfo, visible: false });
+      setContextMenuScene(defaultMenuInfo);
     };
     const handleModelChange = () => {
       if (flowGraph) {
@@ -229,7 +224,6 @@ const LiteFlowEditor = forwardRef<React.FC, ILiteFlowEditorProps>(function (
       }
     };
   }, [flowGraph]);
-
   return (
     <div className={classNames(className)} style={style}>
       <GlobalStyles />
@@ -254,18 +248,21 @@ const LiteFlowEditor = forwardRef<React.FC, ILiteFlowEditorProps>(function (
           SettingBar={SettingBar}
           widgets={widgetList}
         >
-          <div className={styles.editorContainer} ref={wrapperRef}>
-            <div className={styles.editorGraph} ref={graphRef} />
-            <div className={styles.editorMiniMap} ref={miniMapRef} />
-            {flowGraph && <Breadcrumb flowGraph={flowGraph} />}
-            {flowGraph && (
-              <FlowGraphContextMenu
-                {...contextMenuInfo}
-                flowGraph={flowGraph}
-              />
-            )}
-            {children}
-          </div>
+          <Dropdown
+            menu={{
+              items: getContextMenu({
+                scene: contextMenuScene,
+                flowGraph,
+              }),
+            }}
+            trigger={['contextMenu']}
+          >
+            <div className={styles.editorContainer} ref={wrapperRef}>
+              <div className={styles.editorGraph} ref={graphRef} />
+              <div className={styles.editorMiniMap} ref={miniMapRef} />
+              {flowGraph && <Breadcrumb flowGraph={flowGraph} />}
+            </div>
+          </Dropdown>
         </Layout>
       </GraphContext.Provider>
     </div>

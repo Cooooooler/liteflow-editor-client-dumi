@@ -9,7 +9,7 @@ import { Dropdown, Modal, Tooltip } from 'antd';
 import classNames from 'classnames';
 import { history } from 'liteflow-editor-client/LiteFlowEditor/hooks/useHistory';
 import { INodeData } from 'liteflow-editor-client/LiteFlowEditor/model/node';
-import getContextPadMenu from 'liteflow-editor-client/LiteFlowEditor/panels/flowGraph/contextPad/ContextPadMenu';
+import getContextPadMenu from 'liteflow-editor-client/LiteFlowEditor/panels/flowGraph/contextPad';
 import { createStyles } from 'liteflow-editor-client/LiteFlowEditor/styles';
 import IndicatorIcons from 'liteflow-editor-client/LiteFlowEditor/svg_components/IndicatorIcons';
 import { debounce } from 'lodash';

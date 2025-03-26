@@ -5,6 +5,7 @@ declare module '*.svg' {
   export function ReactComponent(
     props: React.SVGProps<SVGSVGElement>,
   ): React.ReactElement;
+
   const url: string;
   export default url;
 }
@@ -23,11 +24,6 @@ declare interface LiteFlowNode {
   disabled?: boolean;
 }
 
-declare interface IMenuInfo {
-  x: number;
-  y: number;
-  scene: string;
-  visible: boolean;
-}
+declare type IMenuScene = 'node' | 'blank';
 
 declare type IContextPadScene = 'append' | 'prepend' | 'replace';

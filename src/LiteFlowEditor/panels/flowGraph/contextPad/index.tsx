@@ -1,5 +1,5 @@
 import { Edge, Graph, Node } from '@antv/x6';
-import { Input } from 'antd';
+import { MenuProps, Typography } from 'antd';
 import {
   BRANCH_GROUP,
   CONTROL_GROUP,
@@ -7,24 +7,12 @@ import {
   OTHER_GROUP,
   SEQUENCE_GROUP,
 } from 'liteflow-editor-client/LiteFlowEditor/cells';
-import useClickAway from 'liteflow-editor-client/LiteFlowEditor/hooks/useClickAway';
+import GraphContext from 'liteflow-editor-client/LiteFlowEditor/context/GraphContext';
 import { history } from 'liteflow-editor-client/LiteFlowEditor/hooks/useHistory';
 import ELBuilder from 'liteflow-editor-client/LiteFlowEditor/model/builder';
 import { INodeData } from 'liteflow-editor-client/LiteFlowEditor/model/node';
 import { createStyles } from 'liteflow-editor-client/LiteFlowEditor/styles';
-import React, { useCallback, useRef } from 'react';
-import styles from './index.module.less';
-
-interface IProps {
-  x: number;
-  y: number;
-  edge?: Edge;
-  node?: Node;
-  scene?: IContextPadScene;
-  title?: string;
-  visible: boolean;
-  flowGraph: Graph;
-}
+import React, { useCallback, useContext } from 'react';
 
 const groups = [
   NODE_GROUP,
@@ -34,148 +22,104 @@ const groups = [
   OTHER_GROUP,
 ];
 
+interface IProps {
+  edge?: Edge;
+  node?: Node;
+  scene?: IContextPadScene;
+  title?: string;
+  flowGraph?: Graph;
+}
+
+const { Text } = Typography;
+
 const useStyles = createStyles(({ token, css }) => {
   return {
-    editorContextPad: css`
-      z-index: ${token.zIndexBase};
-      position: fixed;
-      min-width: 200px;
-      box-shadow: ${token.boxShadow};
-      background: ${token.colorBgContainer};
-    `,
-    editorContextPadHeader: css`
+    groupComponent: css`
+      height: 100%;
+      width: 100%;
       display: flex;
-      align-items: stretch;
-      line-height: 20px;
-      margin: 10px 12px;
-    `,
-    editorContextPadTitle: css`
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-      font-size: ${token.fontSize}px;
-    `,
-    editorContextPadSearch: css`
-      margin: 10px 12px;
-    `,
-    editorContextPadResults: css`
-      margin: 7px 3px 7px 12px;
-      max-height: 280px;
-      overflow: auto;
-      padding-right: 9px;
+      gap: ${token.marginXS}px;
+      align-items: center;
     `,
   };
 });
 
-const FlowGraphContextPad: React.FC<IProps> = (props) => {
-  const menuRef = useRef(null);
-  const {
-    x,
-    y,
-    visible,
-    flowGraph,
-    edge,
-    node,
-    scene = 'append',
-    title = '插入节点',
-  } = props;
+const GroupComponent: React.FC<{ cell: LiteFlowNode; extraProps: IProps }> = ({
+  cell,
+  extraProps,
+}) => {
+  const { styles } = useStyles();
+  const { edge, node, scene, flowGraph } = extraProps;
+  const { graph: flowGraphContext } = useContext(GraphContext);
+  const graph = flowGraph ?? flowGraphContext;
 
-  const onClickAway = useCallback(
-    () => flowGraph.trigger('graph:hideContextPad'),
-    [flowGraph],
-  );
-
-  useClickAway(() => onClickAway(), menuRef);
-
-  const onClickMenu = useCallback(
-    (cellType: LiteFlowNode) => {
-      if (edge) {
-        let targetNode = edge.getTargetNode();
-        let { model: targetModel } = targetNode?.getData<INodeData>() || {};
-        const sourceNode = edge.getSourceNode();
-        const { model: sourceModel } = sourceNode?.getData<INodeData>() || {};
-        const inComingEdgesLength = (
-          flowGraph.getIncomingEdges(targetNode as Node) || []
-        ).length;
-        if (
-          inComingEdgesLength > 1 ||
-          (sourceModel && targetModel?.isParentOf(sourceModel))
-        ) {
-          sourceModel?.append(
-            ELBuilder.createELNode(cellType.type, targetModel),
-          );
-        } else {
-          targetModel?.prepend(
-            ELBuilder.createELNode(cellType.type, targetModel),
-          );
-        }
-        history.push();
-      } else if (node) {
-        const { model } = node.getData() || {};
-        if (scene === 'prepend') {
-          model.prepend(ELBuilder.createELNode(cellType.type, model));
-        } else if (scene === 'replace') {
-          model.replace(ELBuilder.createELNode(cellType.type, model));
-        } else {
-          model.append(ELBuilder.createELNode(cellType.type, model));
-        }
-        history.push();
+  const onClickMenu = useCallback(() => {
+    if (edge) {
+      let targetNode = edge.getTargetNode();
+      let { model: targetModel } = targetNode?.getData<INodeData>() || {};
+      const sourceNode = edge.getSourceNode();
+      const { model: sourceModel } = sourceNode?.getData<INodeData>() || {};
+      const inComingEdgesLength = (
+        graph.getIncomingEdges(targetNode as Node) || []
+      ).length;
+      if (
+        inComingEdgesLength > 1 ||
+        (sourceModel && targetModel?.isParentOf(sourceModel))
+      ) {
+        sourceModel?.append(ELBuilder.createELNode(cell.type, targetModel));
+      } else {
+        targetModel?.prepend(ELBuilder.createELNode(cell.type, targetModel));
       }
+      history.push();
+    } else if (node) {
+      const { model } = node.getData() || {};
+      if (scene === 'prepend') {
+        model.prepend(ELBuilder.createELNode(cell.type, model));
+      } else if (scene === 'replace') {
+        model.replace(ELBuilder.createELNode(cell.type, model));
+      } else {
+        model.append(ELBuilder.createELNode(cell.type, model));
+      }
+      history.push();
+    }
+  }, [graph, edge, node]);
 
-      onClickAway();
-    },
-    [flowGraph, edge, node],
-  );
-
-  return !visible ? null : (
+  return (
     <div
-      ref={menuRef}
-      className={styles.liteflowEditorContextPad}
-      style={{ left: x, top: y }}
+      className={styles.groupComponent}
+      key={cell.type}
+      onClick={onClickMenu}
     >
-      <div className={styles.liteflowEditorContextPadHeader}>
-        <h3 className={styles.liteflowEditorContextPadTitle}>{title}</h3>
-      </div>
-      <div className={styles.liteflowEditorContextPadBody}>
-        <div className={styles.liteflowEditorContextPadSearch}>
-          <Input.Search placeholder="" />
-        </div>
-        <div className={styles.liteflowEditorContextPadResults}>
-          {groups.map((group) => (
-            <div
-              key={group.key}
-              className={styles.liteflowEditorContextPadGroup}
-            >
-              <div className={styles.liteflowEditorContextPadGroupName}>
-                {group.name}
-              </div>
-              <div className={styles.liteflowEditorContextPadGroupItems}>
-                {group.cellTypes.map((cellType, index) => (
-                  <div
-                    key={index}
-                    className={styles.liteflowEditorContextPadGroupItem}
-                    onClick={() => {
-                      onClickMenu(cellType);
-                    }}
-                  >
-                    <img
-                      className={styles.liteflowEditorContextPadGroupItemIcon}
-                      src={cellType.icon}
-                    />
-                    <div
-                      className={styles.liteflowEditorContextPadGroupItemLabel}
-                    >
-                      {cellType.label}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
+      <img src={cell.icon} />
+      <span>{cell.label}</span>
     </div>
   );
 };
 
-export default FlowGraphContextPad;
+const Group = (cell: LiteFlowNode, props: IProps) => {
+  return <GroupComponent cell={cell} extraProps={props} />;
+};
+
+const getContextPadMenu = (props: IProps): MenuProps['items'] => {
+  const { title } = props;
+  return [
+    {
+      key: 'title',
+      label: <Text strong>{title ?? '插入节点'}</Text>,
+      disabled: true,
+    },
+    {
+      type: 'divider',
+    },
+    ...groups.map((item) => ({
+      key: item.key,
+      label: item.name,
+      children: item.cellTypes.map((cell) => ({
+        key: cell.type,
+        label: Group(cell, props),
+      })),
+    })),
+  ];
+};
+
+export default getContextPadMenu;
