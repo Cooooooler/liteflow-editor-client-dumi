@@ -5,6 +5,7 @@ import GraphContext from 'liteflow-editor-client/LiteFlowEditor/context/GraphCon
 import { history } from 'liteflow-editor-client/LiteFlowEditor/hooks/useHistory';
 import ELNode from 'liteflow-editor-client/LiteFlowEditor/model/node';
 import { getDefCmpList } from 'liteflow-editor-client/LiteFlowEditor/services/api';
+import { createStyles } from 'liteflow-editor-client/LiteFlowEditor/styles';
 import React, {
   useCallback,
   useContext,
@@ -12,7 +13,6 @@ import React, {
   useMemo,
   useState,
 } from 'react';
-import styles from './index.module.less';
 
 interface IProps {
   model: ELNode;
@@ -25,10 +25,20 @@ type FormValuesType = {
   maxWaitSeconds: string;
 };
 
+const useStyles = createStyles(({ token, css }) => {
+  return {
+    editorPropertiesEditorContainer: css`
+      overflow-y: auto;
+      padding: ${token.paddingSM}px;
+    `,
+  };
+});
+
 const WHEN_ANY_TRUE: boolean = true;
 const WHEN_ANY_FALSE: boolean = false;
 
 const ConditionPropertiesEditor: React.FC<IProps> = (props) => {
+  const { styles } = useStyles();
   const { model } = props;
   const { getCmpList } = useContext(GraphContext);
   const getCmpListApi = getCmpList ?? getDefCmpList;
@@ -124,7 +134,7 @@ const ConditionPropertiesEditor: React.FC<IProps> = (props) => {
   }, []);
 
   return (
-    <div className={styles.liteflowEditorPropertiesEditorContainer}>
+    <div className={styles.editorPropertiesEditorContainer}>
       <FormRender
         form={form}
         schema={schema}

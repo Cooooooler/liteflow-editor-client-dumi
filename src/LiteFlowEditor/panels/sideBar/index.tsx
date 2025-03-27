@@ -45,11 +45,11 @@ const useStyles = createStyles(({ token, css }) => {
     editorSideBarPanelContent: css`
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      grid-gap: ${token.marginXS}px;
+      grid-gap: ${token.marginSM}px;
     `,
     editorSideBarCellContainer: css`
       display: flex;
-      gap: ${token.marginXS}px;
+      gap: ${token.marginSM}px;
       flex-direction: column;
       align-items: center;
     `,

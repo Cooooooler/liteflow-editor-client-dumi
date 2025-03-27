@@ -29,7 +29,7 @@ const useStyles = createStyles(({ token, css }) => {
       height: 100%;
       width: 100%;
       display: flex;
-      gap: ${token.marginXS}px;
+      gap: ${token.marginSM}px;
       align-items: center;
     `,
   };

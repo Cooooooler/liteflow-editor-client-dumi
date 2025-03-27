@@ -3,11 +3,11 @@ import { Graph, StringExt } from '@antv/x6';
 import { Tree } from 'antd';
 import type { DataNode } from 'antd/es/tree';
 import classNames from 'classnames';
-import React, { MouseEventHandler, useEffect, useState } from 'react';
 import { getIconByType } from 'liteflow-editor-client/LiteFlowEditor/cells';
 import { useModel } from 'liteflow-editor-client/LiteFlowEditor/hooks/useModel';
 import ELNode from 'liteflow-editor-client/LiteFlowEditor/model/node';
 import { createStyles } from 'liteflow-editor-client/LiteFlowEditor/styles';
+import React, { MouseEventHandler, useEffect, useState } from 'react';
 
 interface IProps {
   flowGraph: Graph;
@@ -16,7 +16,7 @@ interface IProps {
 const useStyles = createStyles(({ token, css }) => {
   return {
     editorOutlineContainer: css`
-      padding: ${token.paddingXS}px;
+      padding: ${token.paddingSM}px;
 
       .ant-tree .ant-tree-treenode {
         white-space: nowrap;
@@ -41,9 +41,9 @@ const useStyles = createStyles(({ token, css }) => {
         height: 100%;
       }
     `,
-    editorOutlineTitle:css`
-      padding-left: ${token.paddingXS}px;
-    `
+    editorOutlineTitle: css`
+      padding-left: ${token.paddingSM}px;
+    `,
   };
 });
 
@@ -54,10 +54,7 @@ const TreeNodeTitle: React.FC<{
   const { id, type } = model;
   const { styles } = useStyles();
   return (
-    <div
-      className={classNames(styles.editorOutlineTitle)}
-      onClick={onClick}
-    >
+    <div className={classNames(styles.editorOutlineTitle)} onClick={onClick}>
       <span>{id ? `${id} : ${type}` : type}</span>
     </div>
   );

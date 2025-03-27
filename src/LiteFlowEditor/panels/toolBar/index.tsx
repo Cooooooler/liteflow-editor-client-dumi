@@ -14,10 +14,10 @@ const useStyles = createStyles(({ token, css }) => {
     editorToolBarContainer: css`
       display: flex;
       flex-wrap: wrap;
-      row-gap: ${token.marginXS}px;
+      row-gap: ${token.marginSM}px;
       border-bottom: 1px solid ${token.colorBorder};
       background-color: ${token.colorBgContainer};
-      padding: ${token.paddingXXS}px;
+      padding: ${token.paddingSM}px;
     `,
     editorToolBarGroup: css`
       display: flex;
@@ -29,7 +29,7 @@ const useStyles = createStyles(({ token, css }) => {
         height: 100%;
         width: 1px;
         background-color: ${token.colorBorder};
-        margin: 0 ${token.marginXS}px;
+        margin: 0 ${token.marginSM}px;
       }
 
       &:last-child:after {

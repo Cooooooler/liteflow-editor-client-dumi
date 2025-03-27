@@ -1,7 +1,7 @@
 import { Graph } from '@antv/x6';
-import React, { useEffect, useState } from 'react';
 import { useModel } from 'liteflow-editor-client/LiteFlowEditor/hooks';
 import { createStyles } from 'liteflow-editor-client/LiteFlowEditor/styles';
+import React, { useEffect, useState } from 'react';
 
 interface IProps {
   flowGraph: Graph;
@@ -10,7 +10,7 @@ interface IProps {
 const useStyles = createStyles(({ token, css }) => {
   return {
     editorBasicContainer: css`
-      padding: ${token.paddingXS}px;
+      padding: ${token.paddingSM}px;
     `,
     editorTitle: css`
       color: ${token.colorTextHeading};
@@ -26,6 +26,7 @@ const Basic: React.FC<IProps> = (props) => {
 
   useEffect(() => {
     const handleModelChange = () => {
+      // eslint-disable-next-line react-hooks/rules-of-hooks
       setELString(useModel()?.toEL(' '));
     };
     flowGraph.on('model:change', handleModelChange);
