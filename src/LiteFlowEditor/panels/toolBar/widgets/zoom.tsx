@@ -7,13 +7,25 @@ import {
 } from 'liteflow-editor-client/LiteFlowEditor/constant';
 import { useGraph } from 'liteflow-editor-client/LiteFlowEditor/hooks';
 import makeBtnWidget from 'liteflow-editor-client/LiteFlowEditor/panels/toolBar/widgets/common/makeBtnWidget';
+import { createStyles } from 'liteflow-editor-client/LiteFlowEditor/styles';
 import React, { useEffect, useState } from 'react';
-import styles from './index.module.less';
 
 interface IProps {
   flowGraph: Graph;
 }
 
+const useStyles = createStyles(({ css }) => {
+  return {
+    zoomContainer: css`
+      display: flex;
+      align-items: center;
+    `,
+    zoomText: css`
+      width: 45px;
+      text-align: center;
+    `,
+  };
+});
 const ZoomOut: React.FC<IProps> = makeBtnWidget({
   tooltip: '缩小',
   handler: shortcuts.zoomOut.handler,
@@ -36,7 +48,14 @@ const ZoomIn: React.FC<IProps> = makeBtnWidget({
   },
 });
 
+const Helper = {
+  scaleFormatter(scale: number): string {
+    return (scale * 100).toFixed(0) + '%';
+  },
+};
+
 const Zoom: React.FC<IProps> = (props) => {
+  const { styles } = useStyles();
   const flowGraph = useGraph();
   const [scale, setScale] = useState<number>(flowGraph.zoom());
   useEffect(() => {
@@ -55,12 +74,6 @@ const Zoom: React.FC<IProps> = (props) => {
       <ZoomIn {...props} />
     </div>
   );
-};
-
-const Helper = {
-  scaleFormatter(scale: number): string {
-    return (scale * 100).toFixed(0) + '%';
-  },
 };
 
 export default Zoom;

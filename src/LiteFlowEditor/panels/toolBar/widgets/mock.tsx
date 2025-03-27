@@ -3,14 +3,24 @@ import { Select } from 'antd';
 import { ConditionTypeEnum } from 'liteflow-editor-client/LiteFlowEditor/constant';
 import GraphContext from 'liteflow-editor-client/LiteFlowEditor/context/GraphContext';
 import mocks from 'liteflow-editor-client/LiteFlowEditor/mock';
+import { createStyles } from 'liteflow-editor-client/LiteFlowEditor/styles';
 import React, { useContext, useEffect, useState } from 'react';
-import styles from './index.module.less';
 
 interface IProps {
   flowGraph: Graph;
 }
 
+const useStyles = createStyles(({ css }) => {
+  return {
+    zoomContainer: css`
+      display: flex;
+      align-items: center;
+    `,
+  };
+});
+
 const Mock: React.FC<IProps> = (props) => {
+  const { styles } = useStyles();
   const { flowGraph } = props;
   const [selectedValue, setSelectedValue] = useState<string>('');
 
