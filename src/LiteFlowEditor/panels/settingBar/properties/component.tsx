@@ -36,7 +36,7 @@ const useStyles = createStyles(({ token, css }) => {
 const ComponentPropertiesEditor: React.FC<IProps> = (props) => {
   const { styles } = useStyles();
   const { model } = props;
-  const { getCmpList } = useContext(GraphContext);
+  const { getCmpList, messageApi } = useContext(GraphContext);
   const getCmpListApi = getCmpList ?? getDefCmpList;
   const [cmpList, setCmpList] = useState<any[]>([]);
   const properties = model.getProperties();
@@ -99,6 +99,7 @@ const ComponentPropertiesEditor: React.FC<IProps> = (props) => {
     const modelNode = model.getStartNode();
     const originSize = modelNode.getSize();
     modelNode.updateAttrs({ label: { text: id } }).setSize(originSize); // 解决由于文本修改导致的尺寸错误
+    messageApi.success('操作成功');
   };
 
   useEffect(() => {
@@ -106,8 +107,8 @@ const ComponentPropertiesEditor: React.FC<IProps> = (props) => {
       data: '',
       tag: '',
       maxWaitSeconds: '',
-      ...properties,
       id: model.id,
+      ...properties,
     });
   }, [model.id]);
 

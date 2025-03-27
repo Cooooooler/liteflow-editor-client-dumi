@@ -1,4 +1,5 @@
 import { Graph } from '@antv/x6';
+import { MessageInstance } from 'antd/es/message/interface';
 import { Context, createContext, RefObject } from 'react';
 
 /**
@@ -14,6 +15,7 @@ export interface IGraphContext {
     toJSON(): Record<string, any>;
     fromJSON(data: Record<string, any>): void;
   };
+  messageApi: MessageInstance;
   getCmpList?: (data?: any) => Promise<any>;
   getChainPage?: (data?: any) => Promise<any>;
   getChainById?: (data?: any) => Promise<any>;

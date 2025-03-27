@@ -1,5 +1,5 @@
 import { Cell, Graph } from '@antv/x6';
-import { Dropdown } from 'antd';
+import { Dropdown, message } from 'antd';
 import classNames from 'classnames';
 import { forceLayout } from 'liteflow-editor-client/LiteFlowEditor/common/layout';
 import {
@@ -129,6 +129,7 @@ const LiteFlowEditor = forwardRef<React.FC, ILiteFlowEditorProps>(function (
   } = props;
 
   const { styles } = useStyles();
+  const [messageApi, contextHolder] = message.useMessage();
   const widgetList = useMemo(
     () => widgets || [ConnectStatus, ChainManager],
     [widgets],
@@ -226,6 +227,7 @@ const LiteFlowEditor = forwardRef<React.FC, ILiteFlowEditorProps>(function (
   }, [flowGraph]);
   return (
     <div className={classNames(className)} style={style}>
+      {contextHolder}
       <GlobalStyles />
       <GraphContext.Provider
         value={{
@@ -233,6 +235,7 @@ const LiteFlowEditor = forwardRef<React.FC, ILiteFlowEditorProps>(function (
           graphWrapper: wrapperRef,
           model: null,
           currentEditor,
+          messageApi,
           getCmpList,
           getChainPage,
           getChainById,
