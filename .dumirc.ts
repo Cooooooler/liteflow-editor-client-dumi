@@ -17,5 +17,4 @@ Powered by self`,
       pathRewrite: { '^/lon': '' },
     },
   },
-  define: { 'process.env.DUMI_APP_A': process.env.DUMI_APP_A },
 });

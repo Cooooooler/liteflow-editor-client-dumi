@@ -21,39 +21,39 @@ export const LINE_COLOR = '#c1c1c1';
 
 /** 逻辑组件类型 */
 export enum NodeTypeEnum {
-  COMMON = 'common', // common, 普通
+  COMMON = 'NodeComponent', // common, 普通
 
-  BOOLEAN = 'boolean', // boolean, 布尔
+  BOOLEAN = 'NodeBooleanComponent', // boolean, 布尔
 
-  SWITCH = 'switch', // switch, 选择
+  SWITCH = 'NodeSwitchComponent', // switch, 选择
 
-  IF = 'if', // if, 条件
+  IF = 'NodeIfComponent', // if, 条件
 
-  FOR = 'for', // for, 循环次数
+  FOR = 'NodeForComponent', // for, 循环次数
 
-  WHILE = 'while', // while, 循环条件
+  WHILE = 'NodeWhileComponent', // while, 循环条件
 
-  BREAK = 'break', // break, 循环跳出
+  BREAK = 'NodeBreakComponent', // break, 循环跳出
 
-  ITERATOR = 'iterator', // iterator, 循环迭代
+  ITERATOR = 'NodeIteratorComponent', // iterator, 循环迭代
 
-  SCRIPT = 'script', // script, 脚本
+  SCRIPT = 'ScriptCommonComponent', // script, 脚本
 
-  BOOLEAN_SCRIPT = 'boolean_script', // boolean_script, 布尔脚本
+  BOOLEAN_SCRIPT = 'ScriptBooleanComponent', // boolean_script, 布尔脚本
 
-  SWITCH_SCRIPT = 'switch_script', // switch_script, 选择脚本
+  SWITCH_SCRIPT = 'ScriptSwitchComponent', // switch_script, 选择脚本
 
-  IF_SCRIPT = 'if_script', // if_script, 条件脚本
+  IF_SCRIPT = 'ScriptIfComponent', // if_script, 条件脚本
 
-  FOR_SCRIPT = 'for_script', // for_script, 循环次数脚本
+  FOR_SCRIPT = 'ScriptForComponent', // for_script, 循环次数脚本
 
-  WHILE_SCRIPT = 'while_script', // while_script, 循环条件脚本
+  WHILE_SCRIPT = 'ScriptWhileComponent', // while_script, 循环条件脚本
 
-  BREAK_SCRIPT = 'break_script', // break_script, 循环跳出脚本
+  BREAK_SCRIPT = 'ScriptBreakComponent', // break_script, 循环跳出脚本
 
   FALLBACK = 'fallback', // 降级
 
-  VIRTUAL = 'virtual', // virtual, 虚节点
+  VIRTUAL = 'NodeVirtualComponent', // virtual, 虚节点
 }
 
 /** 逻辑编排类型 */

@@ -1,6 +1,6 @@
 {
   "name": "liteflow-editor-client",
-  "version": "1.0.14",
+  "version": "1.0.17",
   "description": "LiteFlow EL-Expression Visual Editor",
   "module": "dist/index.js",
   "types": "dist/index.d.ts",

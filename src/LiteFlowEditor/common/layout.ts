@@ -1,7 +1,6 @@
-import {Graph, Node, KeyValue} from '@antv/x6';
-import {DagreLayout, DagreLayoutOptions} from '@antv/layout';
-import {NODE_WIDTH, RANK_SEP, NODE_SEP, ConditionTypeEnum} from '../constant';
-import {} from '@antv/x6';
+import { DagreLayout, DagreLayoutOptions } from '@antv/layout';
+import { Graph, KeyValue, Node } from '@antv/x6';
+import { ConditionTypeEnum, NODE_SEP, NODE_WIDTH, RANK_SEP } from '../constant';
 // import dagre from '@dagrejs/dagre';
 // import ELK from 'elkjs/lib/elk.bundled.js';
 // import cytoscape from 'cytoscape';
@@ -20,12 +19,6 @@ const ranksep: number = RANK_SEP;
 const nodesep: number = NODE_SEP;
 const controlPoints: DagreLayoutOptions['controlPoints'] = false;
 const begin: [number, number] = [40, 40];
-
-export const forceLayout = (flowGraph: Graph, cfg: any = {}): void => {
-  antvDagreLayout(flowGraph, cfg);
-
-  // dagreLayout(flowGraph, cfg);
-};
 
 /**
  * 使用AntV的图布局包实现布局
@@ -51,7 +44,7 @@ function antvDagreLayout(flowGraph: Graph, cfg: any = {}): void {
     ...cfg,
   });
 
-  const {nodes: newNodes} = dagreLayout.layout({
+  const { nodes: newNodes } = dagreLayout.layout({
     // @ts-ignore
     nodes: flowGraph.getNodes().map((node) => {
       node.setZIndex(1);
@@ -64,12 +57,11 @@ function antvDagreLayout(flowGraph: Graph, cfg: any = {}): void {
   });
 
   newNodes?.forEach((node: any) => {
-
     const cell: Node | undefined = flowGraph.getCellById(node.id) as
       | Node
       | undefined;
     if (cell) {
-      const positionMes = cell.position()
+      const positionMes = cell.position();
       if (positionMes.x === 0 && positionMes.y === 0) {
         cell.position(node.x, node.y);
       }
@@ -81,6 +73,12 @@ function antvDagreLayout(flowGraph: Graph, cfg: any = {}): void {
 
   // fineTuneCatchNodes(flowGraph);
 }
+
+export const forceLayout = (flowGraph: Graph, cfg: any = {}): void => {
+  antvDagreLayout(flowGraph, cfg);
+
+  // dagreLayout(flowGraph, cfg);
+};
 
 /**
  * 解决Dagre布局部分节点层次过低问题
@@ -122,7 +120,7 @@ function fineTuneCatchNodes(flowGraph: Graph) {
   while (queue.length) {
     let cells: Node[] = [];
     queue.forEach((next: Node) => {
-      const {model} = next.getData();
+      const { model } = next.getData();
       const currentModel = model.proxy || model;
       if (currentModel.type === ConditionTypeEnum.CATCH) {
         if (next.shape === ConditionTypeEnum.CATCH) {
@@ -144,9 +142,11 @@ function fineTuneCatchNodes(flowGraph: Graph) {
 }
 
 function beforeCatchStart(flowGraph: Graph, catchStart: Node) {
-  const catchRootNode = (flowGraph.getNeighbors(catchStart, {
-    outgoing: true,
-  }) as Node[])[0];
+  const catchRootNode = (
+    flowGraph.getNeighbors(catchStart, {
+      outgoing: true,
+    }) as Node[]
+  )[0];
 
   const deltaY = catchStart.position().y - catchRootNode.position().y;
   if (!deltaY) return;
@@ -156,7 +156,7 @@ function beforeCatchStart(flowGraph: Graph, catchStart: Node) {
   while (queue.length) {
     let cells: Node[] = [];
     queue.forEach((next: Node) => {
-      const {x, y} = next.position();
+      const { x, y } = next.position();
       next.position(x, y - deltaY);
 
       const neighbors = flowGraph.getNeighbors(next, {
@@ -169,9 +169,11 @@ function beforeCatchStart(flowGraph: Graph, catchStart: Node) {
 }
 
 function afterCatchEnd(flowGraph: Graph, catchEnd: Node) {
-  const catchRootNode = (flowGraph.getNeighbors(catchEnd, {
-    incoming: true,
-  }) as Node[])[0];
+  const catchRootNode = (
+    flowGraph.getNeighbors(catchEnd, {
+      incoming: true,
+    }) as Node[]
+  )[0];
 
   const deltaY = catchEnd.position().y - catchRootNode.position().y;
   if (!deltaY) return;
@@ -181,7 +183,7 @@ function afterCatchEnd(flowGraph: Graph, catchEnd: Node) {
   while (queue.length) {
     let cells: Node[] = [];
     queue.forEach((next: Node) => {
-      const {x, y} = next.position();
+      const { x, y } = next.position();
       next.position(x, y - deltaY);
 
       const neighbors = flowGraph.getNeighbors(next, {
@@ -213,8 +215,8 @@ function getNodeOrderFrom(flowGraph: Graph): string[] {
         outgoing: true,
       }) as Node[];
       neighbors.sort((a: Node, b: Node) => {
-        const {y: aY} = a.position();
-        const {y: bY} = b.position();
+        const { y: aY } = a.position();
+        const { y: bY } = b.position();
         return aY - bY;
       });
       const lastIndex = queue.length;

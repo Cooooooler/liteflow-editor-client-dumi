@@ -30,7 +30,6 @@ const requestController = extend({
   timeout: 10000, // 请求超时时间
   headers: {
     'Content-Type': 'application/json',
-    Authorization: 'token:6329c2b26a8c4f5eaa17dfd76502e988',
   },
   errorHandler: (error) => {
     // 统一的错误处理
@@ -47,8 +46,9 @@ const requestController = extend({
 // 添加请求拦截器
 requestController.interceptors.request.use((url, options) => {
   // 可以在这里添加统一的请求头，例如 token
-  const token = localStorage.getItem('Authorization');
+  const token = localStorage.getItem('authToken');
 
+  console.log(options);
   const headers = new Headers(options.headers);
 
   if (token) {
@@ -59,7 +59,7 @@ requestController.interceptors.request.use((url, options) => {
 });
 
 // 添加响应拦截器
-requestController.interceptors.response.use((response, _) => {
+requestController.interceptors.response.use((response) => {
   // 可以在这里处理统一的响应，例如错误提示
   statusMapHandle.get(response.status)?.();
   return response;
