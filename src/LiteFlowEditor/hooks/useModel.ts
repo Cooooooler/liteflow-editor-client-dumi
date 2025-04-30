@@ -6,6 +6,6 @@ export const setModel = (_newModel: ELNode) => {
   model = _newModel;
 };
 
-export const useModel = () => {
+export const getModel = () => {
   return model;
 };

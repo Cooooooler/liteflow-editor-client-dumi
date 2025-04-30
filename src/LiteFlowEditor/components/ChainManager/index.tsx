@@ -7,7 +7,7 @@ import AddChain, {
 } from 'liteflow-editor-client/LiteFlowEditor/components/ChainManager/AddChain';
 import type { IGraphContext } from 'liteflow-editor-client/LiteFlowEditor/context/GraphContext';
 import { GraphContext } from 'liteflow-editor-client/LiteFlowEditor/context/GraphContext';
-import { useModel } from 'liteflow-editor-client/LiteFlowEditor/hooks';
+import { getModel } from 'liteflow-editor-client/LiteFlowEditor/hooks';
 import {
   deleteDefChain,
   getDefChainById,
@@ -68,7 +68,7 @@ const ChainManager: FC = () => {
       ...currentChain,
       chainDsl: safeStringify(currentEditor.toJSON()),
       // eslint-disable-next-line react-hooks/rules-of-hooks
-      elData: useModel().toEL(' '),
+      elData: getModel().toEL(' '),
     });
     handleDesc(res);
   };

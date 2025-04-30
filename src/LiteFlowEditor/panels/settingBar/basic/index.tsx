@@ -1,5 +1,5 @@
 import { Graph } from '@antv/x6';
-import { useModel } from 'liteflow-editor-client/LiteFlowEditor/hooks';
+import { getModel } from 'liteflow-editor-client/LiteFlowEditor/hooks';
 import { createStyles } from 'liteflow-editor-client/LiteFlowEditor/styles';
 import React, { useEffect, useState } from 'react';
 
@@ -22,12 +22,12 @@ const useStyles = createStyles(({ token, css }) => {
 const Basic: React.FC<IProps> = (props) => {
   const { flowGraph } = props;
   const { styles } = useStyles();
-  const [elString, setELString] = useState<string>(useModel()?.toEL(' '));
+  const [elString, setELString] = useState<string>(getModel()?.toEL(' '));
 
   useEffect(() => {
     const handleModelChange = () => {
       // eslint-disable-next-line react-hooks/rules-of-hooks
-      setELString(useModel()?.toEL(' '));
+      setELString(getModel()?.toEL(' '));
     };
     flowGraph.on('model:change', handleModelChange);
     return () => {

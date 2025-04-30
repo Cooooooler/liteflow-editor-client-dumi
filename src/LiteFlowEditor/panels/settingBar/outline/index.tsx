@@ -4,7 +4,7 @@ import { Tree } from 'antd';
 import type { DataNode } from 'antd/es/tree';
 import classNames from 'classnames';
 import { getIconByType } from 'liteflow-editor-client/LiteFlowEditor/cells';
-import { useModel } from 'liteflow-editor-client/LiteFlowEditor/hooks/useModel';
+import { getModel } from 'liteflow-editor-client/LiteFlowEditor/hooks/useModel';
 import ELNode from 'liteflow-editor-client/LiteFlowEditor/model/node';
 import { createStyles } from 'liteflow-editor-client/LiteFlowEditor/styles';
 import React, { MouseEventHandler, useEffect, useState } from 'react';
@@ -64,7 +64,7 @@ const Outline: React.FC<IProps> = (props) => {
   const { flowGraph } = props;
   const { styles } = useStyles();
 
-  const model = useModel();
+  const model = getModel();
   const initialkeys: string[] = [];
   const [treeData, setTreeData] = useState<DataNode[]>(
     model ? [transformer(model, initialkeys)] : [],
@@ -106,7 +106,7 @@ const Outline: React.FC<IProps> = (props) => {
 
   useEffect(() => {
     const handleModelChange = () => {
-      const model = useModel();
+      const model = getModel();
       if (model) {
         const keys: string[] = [];
         setTreeData([transformer(model, keys)]);

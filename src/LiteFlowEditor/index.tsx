@@ -1,5 +1,4 @@
 import { Cell, Graph } from '@antv/x6';
-import { useUpdateEffect } from 'ahooks';
 import { Dropdown, message, Spin } from 'antd';
 import classNames from 'classnames';
 import { forceLayout } from 'liteflow-editor-client/LiteFlowEditor/common/layout';
@@ -9,9 +8,11 @@ import {
 } from 'liteflow-editor-client/LiteFlowEditor/components';
 import { MIN_ZOOM } from 'liteflow-editor-client/LiteFlowEditor/constant';
 import GraphContext from 'liteflow-editor-client/LiteFlowEditor/context/GraphContext';
-import { useModel } from 'liteflow-editor-client/LiteFlowEditor/hooks';
 import { history } from 'liteflow-editor-client/LiteFlowEditor/hooks/useHistory';
-import { setModel } from 'liteflow-editor-client/LiteFlowEditor/hooks/useModel';
+import {
+  getModel,
+  setModel,
+} from 'liteflow-editor-client/LiteFlowEditor/hooks/useModel';
 import ELBuilder from 'liteflow-editor-client/LiteFlowEditor/model/builder';
 import Breadcrumb from 'liteflow-editor-client/LiteFlowEditor/panels/breadcrumb';
 import getContextMenu from 'liteflow-editor-client/LiteFlowEditor/panels/flowGraph/contextMenu';
@@ -24,14 +25,17 @@ import {
   createGlobalStyle,
   createStyles,
 } from 'liteflow-editor-client/LiteFlowEditor/styles';
+import { handleTimeConsumingOperations } from 'liteflow-editor-client/LiteFlowEditor/utils/flowChartUtils';
 import React, {
   forwardRef,
+  useCallback,
   useEffect,
   useImperativeHandle,
   useMemo,
   useRef,
   useState,
 } from 'react';
+
 interface ILiteFlowEditorProps {
   /**
    * 样式类
@@ -147,23 +151,29 @@ const LiteFlowEditor = forwardRef<React.FC, ILiteFlowEditorProps>(function (
   const [flowGraph, setFlowGraph] = useState<Graph>();
   const [contextMenuScene, setContextMenuScene] =
     useState<IMenuScene>(defaultMenuInfo);
+  const [isLayouting, setIsLayouting] = useState(false);
 
-  const currentEditor = {
-    getGraphInstance() {
-      return flowGraph;
-    },
-    toJSON() {
-      // eslint-disable-next-line react-hooks/rules-of-hooks
-      return useModel().toJSON();
-    },
-    fromJSON(data: Record<string, any>) {
-      const model = ELBuilder.build(data || {});
-      setModel(model);
-      history.cleanHistory();
-      flowGraph?.zoomToFit({ minScale: MIN_ZOOM, maxScale: 1 });
-    },
-  };
+  // Memoize the currentEditor object to prevent unnecessary re-renders
+  const currentEditor = useMemo(
+    () => ({
+      getGraphInstance() {
+        return flowGraph;
+      },
+      toJSON() {
+        return getModel().toJSON();
+      },
+      fromJSON(data: Record<string, any>) {
+        const model = ELBuilder.build(data || {});
+        setModel(model);
+        history.cleanHistory();
+        flowGraph?.zoomToFit({ minScale: MIN_ZOOM, maxScale: 1 });
+      },
+    }),
+    [flowGraph],
+  );
+
   useImperativeHandle(ref, () => currentEditor as any);
+
   useEffect(() => {
     if (graphRef.current && miniMapRef.current) {
       const flowGraph = createFlowGraph(graphRef.current, miniMapRef.current);
@@ -171,48 +181,39 @@ const LiteFlowEditor = forwardRef<React.FC, ILiteFlowEditorProps>(function (
       setFlowGraph(flowGraph);
       history.init(flowGraph);
     }
-  }, []);
+  }, [onReady]);
+
+  // Memoize resize handler to prevent recreation on each render
+  const resizeHandler = useCallback(() => {
+    requestAnimationFrame(() => {
+      if (flowGraph && wrapperRef.current) {
+        const width = wrapperRef.current.clientWidth;
+        const height = wrapperRef.current.clientHeight;
+        flowGraph.resize(width, height);
+      }
+    });
+  }, [flowGraph]);
 
   // resize flowGraph's size when window size changes
   useEffect(() => {
-    const handler = () => {
-      requestAnimationFrame(() => {
-        if (flowGraph && wrapperRef && wrapperRef.current) {
-          const width = wrapperRef.current.clientWidth;
-          const height = wrapperRef.current.clientHeight;
-          flowGraph.resize(width, height);
-        }
-      });
-    };
-    window.addEventListener('resize', handler);
+    window.addEventListener('resize', resizeHandler);
     return () => {
-      window.removeEventListener('resize', handler);
+      window.removeEventListener('resize', resizeHandler);
     };
-  }, [flowGraph, wrapperRef]);
+  }, [resizeHandler]);
 
-  // NOTE: listen toggling context menu event
-  const [isLayouting, setIsLayouting] = useState(false);
-  const handleModelChange = async () => {
+  // Memoize model change handler
+  const handleModelChange = useCallback(async () => {
     if (flowGraph) {
-      // Set loading state immediately
-      setIsLayouting(true);
-
-      // Use a promise to ensure the loading state is fully applied
-      // before continuing with the layout operation
-      await new Promise((resolve) => {
-        // Use requestAnimationFrame to wait for the next paint cycle
-        // This ensures the loading spinner is rendered before heavy operations
-        requestAnimationFrame(() => {
-          // Add a small delay to ensure the spinner is visible
-          setTimeout(resolve, 50);
-        });
-      });
-
-      try {
-        // Define the layout function
-        const performLayout = async () => {
-          // eslint-disable-next-line react-hooks/rules-of-hooks
-          const model = useModel();
+      handleTimeConsumingOperations(
+        () => {
+          setIsLayouting(true);
+        },
+        () => {
+          setIsLayouting(false);
+        },
+        async () => {
+          const model = getModel();
           const modelJSON = model.toCells() as Cell[];
           flowGraph.startBatch('update');
           flowGraph.resetCells(modelJSON);
@@ -221,92 +222,89 @@ const LiteFlowEditor = forwardRef<React.FC, ILiteFlowEditorProps>(function (
             flowGraph.stopBatch('update');
             flowGraph.trigger('model:changed');
           });
-        };
-
-        // Determine which scheduling method to use
-        if (window.requestIdleCallback) {
-          // Use requestIdleCallback for browsers that support it
-          await new Promise<void>((resolve) => {
-            window.requestIdleCallback(
-              async () => {
-                try {
-                  await performLayout();
-                  resolve();
-                } catch (error) {
-                  console.error(
-                    'Layout operation failed in idle callback:',
-                    error,
-                  );
-                  resolve();
-                }
-              },
-              { timeout: 2000 }, // Increased timeout for complex layouts
-            );
-          });
-        } else {
-          // Direct execution for browsers without requestIdleCallback
-          await performLayout();
-        }
-      } catch (error) {
-        console.error('Layout operation failed:', error);
-      } finally {
-        // Always ensure we reset the loading state
-        setIsLayouting(false);
-      }
+        },
+      );
     }
-  };
+  }, [flowGraph]);
 
-  useUpdateEffect(() => {
-    if (isLayouting) {
-      console.log('布局中...');
-    } else {
-      console.log('布局完成');
-    }
-  }, [isLayouting]);
-
-  useEffect(() => {
-    const showHandler = (info: IMenuScene) => {
+  // Memoize context menu handlers
+  const showContextMenuHandler = useCallback(
+    (info: IMenuScene) => {
       flowGraph?.lockScroller();
       setContextMenuScene(info);
-    };
-    const hideHandler = () => {
-      flowGraph?.unlockScroller();
-      setContextMenuScene(defaultMenuInfo);
-    };
+    },
+    [flowGraph],
+  );
 
-    if (flowGraph) {
-      flowGraph.on('graph:showContextMenu', showHandler);
-      flowGraph.on('graph:hideContextMenu', hideHandler);
-      flowGraph.on('model:change', handleModelChange);
-    }
-    return () => {
-      if (flowGraph) {
-        flowGraph.off('graph:showContextMenu', showHandler);
-        flowGraph.off('graph:hideContextMenu', hideHandler);
-        flowGraph.off('model:change', handleModelChange);
-      }
-    };
+  const hideContextMenuHandler = useCallback(() => {
+    flowGraph?.unlockScroller();
+    setContextMenuScene(defaultMenuInfo);
   }, [flowGraph]);
+
+  // Set up event listeners
+  useEffect(() => {
+    if (!flowGraph) return;
+
+    flowGraph.on('graph:showContextMenu', showContextMenuHandler);
+    flowGraph.on('graph:hideContextMenu', hideContextMenuHandler);
+    flowGraph.on('model:change', handleModelChange);
+
+    return () => {
+      flowGraph.off('graph:showContextMenu', showContextMenuHandler);
+      flowGraph.off('graph:hideContextMenu', hideContextMenuHandler);
+      flowGraph.off('model:change', handleModelChange);
+    };
+  }, [
+    flowGraph,
+    showContextMenuHandler,
+    hideContextMenuHandler,
+    handleModelChange,
+  ]);
+
+  // Memoize context value to prevent unnecessary re-renders
+  const contextValue = useMemo(
+    () => ({
+      graph: flowGraph!,
+      graphWrapper: wrapperRef,
+      model: null,
+      currentEditor,
+      messageApi,
+      getCmpList,
+      getChainPage,
+      getChainById,
+      addChain,
+      updateChain,
+      deleteChain,
+    }),
+    [
+      flowGraph,
+      currentEditor,
+      messageApi,
+      getCmpList,
+      getChainPage,
+      getChainById,
+      addChain,
+      updateChain,
+      deleteChain,
+    ],
+  );
+
+  // Memoize context menu items
+  const contextMenuItems = useMemo(
+    () =>
+      getContextMenu({
+        scene: contextMenuScene,
+        flowGraph,
+      }),
+    [contextMenuScene, flowGraph],
+  );
+
   return (
     <div className={classNames(className)} style={style}>
       <Spin spinning={isLayouting} fullscreen />
       {contextHolder}
       <GlobalStyles />
-      <GraphContext.Provider
-        value={{
-          graph: flowGraph!,
-          graphWrapper: wrapperRef,
-          model: null,
-          currentEditor,
-          messageApi,
-          getCmpList,
-          getChainPage,
-          getChainById,
-          addChain,
-          updateChain,
-          deleteChain,
-        }}
-      >
+      <GraphContext.Provider value={contextValue}>
         <Layout
           flowGraph={flowGraph}
           SideBar={SideBar}
@@ -316,10 +314,7 @@ const LiteFlowEditor = forwardRef<React.FC, ILiteFlowEditorProps>(function (
         >
           <Dropdown
             menu={{
-              items: getContextMenu({
-                scene: contextMenuScene,
-                flowGraph,
-              }),
+              items: contextMenuItems,
             }}
             trigger={['contextMenu']}
           >

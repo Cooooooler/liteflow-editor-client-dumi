@@ -1,7 +1,7 @@
 import { Graph } from '@antv/x6';
 import {
+  getModel,
   setModel,
-  useModel,
 } from 'liteflow-editor-client/LiteFlowEditor/hooks/useModel';
 import ELBuilder from 'liteflow-editor-client/LiteFlowEditor/model/builder';
 import ELNode from 'liteflow-editor-client/LiteFlowEditor/model/node';
@@ -32,7 +32,7 @@ export const history = {
     if (nextState) {
       this.$historyStack.push(nextState.toJSON());
     } else {
-      this.$historyStack.push(useModel().toJSON());
+      this.$historyStack.push(getModel().toJSON());
     }
     this.$cursorIndex++;
     if (!options.silent) {
@@ -60,7 +60,7 @@ export const history = {
     }
   },
   cleanHistory() {
-    this.$historyStack = [useModel().toJSON()];
+    this.$historyStack = [getModel().toJSON()];
     this.$cursorIndex = 0;
     this.$graph.trigger('model:change');
     this.$graph.trigger('toolBar:forceUpdate');

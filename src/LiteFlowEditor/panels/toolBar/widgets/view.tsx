@@ -1,7 +1,7 @@
 import { EyeOutlined } from '@ant-design/icons';
 import { Graph } from '@antv/x6';
 import { Modal } from 'antd';
-import { useModel } from 'liteflow-editor-client/LiteFlowEditor/hooks';
+import { getModel } from 'liteflow-editor-client/LiteFlowEditor/hooks';
 import { createStyles } from 'liteflow-editor-client/LiteFlowEditor/styles';
 import React from 'react';
 import JsonView from 'react-json-view';
@@ -22,7 +22,7 @@ const useStyles = createStyles(({ css }) => {
 
 const ViewComponent: React.FC = () => {
   const { styles } = useStyles();
-  const model = useModel();
+  const model = getModel();
 
   return (
     <div className={styles.modalContent}>
