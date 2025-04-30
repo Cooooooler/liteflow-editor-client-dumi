@@ -6,7 +6,7 @@
 import { LiteFlowEditor, requestController } from 'liteflow-editor-client';
 import React, { FC } from 'react';
 
-const Authorization = 'token:4f2eb94cf4674f4990842caf09662ec2';
+const Authorization = 'token:8f6dd867e9434612bbeda04b53cc290f';
 
 const getChainPage = (data?: any) => {
   return requestController('/lon/api/v2/aiqa/mgr/liteflowChain/getPage', {

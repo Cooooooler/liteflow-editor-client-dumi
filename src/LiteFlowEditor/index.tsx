@@ -1,5 +1,6 @@
 import { Cell, Graph } from '@antv/x6';
-import { Dropdown, message } from 'antd';
+import { useUpdateEffect } from 'ahooks';
+import { Dropdown, message, Spin } from 'antd';
 import classNames from 'classnames';
 import { forceLayout } from 'liteflow-editor-client/LiteFlowEditor/common/layout';
 import {
@@ -31,7 +32,6 @@ import React, {
   useRef,
   useState,
 } from 'react';
-
 interface ILiteFlowEditorProps {
   /**
    * 样式类
@@ -191,6 +191,79 @@ const LiteFlowEditor = forwardRef<React.FC, ILiteFlowEditorProps>(function (
   }, [flowGraph, wrapperRef]);
 
   // NOTE: listen toggling context menu event
+  const [isLayouting, setIsLayouting] = useState(false);
+  const handleModelChange = async () => {
+    if (flowGraph) {
+      // Set loading state immediately
+      setIsLayouting(true);
+
+      // Use a promise to ensure the loading state is fully applied
+      // before continuing with the layout operation
+      await new Promise((resolve) => {
+        // Use requestAnimationFrame to wait for the next paint cycle
+        // This ensures the loading spinner is rendered before heavy operations
+        requestAnimationFrame(() => {
+          // Add a small delay to ensure the spinner is visible
+          setTimeout(resolve, 50);
+        });
+      });
+
+      try {
+        // Define the layout function
+        const performLayout = async () => {
+          // eslint-disable-next-line react-hooks/rules-of-hooks
+          const model = useModel();
+          const modelJSON = model.toCells() as Cell[];
+          flowGraph.startBatch('update');
+          flowGraph.resetCells(modelJSON);
+          // Apply layout method
+          await forceLayout(flowGraph).then(() => {
+            flowGraph.stopBatch('update');
+            flowGraph.trigger('model:changed');
+          });
+        };
+
+        // Determine which scheduling method to use
+        if (window.requestIdleCallback) {
+          // Use requestIdleCallback for browsers that support it
+          await new Promise<void>((resolve) => {
+            window.requestIdleCallback(
+              async () => {
+                try {
+                  await performLayout();
+                  resolve();
+                } catch (error) {
+                  console.error(
+                    'Layout operation failed in idle callback:',
+                    error,
+                  );
+                  resolve();
+                }
+              },
+              { timeout: 2000 }, // Increased timeout for complex layouts
+            );
+          });
+        } else {
+          // Direct execution for browsers without requestIdleCallback
+          await performLayout();
+        }
+      } catch (error) {
+        console.error('Layout operation failed:', error);
+      } finally {
+        // Always ensure we reset the loading state
+        setIsLayouting(false);
+      }
+    }
+  };
+
+  useUpdateEffect(() => {
+    if (isLayouting) {
+      console.log('布局中...');
+    } else {
+      console.log('布局完成');
+    }
+  }, [isLayouting]);
+
   useEffect(() => {
     const showHandler = (info: IMenuScene) => {
       flowGraph?.lockScroller();
@@ -200,18 +273,7 @@ const LiteFlowEditor = forwardRef<React.FC, ILiteFlowEditorProps>(function (
       flowGraph?.unlockScroller();
       setContextMenuScene(defaultMenuInfo);
     };
-    const handleModelChange = () => {
-      if (flowGraph) {
-        // eslint-disable-next-line react-hooks/rules-of-hooks
-        const model = useModel();
-        const modelJSON = model.toCells() as Cell[];
-        flowGraph.startBatch('update');
-        flowGraph.resetCells(modelJSON);
-        forceLayout(flowGraph);
-        flowGraph.stopBatch('update');
-        flowGraph.trigger('model:changed');
-      }
-    };
+
     if (flowGraph) {
       flowGraph.on('graph:showContextMenu', showHandler);
       flowGraph.on('graph:hideContextMenu', hideHandler);
@@ -227,6 +289,7 @@ const LiteFlowEditor = forwardRef<React.FC, ILiteFlowEditorProps>(function (
   }, [flowGraph]);
   return (
     <div className={classNames(className)} style={style}>
+      <Spin spinning={isLayouting} fullscreen />
       {contextHolder}
       <GlobalStyles />
       <GraphContext.Provider
