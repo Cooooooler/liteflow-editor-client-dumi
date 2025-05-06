@@ -5,10 +5,6 @@ hero:
   actions:
     - text: 开发指南
       link: /guide
-    - text: 编辑器前端
-      link: https://gitee.com/imwangshijiang/flow-editor-quickstart/
-    - text: 编辑器后端
-      link: https://gitee.com/dogsong99/liteflow-editor-server/
 features:
   - title: 开源免费
     emoji: 💎

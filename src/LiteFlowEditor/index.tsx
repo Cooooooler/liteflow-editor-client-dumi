@@ -221,6 +221,7 @@ const LiteFlowEditor = forwardRef<React.FC, ILiteFlowEditorProps>(function (
           await forceLayout(flowGraph).then(() => {
             flowGraph.stopBatch('update');
             flowGraph.trigger('model:changed');
+            flowGraph.zoomToFit({ minScale: MIN_ZOOM, maxScale: 1 });
           });
         },
       );

@@ -11,28 +11,18 @@ group:
 
 ![LiteFlow逻辑可视化编排](./assets/Liteflow逻辑编排可视化设计.png)
 
-```jsx
-import { LiteFlowEditor } from 'liteflow-editor-client';
-
-export default () => (
-  <div style={{ height: '800px' }}>
-    <LiteFlowEditor />
-  </div>
-);
-```
-
 ### 项目启动步骤
 
 - 1. 安装依赖：
 
 ```bash
-$ yarn
+$ pnpm i
 ```
 
 - 2. 启动服务：
 
 ```bash
-$ yarn start
+$ pnpm dev
 ```
 
 以下是对[LiteFlow](https://liteflow.cc/)逻辑可视化编排的实现说明。
