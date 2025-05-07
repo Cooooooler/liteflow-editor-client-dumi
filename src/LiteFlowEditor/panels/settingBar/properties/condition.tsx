@@ -1,18 +1,13 @@
 import { useAsyncEffect } from 'ahooks';
 import FormRender, { Schema, useForm, WatchProperties } from 'form-render';
+import { state } from 'liteflow-editor-client/LiteFlowEditor';
 import { ConditionTypeEnum } from 'liteflow-editor-client/LiteFlowEditor/constant';
 import GraphContext from 'liteflow-editor-client/LiteFlowEditor/context/GraphContext';
 import { history } from 'liteflow-editor-client/LiteFlowEditor/hooks/useHistory';
 import ELNode from 'liteflow-editor-client/LiteFlowEditor/model/node';
-import { getDefCmpList } from 'liteflow-editor-client/LiteFlowEditor/services/api';
 import { createStyles } from 'liteflow-editor-client/LiteFlowEditor/styles';
-import React, {
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react';
+import React, { useContext, useEffect } from 'react';
+import { useSnapshot } from 'valtio';
 
 interface IProps {
   model: ELNode;
@@ -41,53 +36,49 @@ const ConditionPropertiesEditor: React.FC<IProps> = (props) => {
   const { styles } = useStyles();
   const { model } = props;
   const { getCmpList, messageApi } = useContext(GraphContext);
-  const getCmpListApi = getCmpList ?? getDefCmpList;
-  const [cmpList, setCmpList] = useState<any[]>([]);
+  const snap = useSnapshot(state);
   const properties = model.getProperties();
 
-  const schema = useMemo<Schema>(
-    () => ({
-      type: 'object',
-      properties: {
-        any: {
-          title: 'Any（any）',
-          type: 'string',
-          widget: 'select',
-          props: {
-            options: [
-              { label: '是', value: WHEN_ANY_TRUE },
-              { label: '否', value: WHEN_ANY_FALSE },
-            ],
-          },
-          hidden: model.type !== ConditionTypeEnum.WHEN,
+  const schema: Schema = {
+    type: 'object',
+    properties: {
+      any: {
+        title: 'Any（any）',
+        type: 'string',
+        widget: 'select',
+        props: {
+          options: [
+            { label: '是', value: WHEN_ANY_TRUE },
+            { label: '否', value: WHEN_ANY_FALSE },
+          ],
         },
-        id: {
-          title: '唯一标识（id）',
-          type: 'string',
-          widget: 'input',
-          required: true,
-        },
-        tag: {
-          title: '标签（tag）',
-          type: 'string',
-          widget: 'select',
-          props: {
-            options: cmpList.map((item) => ({
-              label: item?.cmpName,
-              value: item?.cmpId,
-            })),
-          },
-          required: true,
-        },
-        maxWaitSeconds: {
-          title: '超时（maxWaitSeconds）',
-          type: 'string',
-          widget: 'input',
-        },
+        hidden: model.type !== ConditionTypeEnum.WHEN,
       },
-    }),
-    [model, cmpList],
-  );
+      id: {
+        title: '唯一标识（id）',
+        type: 'string',
+        widget: 'input',
+        required: true,
+      },
+      tag: {
+        title: '标签（tag）',
+        type: 'string',
+        widget: 'select',
+        props: {
+          options: snap.cmpList.map((item) => ({
+            label: item?.cmpName,
+            value: item?.cmpId,
+          })),
+        },
+        required: true,
+      },
+      maxWaitSeconds: {
+        title: '超时（maxWaitSeconds）',
+        type: 'string',
+        widget: 'input',
+      },
+    },
+  };
 
   const form = useForm();
 
@@ -95,7 +86,7 @@ const ConditionPropertiesEditor: React.FC<IProps> = (props) => {
     tag: (val: string) => {
       form.setValueByPath(
         'id',
-        cmpList.find((item) => item.cmpId === val)?.cmpId,
+        snap.cmpList.find((item) => item.cmpId === val)?.cmpId,
       );
     },
   };
@@ -123,16 +114,9 @@ const ConditionPropertiesEditor: React.FC<IProps> = (props) => {
     });
   }, [model.id]);
 
-  const getCmpListCallBack = useCallback(async () => {
-    const { data } = await getCmpListApi({ type: model.type });
-    if (data && data.length) {
-      setCmpList(data);
-    }
-  }, [setCmpList]);
-
   useAsyncEffect(async () => {
-    await getCmpListCallBack();
-  }, []);
+    await getCmpList({ type: model.type });
+  }, [model.type]);
 
   return (
     <div className={styles.editorPropertiesEditorContainer}>

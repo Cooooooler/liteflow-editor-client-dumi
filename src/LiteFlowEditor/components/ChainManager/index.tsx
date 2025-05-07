@@ -32,13 +32,12 @@ const ChainManager: FC = () => {
   const { styles } = useStyles();
   const { getChainPage, getChainById, updateChain, deleteChain } =
     useContext(GraphContext);
-  const getChainPageApi = getChainPage;
   const getChainByIdApi = getChainById;
   const updateChainApi = updateChain;
   const deleteChainApi = deleteChain;
 
   useAsyncEffect(async () => {
-    await getChainPageApi();
+    await getChainPage();
   }, []);
 
   const { currentEditor } = useContext<IGraphContext>(GraphContext);

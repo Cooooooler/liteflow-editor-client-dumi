@@ -51,6 +51,13 @@ export type Chain = {
   elJson: any;
 };
 
+export type CmpList = {
+  cmpId: string;
+  cmpName: string;
+  type: string;
+  typeName: string;
+};
+
 export type Status = 'success' | 'error' | 'pending';
 
 interface ILiteFlowEditorProps {
@@ -95,9 +102,14 @@ interface ILiteFlowEditorProps {
   [key: string]: any;
 }
 
-export const state = proxy<{ status: Status; chains: Chain[] }>({
+export const state = proxy<{
+  status: Status;
+  chains: Chain[];
+  cmpList: CmpList[];
+}>({
   status: 'pending',
   chains: [],
+  cmpList: [],
 });
 
 const defaultMenuInfo: IMenuScene = 'blank';

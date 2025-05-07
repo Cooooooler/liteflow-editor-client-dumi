@@ -1,17 +1,12 @@
 import { useAsyncEffect } from 'ahooks';
 import FormRender, { Schema, useForm, WatchProperties } from 'form-render';
+import { state } from 'liteflow-editor-client/LiteFlowEditor';
 import GraphContext from 'liteflow-editor-client/LiteFlowEditor/context/GraphContext';
 import { history } from 'liteflow-editor-client/LiteFlowEditor/hooks/useHistory';
 import ELNode from 'liteflow-editor-client/LiteFlowEditor/model/node';
-import { getDefCmpList } from 'liteflow-editor-client/LiteFlowEditor/services/api';
 import { createStyles } from 'liteflow-editor-client/LiteFlowEditor/styles';
-import React, {
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react';
+import React, { useContext, useEffect } from 'react';
+import { useSnapshot } from 'valtio';
 
 interface IProps {
   model: ELNode;
@@ -37,46 +32,42 @@ const ComponentPropertiesEditor: React.FC<IProps> = (props) => {
   const { styles } = useStyles();
   const { model } = props;
   const { getCmpList, messageApi } = useContext(GraphContext);
-  const getCmpListApi = getCmpList ?? getDefCmpList;
-  const [cmpList, setCmpList] = useState<any[]>([]);
+  const snap = useSnapshot(state);
   const properties = model.getProperties();
 
-  const schema: Schema = useMemo(
-    () => ({
-      type: 'object',
-      properties: {
-        id: {
-          title: 'ID',
-          type: 'string',
-          widget: 'input',
-          required: true,
-        },
-        data: {
-          title: '参数（data）',
-          type: 'string',
-          widget: 'input',
-        },
-        tag: {
-          title: '标签（tag）',
-          type: 'string',
-          widget: 'select',
-          props: {
-            options: cmpList.map((item) => ({
-              label: item?.cmpName,
-              value: item?.cmpId,
-            })),
-          },
-          required: true,
-        },
-        maxWaitSeconds: {
-          title: '超时（maxWaitSeconds）',
-          type: 'string',
-          widget: 'input',
-        },
+  const schema: Schema = {
+    type: 'object',
+    properties: {
+      id: {
+        title: 'ID',
+        type: 'string',
+        widget: 'input',
+        required: true,
       },
-    }),
-    [cmpList],
-  );
+      data: {
+        title: '参数（data）',
+        type: 'string',
+        widget: 'input',
+      },
+      tag: {
+        title: '标签（tag）',
+        type: 'string',
+        widget: 'select',
+        props: {
+          options: snap.cmpList.map((item) => ({
+            label: item?.cmpName,
+            value: item?.cmpId,
+          })),
+        },
+        required: true,
+      },
+      maxWaitSeconds: {
+        title: '超时（maxWaitSeconds）',
+        type: 'string',
+        widget: 'input',
+      },
+    },
+  };
 
   const form = useForm();
 
@@ -84,7 +75,7 @@ const ComponentPropertiesEditor: React.FC<IProps> = (props) => {
     tag: (val: string) => {
       form.setValueByPath(
         'id',
-        cmpList.find((item) => item.cmpId === val)?.cmpId,
+        snap.cmpList.find((item) => item.cmpId === val)?.cmpId,
       );
     },
   };
@@ -112,16 +103,9 @@ const ComponentPropertiesEditor: React.FC<IProps> = (props) => {
     });
   }, [model.id]);
 
-  const getCmpListCallBack = useCallback(async () => {
-    const { data } = await getCmpListApi({ type: model.type });
-    if (data && data.length) {
-      setCmpList(data);
-    }
-  }, [setCmpList]);
-
   useAsyncEffect(async () => {
-    await getCmpListCallBack();
-  }, []);
+    await getCmpList({ type: model.type });
+  }, [model.type]);
 
   return (
     <div className={styles.editorPropertiesEditorContainer}>

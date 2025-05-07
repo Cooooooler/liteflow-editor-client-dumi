@@ -34,14 +34,22 @@ const Demo: FC = () => {
     }
   };
 
-  const getCmpList = (params?: any) => {
-    return requestController('/lon/api/v2/aiqa/chat/cmpManager/getCmpList', {
-      method: 'GET',
-      params,
-      headers: {
-        Authorization,
+  const getCmpList = async (params?: any) => {
+    const res = await requestController(
+      '/lon/api/v2/aiqa/chat/cmpManager/getCmpList',
+      {
+        method: 'GET',
+        params,
+        headers: {
+          Authorization,
+        },
       },
-    });
+    );
+
+    if (res.data && ref.current) {
+      const { data: cmpList = [] } = res;
+      ref.current.state.cmpList = cmpList;
+    }
   };
 
   const getChainById = (data?: any) => {
