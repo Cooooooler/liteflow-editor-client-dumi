@@ -1,26 +1,20 @@
 import { DeleteOutlined, SaveOutlined } from '@ant-design/icons';
 import { useAsyncEffect } from 'ahooks';
 import { Button, Modal, Select, Tooltip } from 'antd';
+import { Chain, state } from 'liteflow-editor-client';
 import { LoadingButton } from 'liteflow-editor-client/LiteFlowEditor/components';
-import AddChain, {
-  Chain,
-} from 'liteflow-editor-client/LiteFlowEditor/components/ChainManager/AddChain';
+import AddChain from 'liteflow-editor-client/LiteFlowEditor/components/ChainManager/AddChain';
 import type { IGraphContext } from 'liteflow-editor-client/LiteFlowEditor/context/GraphContext';
 import { GraphContext } from 'liteflow-editor-client/LiteFlowEditor/context/GraphContext';
 import { getModel } from 'liteflow-editor-client/LiteFlowEditor/hooks';
-import {
-  deleteDefChain,
-  getDefChainById,
-  getDefChainPage,
-  updateDefChain,
-} from 'liteflow-editor-client/LiteFlowEditor/services/api';
 import { createStyles } from 'liteflow-editor-client/LiteFlowEditor/styles';
 import {
   handleDesc,
   safeParse,
   safeStringify,
 } from 'liteflow-editor-client/LiteFlowEditor/utils';
-import React, { FC, useCallback, useContext, useState } from 'react';
+import React, { FC, useContext, useState } from 'react';
+import { useSnapshot } from 'valtio';
 
 const useStyles = createStyles(({ token }) => {
   return {
@@ -33,31 +27,23 @@ const useStyles = createStyles(({ token }) => {
 });
 
 const ChainManager: FC = () => {
-  const [chains, setChains] = useState<Array<Chain>>([]);
+  const snap = useSnapshot(state);
   const [currentChain, setCurrentChain] = useState<Chain>();
   const { styles } = useStyles();
   const { getChainPage, getChainById, updateChain, deleteChain } =
     useContext(GraphContext);
-  const getChainPageApi = getChainPage ?? getDefChainPage;
-  const getChainByIdApi = getChainById ?? getDefChainById;
-  const updateChainApi = updateChain ?? updateDefChain;
-  const deleteChainApi = deleteChain ?? deleteDefChain;
-  const getChainList = useCallback(async () => {
-    const {
-      data: { data },
-    } = await getChainPageApi();
-    if (data && data.length) {
-      setChains(data);
-    }
-  }, [setChains]);
+  const getChainPageApi = getChainPage;
+  const getChainByIdApi = getChainById;
+  const updateChainApi = updateChain;
+  const deleteChainApi = deleteChain;
 
   useAsyncEffect(async () => {
-    await getChainList();
+    await getChainPageApi();
   }, []);
 
   const { currentEditor } = useContext<IGraphContext>(GraphContext);
   const handleOnChange = async (id: number) => {
-    setCurrentChain(chains.find((chain) => chain.id === id));
+    setCurrentChain(snap.chains.find((chain) => chain.id === id));
     const { data } = await getChainByIdApi({ id });
     const chainDsl = safeParse(data?.chainDsl);
     currentEditor.fromJSON(chainDsl);
@@ -82,19 +68,18 @@ const ChainManager: FC = () => {
         handleDesc(res);
         setCurrentChain(undefined);
         currentEditor.fromJSON({});
-        await getChainList();
       },
     });
   };
 
   return (
-    !!chains.length && (
+    snap.status === 'success' && (
       <div className={styles.wrapper}>
         <Select
           value={currentChain?.id}
           placeholder="请选择接口数据"
           style={{ width: 200 }}
-          options={chains.map((chain) => ({
+          options={snap.chains.map((chain) => ({
             label: chain.chainDesc,
             value: chain.id ?? void 0,
           }))}
@@ -105,7 +90,7 @@ const ChainManager: FC = () => {
             <LoadingButton
               type="primary"
               requestApi={handleSave}
-              disabled={!chains.length || !currentChain?.id}
+              disabled={!currentChain?.id}
               icon={<SaveOutlined />}
             >
               保存
@@ -117,12 +102,12 @@ const ChainManager: FC = () => {
             type="primary"
             danger
             onClick={handleDelete}
-            disabled={!chains.length || !currentChain?.id}
+            disabled={!currentChain?.id}
           >
             <DeleteOutlined /> 删除
           </Button>
         </Tooltip>
-        <AddChain onChange={getChainList} />
+        <AddChain />
       </div>
     )
   );

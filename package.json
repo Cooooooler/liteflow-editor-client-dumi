@@ -65,6 +65,7 @@
     "@umijs/test": "^4.4.5",
     "dumi": "^2.4.13",
     "eslint": "^8.23.0",
+    "eslint-plugin-valtio": "^0.8.0",
     "father": "^4.1.0",
     "husky": "^8.0.1",
     "lint-staged": "^13.0.3",
@@ -101,6 +102,7 @@
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-json-view": "^1.21.3",
-    "umi-request": "^1.4.0"
+    "umi-request": "^1.4.0",
+    "valtio": "^2.1.4"
   }
 }

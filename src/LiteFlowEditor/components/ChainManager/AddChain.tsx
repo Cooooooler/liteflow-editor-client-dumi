@@ -7,20 +7,14 @@ import { addDefChain } from 'liteflow-editor-client/LiteFlowEditor/services/api'
 import { handleDesc } from 'liteflow-editor-client/LiteFlowEditor/utils';
 import React, { useContext, useState } from 'react';
 
-export type Chain = {
-  id: number;
-  chainDesc: string;
-  chainId: string;
-  elJson: any;
-};
+
 
 interface IProps {
   className?: string;
   disabled?: boolean;
-  onChange: (...args: any[]) => Promise<void>;
 }
 
-const ChainSettings: React.FC<IProps> = ({ disabled, onChange, className }) => {
+const ChainSettings: React.FC<IProps> = ({ disabled, className }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { addChain } = useContext(GraphContext);
   const addChainApi = addChain ?? addDefChain;
@@ -62,7 +56,6 @@ const ChainSettings: React.FC<IProps> = ({ disabled, onChange, className }) => {
       });
       if (handleDesc(res)) {
         setIsModalOpen(false);
-        await onChange();
       }
     }
   };

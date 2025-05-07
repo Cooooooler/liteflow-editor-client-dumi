@@ -16,12 +16,12 @@ export interface IGraphContext {
     fromJSON(data: Record<string, any>): void;
   };
   messageApi: MessageInstance;
-  getCmpList?: (data?: any) => Promise<any>;
-  getChainPage?: (data?: any) => Promise<any>;
-  getChainById?: (data?: any) => Promise<any>;
-  addChain?: (data?: any) => Promise<any>;
-  updateChain?: (data?: any) => Promise<any>;
-  deleteChain?: (data?: any) => Promise<any>;
+  getCmpList: (data?: any) => Promise<any>;
+  getChainPage: (data?: any) => Promise<any>;
+  getChainById: (data?: any) => Promise<any>;
+  addChain: (data?: any) => Promise<any>;
+  updateChain: (data?: any) => Promise<any>;
+  deleteChain: (data?: any) => Promise<any>;
 }
 
 const defaultValue: IGraphContext = {} as any;
