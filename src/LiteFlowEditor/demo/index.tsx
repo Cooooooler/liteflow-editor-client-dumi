@@ -8,6 +8,7 @@ import {
   LiteFlowEditorRef,
   requestController,
 } from 'liteflow-editor-client';
+import { safeParse } from 'liteflow-editor-client/LiteFlowEditor/utils';
 import React, { FC, useRef } from 'react';
 
 const Demo: FC = () => {
@@ -62,7 +63,14 @@ const Demo: FC = () => {
           Authorization,
         },
       },
-    );
+    ).then((res) => {
+      if (res.data?.chainDsl) {
+        // 安全的处理JSON字符串
+        return safeParse(res.data?.chainDsl);
+      } else {
+        return {};
+      }
+    });
   };
 
   const addChain = (data?: any) => {

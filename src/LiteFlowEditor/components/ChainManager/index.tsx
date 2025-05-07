@@ -10,7 +10,6 @@ import { getModel } from 'liteflow-editor-client/LiteFlowEditor/hooks';
 import { createStyles } from 'liteflow-editor-client/LiteFlowEditor/styles';
 import {
   handleDesc,
-  safeParse,
   safeStringify,
 } from 'liteflow-editor-client/LiteFlowEditor/utils';
 import React, { FC, useContext, useState } from 'react';
@@ -32,7 +31,6 @@ const ChainManager: FC = () => {
   const { styles } = useStyles();
   const { getChainPage, getChainById, updateChain, deleteChain } =
     useContext(GraphContext);
-  const getChainByIdApi = getChainById;
   const updateChainApi = updateChain;
   const deleteChainApi = deleteChain;
 
@@ -43,16 +41,14 @@ const ChainManager: FC = () => {
   const { currentEditor } = useContext<IGraphContext>(GraphContext);
   const handleOnChange = async (id: number) => {
     setCurrentChain(snap.chains.find((chain) => chain.id === id));
-    const { data } = await getChainByIdApi({ id });
-    const chainDsl = safeParse(data?.chainDsl);
-    currentEditor.fromJSON(chainDsl);
+    const data = await getChainById({ id });
+    currentEditor.fromJSON(data);
   };
 
   const handleSave = async () => {
     const res = await updateChainApi({
       ...currentChain,
       chainDsl: safeStringify(currentEditor.toJSON()),
-      // eslint-disable-next-line react-hooks/rules-of-hooks
       elData: getModel().toEL(' '),
     });
     handleDesc(res);

@@ -134,7 +134,7 @@ export default Demo;
 | -------------- | -------------------------------- | ---- | -------------------------- |
 | `style`        | `CSSProperties`                  | 否   | 编辑器容器的样式           |
 | `className`    | `string`                         | 否   | 编辑器容器的样式           |
-| `getCmpList`   | `(params?: any) => Promise<any>` | 否   | 获取组件列表的接口         |
+| `getCmpList`   | `(params?: any) => Promise<any>` | 否   | 获取标签列表的接口         |
 | `getChainPage` | `(data?: any) => Promise<any>`   | 否   | 获取链路分页数据的接口     |
 | `getChainById` | `(data?: any) => Promise<any>`   | 否   | 根据 ID 获取链路详情的接口 |
 | `addChain`     | `(data?: any) => Promise<any>`   | 否   | 添加链路的接口             |
