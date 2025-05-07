@@ -4,9 +4,9 @@
  */
 
 import {
+  Chain,
   LiteFlowEditor,
   LiteFlowEditorRef,
-  requestController,
 } from 'liteflow-editor-client';
 import {
   ConditionTypeList,
@@ -14,6 +14,40 @@ import {
 } from 'liteflow-editor-client/LiteFlowEditor/constant';
 import { safeParse } from 'liteflow-editor-client/LiteFlowEditor/utils';
 import React, { FC, useRef } from 'react';
+import { extend } from 'umi-request';
+
+const requestController = extend({
+  timeout: 10000,
+  headers: {
+    'Content-Type': 'application/json',
+  },
+  errorHandler: (error) => {
+    const { response } = error;
+
+    if (response && response.status) {
+    } else if (!response) {
+    }
+
+    return Promise.reject(error);
+  },
+});
+
+requestController.interceptors.request.use((url, options) => {
+  const token = localStorage.getItem('authToken');
+
+  console.log(options);
+  const headers = new Headers(options.headers);
+
+  if (token) {
+    headers.set('Authorization', token);
+  }
+
+  return { url, options };
+});
+
+requestController.interceptors.response.use((response) => {
+  return response;
+});
 
 const Demo: FC = () => {
   const ref = useRef<LiteFlowEditorRef>(null);
@@ -96,8 +130,10 @@ const Demo: FC = () => {
     }
   };
 
-  const updateChain = (data?: any) => {
-    return requestController(
+  const updateChain = async (
+    data: Chain | { chainDsl: string; elData: string },
+  ) => {
+    const res = await requestController(
       '/lon/api/v2/aiqa/mgr/liteflowChain/updateLiteflowChain',
       {
         method: 'POST',
@@ -107,10 +143,15 @@ const Demo: FC = () => {
         },
       },
     );
+    if (res) {
+      return true;
+    } else {
+      return false;
+    }
   };
 
-  const deleteChain = (data?: any) => {
-    return requestController(
+  const deleteChain = async (data?: { ids: number[] }) => {
+    const res = await requestController(
       '/lon/api/v2/aiqa/mgr/liteflowChain/deleteLiteflowChain',
       {
         method: 'POST',
@@ -120,6 +161,11 @@ const Demo: FC = () => {
         },
       },
     );
+    if (res) {
+      return true;
+    } else {
+      return false;
+    }
   };
 
   return (

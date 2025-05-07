@@ -1,5 +1,6 @@
 import { Cell, Graph } from '@antv/x6';
 import { Dropdown, message, Spin } from 'antd';
+import { MessageInstance } from 'antd/es/message/interface';
 import classNames from 'classnames';
 import { forceLayout } from 'liteflow-editor-client/LiteFlowEditor/common/layout';
 import {
@@ -41,6 +42,7 @@ export type LiteFlowEditorRef = {
   getGraphInstance(): Graph | undefined;
   toJSON(): Record<string, any>;
   fromJSON(data: Record<string, any>): void;
+  messageApi: MessageInstance;
   state: typeof state;
 };
 
@@ -200,6 +202,7 @@ const LiteFlowEditor = forwardRef<LiteFlowEditorRef, ILiteFlowEditorProps>(
           history.cleanHistory();
           flowGraph?.zoomToFit({ minScale: MIN_ZOOM, maxScale: 1 });
         },
+        messageApi,
         state,
       }),
       [flowGraph],

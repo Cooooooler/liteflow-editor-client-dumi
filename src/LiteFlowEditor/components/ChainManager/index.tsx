@@ -8,10 +8,7 @@ import type { IGraphContext } from 'liteflow-editor-client/LiteFlowEditor/contex
 import { GraphContext } from 'liteflow-editor-client/LiteFlowEditor/context/GraphContext';
 import { getModel } from 'liteflow-editor-client/LiteFlowEditor/hooks';
 import { createStyles } from 'liteflow-editor-client/LiteFlowEditor/styles';
-import {
-  handleDesc,
-  safeStringify,
-} from 'liteflow-editor-client/LiteFlowEditor/utils';
+import { safeStringify } from 'liteflow-editor-client/LiteFlowEditor/utils';
 import React, { FC, useContext, useState } from 'react';
 import { useSnapshot } from 'valtio';
 
@@ -31,8 +28,6 @@ const ChainManager: FC = () => {
   const { styles } = useStyles();
   const { getChainPage, getChainById, updateChain, deleteChain } =
     useContext(GraphContext);
-  const updateChainApi = updateChain;
-  const deleteChainApi = deleteChain;
 
   useAsyncEffect(async () => {
     await getChainPage();
@@ -46,12 +41,11 @@ const ChainManager: FC = () => {
   };
 
   const handleSave = async () => {
-    const res = await updateChainApi({
+    const res = await updateChain({
       ...currentChain,
       chainDsl: safeStringify(currentEditor.toJSON()),
       elData: getModel().toEL(' '),
     });
-    handleDesc(res);
   };
 
   const handleDelete = () => {
@@ -59,8 +53,7 @@ const ChainManager: FC = () => {
       title: '操作确认',
       content: '请确认是否删除当前记录？',
       async onOk() {
-        const res = await deleteChainApi({ ids: [currentChain?.id] });
-        handleDesc(res);
+        await deleteChain({ ids: [currentChain?.id] });
         setCurrentChain(undefined);
         currentEditor.fromJSON({});
       },

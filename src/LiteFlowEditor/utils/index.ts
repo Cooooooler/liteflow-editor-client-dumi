@@ -1,5 +1,3 @@
-import { message } from 'antd';
-
 export const safeGet = (obj: any, keyChain: string, defaultVal?: any): any => {
   if (typeof obj !== 'object' || obj === null) {
     return defaultVal;
@@ -25,27 +23,6 @@ export const executeScript = (code: string, type = 'module') => {
   document.body.appendChild(script);
 };
 
-export const handleDesc = ({
-  desc,
-  status,
-}: {
-  data?: any;
-  desc?: string;
-  status?: number;
-}) => {
-  switch (status) {
-    case 1: {
-      message.success(desc);
-      break;
-    }
-    default: {
-      message.error(desc);
-      break;
-    }
-  }
-  return status ?? 0;
-};
-
 export const safeParse = (jsonString: string) => {
   try {
     return JSON.parse(jsonString);
@@ -60,6 +37,6 @@ export const safeStringify = (data: any) => {
     return JSON.stringify(data);
   } catch (error) {
     console.error('Failed to stringify data:', error);
-    return {}; // 或返回一个默认值
+    return ''; // 或返回一个默认值
   }
 };
