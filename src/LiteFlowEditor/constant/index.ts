@@ -96,3 +96,43 @@ export enum ConditionTypeEnum {
 
   DEFAULT = 'DEFAULT', // default
 }
+
+export type NodeTypeList =
+  | NodeTypeEnum.COMMON
+  | NodeTypeEnum.BOOLEAN
+  | NodeTypeEnum.SWITCH
+  | NodeTypeEnum.IF
+  | NodeTypeEnum.FOR
+  | NodeTypeEnum.WHILE
+  | NodeTypeEnum.BREAK
+  | NodeTypeEnum.ITERATOR
+  | NodeTypeEnum.SCRIPT
+  | NodeTypeEnum.BOOLEAN_SCRIPT
+  | NodeTypeEnum.SWITCH_SCRIPT
+  | NodeTypeEnum.IF_SCRIPT
+  | NodeTypeEnum.FOR_SCRIPT
+  | NodeTypeEnum.WHILE_SCRIPT
+  | NodeTypeEnum.BREAK_SCRIPT
+  | NodeTypeEnum.FALLBACK
+  | NodeTypeEnum.VIRTUAL;
+
+export type ConditionTypeList =
+  | ConditionTypeEnum.CHAIN
+  | ConditionTypeEnum.THEN
+  | ConditionTypeEnum.SER
+  | ConditionTypeEnum.WHEN
+  | ConditionTypeEnum.PAR
+  | ConditionTypeEnum.SWITCH
+  | ConditionTypeEnum.IF
+  | ConditionTypeEnum.PRE
+  | ConditionTypeEnum.FINALLY
+  | ConditionTypeEnum.FOR
+  | ConditionTypeEnum.WHILE
+  | ConditionTypeEnum.ITERATOR
+  | ConditionTypeEnum.BREAK
+  | ConditionTypeEnum.CATCH
+  | ConditionTypeEnum.AND
+  | ConditionTypeEnum.OR
+  | ConditionTypeEnum.NOT
+  | ConditionTypeEnum.ABSTRACT
+  | ConditionTypeEnum.DEFAULT;

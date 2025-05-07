@@ -102,7 +102,11 @@ const ChainManager: FC = () => {
             <DeleteOutlined /> 删除
           </Button>
         </Tooltip>
-        <AddChain />
+        <AddChain
+          onSuccess={async () => {
+            await getChainPage();
+          }}
+        />
       </div>
     )
   );

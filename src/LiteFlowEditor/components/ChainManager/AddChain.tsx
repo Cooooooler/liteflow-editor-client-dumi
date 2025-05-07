@@ -3,21 +3,21 @@ import { Button, Modal, Tooltip } from 'antd';
 import FormRender, { Schema, useForm } from 'form-render';
 import { LoadingButton } from 'liteflow-editor-client/LiteFlowEditor/components';
 import GraphContext from 'liteflow-editor-client/LiteFlowEditor/context/GraphContext';
-import { addDefChain } from 'liteflow-editor-client/LiteFlowEditor/services/api';
-import { handleDesc } from 'liteflow-editor-client/LiteFlowEditor/utils';
 import React, { useContext, useState } from 'react';
-
-
 
 interface IProps {
   className?: string;
   disabled?: boolean;
+  onSuccess?: () => void;
 }
 
-const ChainSettings: React.FC<IProps> = ({ disabled, className }) => {
+const ChainSettings: React.FC<IProps> = ({
+  disabled,
+  className,
+  onSuccess,
+}) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { addChain } = useContext(GraphContext);
-  const addChainApi = addChain ?? addDefChain;
   const form = useForm();
 
   const showModal = () => {
@@ -48,15 +48,23 @@ const ChainSettings: React.FC<IProps> = ({ disabled, className }) => {
   };
 
   const handleOk = async () => {
-    const { chainName, chainDesc } = await form.validateFields();
-    if (chainName && chainDesc) {
-      const res = await addChainApi({
+    try {
+      const values = (await form.validateFields()) as {
+        chainName: string;
+        chainDesc: string;
+      };
+      const { chainName, chainDesc } = values;
+      const res = await addChain({
         chainDesc,
         chainName,
       });
-      if (handleDesc(res)) {
+      if (res) {
         setIsModalOpen(false);
+        onSuccess?.();
       }
+    } catch (error) {
+      // Form validation failed
+      console.error('Validation failed:', error);
     }
   };
 
