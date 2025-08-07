@@ -55,21 +55,27 @@ const Demo: FC = () => {
   const Authorization = 'token:8d2cd444d2124a668d1d23109ce6b06c';
 
   const getChainPage = async (data: undefined) => {
-    const res = await requestController(
-      '/lon/api/v2/aiqa/mgr/liteflowChain/getPage',
-      {
-        method: 'POST',
-        data: data ?? {},
-        headers: {
-          Authorization,
+    try {
+      const res = await requestController(
+        '/lon/api/v2/aiqa/mgr/liteflowChain/getPage',
+        {
+          method: 'POST',
+          data: data ?? {},
+          headers: {
+            Authorization,
+          },
         },
-      },
-    );
+      );
 
-    if (res.data && ref.current) {
-      const { data: chains = [] } = res.data;
-      ref.current.state.chains = chains;
-      ref.current.state.status = 'success';
+      if (res.data && ref.current) {
+        const { data: chains = [] } = res.data;
+        ref.current.state.chains = chains;
+        ref.current.state.status = 'success';
+      }
+    } catch (error) {
+      if (ref.current) {
+        ref.current.state.status = 'error';
+      }
     }
   };
 

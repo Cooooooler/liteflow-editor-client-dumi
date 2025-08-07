@@ -116,8 +116,11 @@ export const state = proxy<{
 
 const defaultMenuInfo: IMenuScene = 'blank';
 
-const useStyles = createStyles(({ css }) => {
+const useStyles = createStyles(({ css, token }) => {
   return {
+    editorWrapper: css`
+      background-color: ${token.colorBgContainer};
+    `,
     editorContainer: css`
       width: 100%;
       height: 100%;
@@ -337,7 +340,10 @@ const LiteFlowEditor = forwardRef<LiteFlowEditorRef, ILiteFlowEditorProps>(
     );
 
     return (
-      <div className={classNames(className)} style={style}>
+      <div
+        className={classNames(styles.editorWrapper, className)}
+        style={style}
+      >
         <Spin spinning={isLayouting} fullscreen />
         {contextHolder}
         <GlobalStyles />

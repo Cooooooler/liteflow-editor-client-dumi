@@ -10,11 +10,12 @@ interface IProps {
   flowGraph: Graph;
 }
 
-const useStyles = createStyles(({ css }) => {
+const useStyles = createStyles(({ css, token }) => {
   return {
     zoomContainer: css`
       display: flex;
       align-items: center;
+      color: ${token.colorText};
     `,
   };
 });

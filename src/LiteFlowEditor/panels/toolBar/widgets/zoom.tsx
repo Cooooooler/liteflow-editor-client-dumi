@@ -14,7 +14,7 @@ interface IProps {
   flowGraph: Graph;
 }
 
-const useStyles = createStyles(({ css }) => {
+const useStyles = createStyles(({ css, token }) => {
   return {
     zoomContainer: css`
       display: flex;
@@ -23,6 +23,7 @@ const useStyles = createStyles(({ css }) => {
     zoomText: css`
       width: 45px;
       text-align: center;
+      color: ${token.colorText};
     `,
   };
 });

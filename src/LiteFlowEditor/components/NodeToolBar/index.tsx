@@ -105,9 +105,12 @@ const useStyles = createStyles(({ token, css }) => {
       border-radius: ${token.borderRadius}px;
 
       &:hover {
-        border: 1px solid #ccc;
-        background-color: rgba(64, 87, 109, 0.07);
+        border: 1px solid ${token.colorPrimaryBorder};
+        background-color: ${token.colorBgContainer};
       }
+    `,
+    replaceNode: css`
+      color: #feb663;
     `,
     deleteNode: css`
       position: relative;
@@ -133,15 +136,15 @@ const useStyles = createStyles(({ token, css }) => {
     collapseNode: css`
       position: relative;
       top: -2px;
-      color: #c1c1c1;
+      color: ${token.colorText};
       width: 12px;
       height: 12px;
       font-size: 12px;
-      background: rgba(255, 255, 255, 0.85);
+      background: ${token.colorBgContainer};
 
       &:hover {
         color: rgba(0, 0, 0, 0.85);
-        background: #ffffff;
+        background: ${token.colorBgContainer};
       }
     `,
   };
@@ -255,7 +258,9 @@ const NodeToolBar: React.FC<{ node: Node }> = (props) => {
               }}
               trigger={['click']}
             >
-              <div className={classNames(styles.toolBarBtn)}>
+              <div
+                className={classNames(styles.toolBarBtn, styles.replaceNode)}
+              >
                 <Tooltip title="替换当前节点">
                   <EditOutlined />
                 </Tooltip>
