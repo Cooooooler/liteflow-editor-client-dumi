@@ -1,4 +1,5 @@
 import { disable, enable, setFetchMethod, Theme } from 'darkreader';
+import { logger } from 'liteflow-editor-client/LiteFlowEditor/logger';
 import { useEffect, useRef } from 'react';
 
 type DarkReaderOptions = Partial<Theme>;
@@ -33,13 +34,13 @@ export const useDarkReader = (
           mode: options.mode || defaultOptions.mode!,
         });
       } catch (error) {
-        console.warn('DarkReader enable failed:', error);
+        logger.warn('DarkReader enable failed:', error);
       }
     } else {
       try {
         disable();
       } catch (error) {
-        console.warn('DarkReader disable failed:', error);
+        logger.warn('DarkReader disable failed:', error);
       }
     }
 
@@ -47,7 +48,7 @@ export const useDarkReader = (
       try {
         disable();
       } catch (error) {
-        console.warn('DarkReader cleanup failed:', error);
+        logger.warn('DarkReader cleanup failed:', error);
       }
     };
   }, [

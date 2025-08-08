@@ -36,7 +36,6 @@ const requestController = extend({
 requestController.interceptors.request.use((url, options) => {
   const token = localStorage.getItem('authToken');
 
-  console.log(options);
   const headers = new Headers(options.headers);
 
   if (token) {

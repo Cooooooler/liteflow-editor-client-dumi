@@ -1,4 +1,5 @@
 import { Cell, Graph } from '@antv/x6';
+import { logger } from 'liteflow-editor-client/LiteFlowEditor/logger';
 
 /**
  * Checks if any cell is selected in the graph
@@ -100,7 +101,7 @@ export const handleTimeConsumingOperations = async (
               await timeConsuming();
               resolve();
             } catch (error) {
-              console.error('Layout operation failed in idle callback:', error);
+              logger.error('Layout operation failed in idle callback:', error);
               resolve();
             }
           },
@@ -112,7 +113,7 @@ export const handleTimeConsumingOperations = async (
       await timeConsuming();
     }
   } catch (error) {
-    console.error('Layout operation failed:', error);
+    logger.error('Layout operation failed:', error);
   } finally {
     // End loading state
     afterTimeConsuming();

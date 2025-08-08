@@ -4,6 +4,7 @@ import FormRender, { Schema, useForm } from 'form-render';
 import { LoadingButton } from 'liteflow-editor-client/LiteFlowEditor/components';
 import GraphContext from 'liteflow-editor-client/LiteFlowEditor/context/GraphContext';
 import React, { useContext, useState } from 'react';
+import { logger } from 'liteflow-editor-client/LiteFlowEditor/logger';
 
 interface IProps {
   className?: string;
@@ -64,7 +65,7 @@ const ChainSettings: React.FC<IProps> = ({
       }
     } catch (error) {
       // Form validation failed
-      console.error('Validation failed:', error);
+      logger.error('Validation failed:', error);
     }
   };
 
