@@ -12,6 +12,7 @@ import {
   ConditionTypeList,
   NodeTypeList,
 } from 'liteflow-editor-client/LiteFlowEditor/constant';
+import { ThemeProvider } from 'liteflow-editor-client/LiteFlowEditor/styles';
 import { safeParse } from 'liteflow-editor-client/LiteFlowEditor/utils';
 import React, { FC, useRef } from 'react';
 import { extend } from 'umi-request';
@@ -175,18 +176,20 @@ const Demo: FC = () => {
   };
 
   return (
-    <LiteFlowEditor
-      ref={ref}
-      style={{
-        height: '800px',
-      }}
-      getCmpList={getCmpList}
-      getChainPage={getChainPage}
-      getChainById={getChainById}
-      addChain={addChain}
-      updateChain={updateChain}
-      deleteChain={deleteChain}
-    />
+    <ThemeProvider>
+      <LiteFlowEditor
+        ref={ref}
+        style={{
+          height: '800px',
+        }}
+        getCmpList={getCmpList}
+        getChainPage={getChainPage}
+        getChainById={getChainById}
+        addChain={addChain}
+        updateChain={updateChain}
+        deleteChain={deleteChain}
+      />
+    </ThemeProvider>
   );
 };
 

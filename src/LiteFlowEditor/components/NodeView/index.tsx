@@ -26,7 +26,6 @@ const useStyles = createStyles(({ token, css }) => {
       width: 100%;
       height: 100%;
       text-align: center;
-      color: ${token.colorText};
     `,
   };
 });
@@ -44,7 +43,11 @@ const NodeView: React.FC<{
     <div className={classNames(styles.shapeWrapper)}>
       <img className={styles.shapeSvg} src={icon}></img>
       {children}
-      <div className={styles.shapeText}>{idText}</div>
+      <div
+        className={classNames(styles.shapeText, 'liteflow-editor-node-text')}
+      >
+        {idText}
+      </div>
     </div>
   );
 };

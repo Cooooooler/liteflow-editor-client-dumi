@@ -68,6 +68,12 @@ importers:
       classnames:
         specifier: ^2.5.1
         version: 2.5.1
+      consola:
+        specifier: ^3.4.2
+        version: 3.4.2
+      darkreader:
+        specifier: ^4.9.109
+        version: 4.9.109
       form-render:
         specifier: ^2.5.2
         version: 2.5.2(@types/react@18.3.18)(antd@5.24.3(date-fns@2.30.0)(moment@2.30.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -1685,6 +1691,16 @@ packages:
       react: '>=16.9.0'
       react-dom: '>=16.9.0'
 
+  '@rollup/rollup-linux-x64-gnu@4.44.0':
+    resolution: {integrity: sha512-iUVJc3c0o8l9Sa/qlDL2Z9UP92UZZW1+EmQ4xfjTc1akr0iUFZNfxrXJ/R1T90h/ILm9iXEY6+iPrmYB3pXKjw==}
+    cpu: [x64]
+    os: [linux]
+
+  '@rollup/rollup-win32-x64-msvc@4.44.0':
+    resolution: {integrity: sha512-Q2Mgwt+D8hd5FIPUuPDsvPR7Bguza6yTkJxspDGkZj7tBRn2y4KSWYuIXpftFSjBra76TbKerCV7rgFPQrn+wQ==}
+    cpu: [x64]
+    os: [win32]
+
   '@rushstack/node-core-library@3.63.0':
     resolution: {integrity: sha512-Q7B3dVpBQF1v+mUfxNcNZh5uHVR8ntcnkN5GYjbBLrxUYHBGKbnCM+OdcN+hzCpFlLBH6Ob0dEHhZ0spQwf24A==}
     peerDependencies:
@@ -3261,6 +3277,10 @@ packages:
       react-router: ^4.3.1 || ^5.0.0
       redux: ^3.6.0 || ^4.0.0
 
+  consola@3.4.2:
+    resolution: {integrity: sha512-5IKcdX0nnYavi6G7TtOhwkYzyjfJlatbjMjuLSfE2kYT5pMDOilZ4OvMhi637CcDICTmz3wARPoyhqyX1Y+XvA==}
+    engines: {node: ^14.18.0 || >=16.10.0}
+
   console-browserify@1.2.0:
     resolution: {integrity: sha512-ZMkYO/LkF17QvCPqM0gxw8yUzigAOZOSWSHg91FH6orS7vcEj5dVZTidN2fQ14yBSdg97RqhSNwLUXInd52OTA==}
 
@@ -3516,6 +3536,9 @@ packages:
   dargs@7.0.0:
     resolution: {integrity: sha512-2iy1EkLdlBzQGvbweYRFxmFath8+K7+AKB0TlhHWkNuH+TmovaMH/Wp7V7R4u7f4SnX3OgLsU9t1NI9ioDnUpg==}
     engines: {node: '>=8'}
+
+  darkreader@4.9.109:
+    resolution: {integrity: sha512-Jd7a+ywBvV3k6zuA246/BJBKwSl7D2puN16m4ZmULp4lPGJHJoWcc+8Kq2mQthkSrh5Bvn7JhVBcpth9Mm29BQ==}
 
   data-uri-to-buffer@4.0.1:
     resolution: {integrity: sha512-0R9ikRb668HB7QDxT1vkpuUBtqc53YyAwMwGeUFKRojY/NWKvdZ+9UYtRfGmhqNbRkTSVpMbmyhXipFFv2cb/A==}
@@ -5679,6 +5702,9 @@ packages:
 
   makeerror@1.0.12:
     resolution: {integrity: sha512-JmqCvUhmt43madlpFzG4BQzG2Z3m6tvQDNKdClZnO3VbIudJYmxsT0FNJMeiB2+JTSlTQTSbU8QdesVmwJcmLg==}
+
+  malevic@0.20.2:
+    resolution: {integrity: sha512-s44yEUyfDaONt7nPT7NDQ+Z2oAswErG70ok2Q95bJFh1Bdcn4dZQVMrLE02ZIjTtYfQ/LFOVxF+yB3bdGw/GtQ==}
 
   map-cache@0.2.2:
     resolution: {integrity: sha512-8y/eV9QQZCiyn1SprXSrCmqJN0yNRATe+PO8ztwqrvrbdRLA3eYJF0yaR0YayLWkMbsQSKWS9N2gPcGEc4UsZg==}
@@ -11025,6 +11051,12 @@ snapshots:
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
 
+  '@rollup/rollup-linux-x64-gnu@4.44.0':
+    optional: true
+
+  '@rollup/rollup-win32-x64-msvc@4.44.0':
+    optional: true
+
   '@rushstack/node-core-library@3.63.0(@types/node@20.5.1)':
     dependencies:
       colors: 1.2.5
@@ -11818,7 +11850,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@umijs/plugin-access@2.4.3(kbi7wcvu4mfkwmmqplbx2wkehm)':
+  '@umijs/plugin-access@2.4.3(37add6673f6a29fe38be24bf72c9de67)':
     dependencies:
       '@umijs/plugin-initial-state': 2.4.0(umi@4.4.6(@babel/core@7.26.10)(@types/node@20.5.1)(@types/react@18.3.18)(eslint@8.57.1)(jest@26.6.3(ts-node@10.9.2(@swc/core@1.9.2(@swc/helpers@0.5.1))(@types/node@20.5.1)(typescript@5.8.2)))(lightningcss@1.22.1)(prettier@2.8.8)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(rollup@3.29.5)(sass@1.85.1)(stylelint@14.16.1)(terser@5.39.0)(type-fest@1.4.0)(typescript@5.8.2)(webpack@5.98.0(@swc/core@1.9.2(@swc/helpers@0.5.1))))
       '@umijs/plugin-model': 2.6.2(umi@4.4.6(@babel/core@7.26.10)(@types/node@20.5.1)(@types/react@18.3.18)(eslint@8.57.1)(jest@26.6.3(ts-node@10.9.2(@swc/core@1.9.2(@swc/helpers@0.5.1))(@types/node@20.5.1)(typescript@5.8.2)))(lightningcss@1.22.1)(prettier@2.8.8)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(rollup@3.29.5)(sass@1.85.1)(stylelint@14.16.1)(terser@5.39.0)(type-fest@1.4.0)(typescript@5.8.2)(webpack@5.98.0(@swc/core@1.9.2(@swc/helpers@0.5.1))))
@@ -11869,7 +11901,7 @@ snapshots:
     dependencies:
       umi: 4.4.6(@babel/core@7.26.10)(@types/node@20.5.1)(@types/react@18.3.18)(eslint@8.57.1)(jest@26.6.3(ts-node@10.9.2(@swc/core@1.9.2(@swc/helpers@0.5.1))(@types/node@20.5.1)(typescript@5.8.2)))(lightningcss@1.22.1)(prettier@2.8.8)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(rollup@3.29.5)(sass@1.85.1)(stylelint@14.16.1)(terser@5.39.0)(type-fest@1.4.0)(typescript@5.8.2)(webpack@5.98.0(@swc/core@1.9.2(@swc/helpers@0.5.1)))
 
-  '@umijs/plugin-layout@0.18.1(eoz64iglcfx6az2ubm44iy43yi)':
+  '@umijs/plugin-layout@0.18.1(bd6655c618d0b4d794be1e7e78c1921b)':
     dependencies:
       '@ant-design/icons': 5.6.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@ant-design/pro-layout': 6.38.22(prop-types@15.8.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -11929,14 +11961,14 @@ snapshots:
 
   '@umijs/preset-react@1.8.32(@ant-design/icons@5.6.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(@ant-design/pro-layout@6.38.22(prop-types@15.8.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(dva-core@2.0.4(redux@4.2.1))(react-dom@18.3.1(react@18.3.1))(react-router@6.3.0(react@18.3.1))(react@18.3.1)(redbox-react@1.6.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(ts-node@10.9.2(@swc/core@1.9.2(@swc/helpers@0.5.1))(@types/node@20.5.1)(typescript@5.8.2))(umi@4.4.6(@babel/core@7.26.10)(@types/node@20.5.1)(@types/react@18.3.18)(eslint@8.57.1)(jest@26.6.3(ts-node@10.9.2(@swc/core@1.9.2(@swc/helpers@0.5.1))(@types/node@20.5.1)(typescript@5.8.2)))(lightningcss@1.22.1)(prettier@2.8.8)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(rollup@3.29.5)(sass@1.85.1)(stylelint@14.16.1)(terser@5.39.0)(type-fest@1.4.0)(typescript@5.8.2)(webpack@5.98.0(@swc/core@1.9.2(@swc/helpers@0.5.1))))':
     dependencies:
-      '@umijs/plugin-access': 2.4.3(kbi7wcvu4mfkwmmqplbx2wkehm)
+      '@umijs/plugin-access': 2.4.3(37add6673f6a29fe38be24bf72c9de67)
       '@umijs/plugin-analytics': 0.2.2(umi@4.4.6(@babel/core@7.26.10)(@types/node@20.5.1)(@types/react@18.3.18)(eslint@8.57.1)(jest@26.6.3(ts-node@10.9.2(@swc/core@1.9.2(@swc/helpers@0.5.1))(@types/node@20.5.1)(typescript@5.8.2)))(lightningcss@1.22.1)(prettier@2.8.8)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(rollup@3.29.5)(sass@1.85.1)(stylelint@14.16.1)(terser@5.39.0)(type-fest@1.4.0)(typescript@5.8.2)(webpack@5.98.0(@swc/core@1.9.2(@swc/helpers@0.5.1))))
       '@umijs/plugin-antd': 0.13.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(umi@4.4.6(@babel/core@7.26.10)(@types/node@20.5.1)(@types/react@18.3.18)(eslint@8.57.1)(jest@26.6.3(ts-node@10.9.2(@swc/core@1.9.2(@swc/helpers@0.5.1))(@types/node@20.5.1)(typescript@5.8.2)))(lightningcss@1.22.1)(prettier@2.8.8)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(rollup@3.29.5)(sass@1.85.1)(stylelint@14.16.1)(terser@5.39.0)(type-fest@1.4.0)(typescript@5.8.2)(webpack@5.98.0(@swc/core@1.9.2(@swc/helpers@0.5.1))))
       '@umijs/plugin-crossorigin': 1.2.1(umi@4.4.6(@babel/core@7.26.10)(@types/node@20.5.1)(@types/react@18.3.18)(eslint@8.57.1)(jest@26.6.3(ts-node@10.9.2(@swc/core@1.9.2(@swc/helpers@0.5.1))(@types/node@20.5.1)(typescript@5.8.2)))(lightningcss@1.22.1)(prettier@2.8.8)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(rollup@3.29.5)(sass@1.85.1)(stylelint@14.16.1)(terser@5.39.0)(type-fest@1.4.0)(typescript@5.8.2)(webpack@5.98.0(@swc/core@1.9.2(@swc/helpers@0.5.1))))
       '@umijs/plugin-dva': 0.13.0(dva-core@2.0.4(redux@4.2.1))(react-dom@18.3.1(react@18.3.1))(react-router@6.3.0(react@18.3.1))(react@18.3.1)(redbox-react@1.6.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(umi@4.4.6(@babel/core@7.26.10)(@types/node@20.5.1)(@types/react@18.3.18)(eslint@8.57.1)(jest@26.6.3(ts-node@10.9.2(@swc/core@1.9.2(@swc/helpers@0.5.1))(@types/node@20.5.1)(typescript@5.8.2)))(lightningcss@1.22.1)(prettier@2.8.8)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(rollup@3.29.5)(sass@1.85.1)(stylelint@14.16.1)(terser@5.39.0)(type-fest@1.4.0)(typescript@5.8.2)(webpack@5.98.0(@swc/core@1.9.2(@swc/helpers@0.5.1))))
       '@umijs/plugin-helmet': 1.1.3(react@18.3.1)(umi@4.4.6(@babel/core@7.26.10)(@types/node@20.5.1)(@types/react@18.3.18)(eslint@8.57.1)(jest@26.6.3(ts-node@10.9.2(@swc/core@1.9.2(@swc/helpers@0.5.1))(@types/node@20.5.1)(typescript@5.8.2)))(lightningcss@1.22.1)(prettier@2.8.8)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(rollup@3.29.5)(sass@1.85.1)(stylelint@14.16.1)(terser@5.39.0)(type-fest@1.4.0)(typescript@5.8.2)(webpack@5.98.0(@swc/core@1.9.2(@swc/helpers@0.5.1))))
       '@umijs/plugin-initial-state': 2.4.0(umi@4.4.6(@babel/core@7.26.10)(@types/node@20.5.1)(@types/react@18.3.18)(eslint@8.57.1)(jest@26.6.3(ts-node@10.9.2(@swc/core@1.9.2(@swc/helpers@0.5.1))(@types/node@20.5.1)(typescript@5.8.2)))(lightningcss@1.22.1)(prettier@2.8.8)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(rollup@3.29.5)(sass@1.85.1)(stylelint@14.16.1)(terser@5.39.0)(type-fest@1.4.0)(typescript@5.8.2)(webpack@5.98.0(@swc/core@1.9.2(@swc/helpers@0.5.1))))
-      '@umijs/plugin-layout': 0.18.1(eoz64iglcfx6az2ubm44iy43yi)
+      '@umijs/plugin-layout': 0.18.1(bd6655c618d0b4d794be1e7e78c1921b)
       '@umijs/plugin-locale': 0.15.2(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(umi@4.4.6(@babel/core@7.26.10)(@types/node@20.5.1)(@types/react@18.3.18)(eslint@8.57.1)(jest@26.6.3(ts-node@10.9.2(@swc/core@1.9.2(@swc/helpers@0.5.1))(@types/node@20.5.1)(typescript@5.8.2)))(lightningcss@1.22.1)(prettier@2.8.8)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(rollup@3.29.5)(sass@1.85.1)(stylelint@14.16.1)(terser@5.39.0)(type-fest@1.4.0)(typescript@5.8.2)(webpack@5.98.0(@swc/core@1.9.2(@swc/helpers@0.5.1))))
       '@umijs/plugin-model': 2.6.2(umi@4.4.6(@babel/core@7.26.10)(@types/node@20.5.1)(@types/react@18.3.18)(eslint@8.57.1)(jest@26.6.3(ts-node@10.9.2(@swc/core@1.9.2(@swc/helpers@0.5.1))(@types/node@20.5.1)(typescript@5.8.2)))(lightningcss@1.22.1)(prettier@2.8.8)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(rollup@3.29.5)(sass@1.85.1)(stylelint@14.16.1)(terser@5.39.0)(type-fest@1.4.0)(typescript@5.8.2)(webpack@5.98.0(@swc/core@1.9.2(@swc/helpers@0.5.1))))
       '@umijs/plugin-request': 2.8.0(react@18.3.1)(umi@4.4.6(@babel/core@7.26.10)(@types/node@20.5.1)(@types/react@18.3.18)(eslint@8.57.1)(jest@26.6.3(ts-node@10.9.2(@swc/core@1.9.2(@swc/helpers@0.5.1))(@types/node@20.5.1)(typescript@5.8.2)))(lightningcss@1.22.1)(prettier@2.8.8)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(rollup@3.29.5)(sass@1.85.1)(stylelint@14.16.1)(terser@5.39.0)(type-fest@1.4.0)(typescript@5.8.2)(webpack@5.98.0(@swc/core@1.9.2(@swc/helpers@0.5.1))))
@@ -13272,6 +13304,8 @@ snapshots:
       redux: 4.2.1
       seamless-immutable: 7.1.4
 
+  consola@3.4.2: {}
+
   console-browserify@1.2.0: {}
 
   constants-browserify@1.0.0: {}
@@ -13548,6 +13582,13 @@ snapshots:
       lodash: 4.17.21
 
   dargs@7.0.0: {}
+
+  darkreader@4.9.109:
+    dependencies:
+      malevic: 0.20.2
+    optionalDependencies:
+      '@rollup/rollup-linux-x64-gnu': 4.44.0
+      '@rollup/rollup-win32-x64-msvc': 4.44.0
 
   data-uri-to-buffer@4.0.1: {}
 
@@ -16511,6 +16552,8 @@ snapshots:
   makeerror@1.0.12:
     dependencies:
       tmpl: 1.0.5
+
+  malevic@0.20.2: {}
 
   map-cache@0.2.2: {}
 

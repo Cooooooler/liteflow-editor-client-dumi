@@ -15,7 +15,6 @@ export const shortcuts: { [key: string]: Shortcut } = {
   save: {
     keys: ['meta + s', 'ctrl + s'],
     handler() {
-      console.log('save');
       return false;
     },
   },

@@ -97,6 +97,8 @@
     "antd": "^5.24.1",
     "antd-style": "^3.7.1",
     "classnames": "^2.5.1",
+    "consola": "^3.4.2",
+    "darkreader": "^4.9.109",
     "form-render": "^2.5.2",
     "lodash": "^4.17.21",
     "react": "^18.3.1",

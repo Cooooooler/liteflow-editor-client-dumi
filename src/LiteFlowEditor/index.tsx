@@ -120,6 +120,12 @@ const useStyles = createStyles(({ css, token }) => {
   return {
     editorWrapper: css`
       background-color: ${token.colorBgContainer};
+      .x6-graph-scroller-background {
+        background-color: ${token.colorBgContainer} !important;
+      }
+      .liteflow-editor-node-text {
+        color: ${token.colorText} !important;
+      }
     `,
     editorContainer: css`
       width: 100%;

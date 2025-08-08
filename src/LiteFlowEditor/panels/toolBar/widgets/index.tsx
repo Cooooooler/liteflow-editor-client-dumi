@@ -8,6 +8,7 @@ import Mock from 'liteflow-editor-client/LiteFlowEditor/panels/toolBar/widgets/m
 import Redo from 'liteflow-editor-client/LiteFlowEditor/panels/toolBar/widgets/redo';
 import Save from 'liteflow-editor-client/LiteFlowEditor/panels/toolBar/widgets/save';
 import Selection from 'liteflow-editor-client/LiteFlowEditor/panels/toolBar/widgets/selection';
+import ThemeSwitcher from 'liteflow-editor-client/LiteFlowEditor/panels/toolBar/widgets/theme';
 import Undo from 'liteflow-editor-client/LiteFlowEditor/panels/toolBar/widgets/undo';
 import View from 'liteflow-editor-client/LiteFlowEditor/panels/toolBar/widgets/view';
 import Zoom from 'liteflow-editor-client/LiteFlowEditor/panels/toolBar/widgets/zoom';
@@ -17,7 +18,7 @@ interface IProps {
 }
 
 const tools: React.FC<IProps>[][] = [
-  [Zoom],
+  [ThemeSwitcher, Zoom],
   [FitWindow, Undo, Redo, Selection, Save, View, Fullscreen],
   [Mock],
 ];

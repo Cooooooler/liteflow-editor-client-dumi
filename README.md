@@ -94,7 +94,6 @@ requestController.interceptors.request.use((url, options) => {
   // 可以在这里添加统一的请求头，例如 token
   const token = localStorage.getItem('authToken');
 
-  console.log(options);
   const headers = new Headers(options.headers);
 
   if (token) {
