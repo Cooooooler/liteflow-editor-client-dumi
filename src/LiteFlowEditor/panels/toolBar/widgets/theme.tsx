@@ -2,7 +2,7 @@ import { MoonOutlined, SunOutlined } from '@ant-design/icons';
 import { Button, Tooltip } from 'antd';
 import { useDarkReader } from 'liteflow-editor-client/LiteFlowEditor/hooks/useDarkReader';
 import { createStyles } from 'liteflow-editor-client/LiteFlowEditor/styles';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 
 const useStyles = createStyles(({ token, css }) => {
   return {
@@ -32,13 +32,20 @@ const ThemeSwitcher: React.FC = () => {
   const { styles } = useStyles();
   const [isDarkMode, setIsDarkMode] = useState(false);
 
+  // 使用 useMemo 来稳定 options 对象，避免不必要的重新渲染
+  const darkReaderOptions = useMemo(
+    () => ({
+      brightness: 100,
+      contrast: 90,
+      sepia: 10,
+      mode: 1 as const, // 使用 as const 确保类型为字面量 1
+      // containerSelector: '#liteflow-editor-wrapper',
+    }),
+    [],
+  );
+
   // 使用 DarkReader hook
-  useDarkReader(isDarkMode, {
-    brightness: 100,
-    contrast: 90,
-    sepia: 10,
-    mode: 0,
-  });
+  useDarkReader(isDarkMode, darkReaderOptions);
 
   // 从 localStorage 读取主题设置
   useEffect(() => {

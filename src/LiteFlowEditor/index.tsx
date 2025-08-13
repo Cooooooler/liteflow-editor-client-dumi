@@ -349,6 +349,7 @@ const LiteFlowEditor = forwardRef<LiteFlowEditorRef, ILiteFlowEditorProps>(
       <div
         className={classNames(styles.editorWrapper, className)}
         style={style}
+        id="liteflow-editor-wrapper"
       >
         <Spin spinning={isLayouting} fullscreen />
         {contextHolder}
