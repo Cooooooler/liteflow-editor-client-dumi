@@ -12,6 +12,7 @@ import {
 } from 'liteflow-editor-client/LiteFlowEditor/cells';
 import { findViewsFromPoint } from 'liteflow-editor-client/LiteFlowEditor/common/events';
 import { history } from 'liteflow-editor-client/LiteFlowEditor/hooks/useHistory';
+import { logger } from 'liteflow-editor-client/LiteFlowEditor/logger';
 import ELBuilder from 'liteflow-editor-client/LiteFlowEditor/model/builder';
 import { INodeData } from 'liteflow-editor-client/LiteFlowEditor/model/node';
 import { createStyles } from 'liteflow-editor-client/LiteFlowEditor/styles';
@@ -121,11 +122,17 @@ const SideBar: React.FC<ISideBarProps> = (props) => {
   const lastEdgeRef = useRef<Edge | null>(null);
   useEffect(() => {
     const handleSetLastEdge = (args: any) => {
-      lastEdgeRef.current = args.edge;
+      if (!lastEdgeRef.current) {
+        logger.info('handleSetLastEdge', args);
+        // 保存边
+        lastEdgeRef.current = args.edge;
+      }
     };
     const handleResetLastEdge = () => {
+      logger.info('handleResetLastEdge');
       lastEdgeRef.current = null;
     };
+    // 鼠标悬浮在边上时，设置 lastEdgeRef，用于从工具栏拖动节点到边上时，松开鼠标后，将节点添加到边上
     flowGraph.on('edge:mouseover', handleSetLastEdge);
     flowGraph.on('edge:mouseleave', handleResetLastEdge);
     return () => {
@@ -144,6 +151,7 @@ const SideBar: React.FC<ISideBarProps> = (props) => {
           const position = droppingNode.getPosition();
           const size = droppingNode.getSize();
           const { node } = droppingNode.getData();
+          // 拿到鼠标位置的边EdgeView，或者节点（这里一般是ReactShapeView）
           const cellViewsFromPoint = findViewsFromPoint(
             flowGraph,
             position.x + size.width / 2,
@@ -152,15 +160,21 @@ const SideBar: React.FC<ISideBarProps> = (props) => {
           if (lastEdgeRef.current) {
             const currentEdge = lastEdgeRef.current;
             if (currentEdge) {
+              // 获取这条边指向的节点
               let targetNode = currentEdge.getTargetNode();
+              // 获取这个targetNode节点的model
               let { model: targetModel } =
                 targetNode?.getData<INodeData>() || {};
+              // 获取这条边的源节点
               const sourceNode = currentEdge.getSourceNode();
+              // 获取这个sourceNode节点的model
               const { model: sourceModel } =
                 sourceNode?.getData<INodeData>() || {};
+              // 获取这个targetNode节点的入边数量
               const inComingEdgesLength = (
                 flowGraph.getIncomingEdges(targetNode as Node) || []
               ).length;
+              // 如果这个targetNode节点的入边数量大于1，或者这个targetNode节点的model是这个sourceNode节点的子节点，则将这个节点添加到这个targetNode节点的model中
               if (
                 inComingEdgesLength > 1 ||
                 (sourceModel && targetModel?.isParentOf(sourceModel))
