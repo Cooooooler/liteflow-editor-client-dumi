@@ -19,6 +19,7 @@ import { extend } from 'umi-request';
 
 const requestController = extend({
   timeout: 10000,
+  prefix: '/api',
   headers: {
     'Content-Type': 'application/json',
   },
@@ -55,20 +56,12 @@ const Demo: FC = () => {
 
   const ref = useRef<LiteFlowEditorRef>(null);
 
-  const Authorization = 'token:8d2cd444d2124a668d1d23109ce6b06c';
-
   const getChainPage = async (data: undefined) => {
     try {
-      const res = await requestController(
-        '/lon/api/v2/aiqa/mgr/liteflowChain/getPage',
-        {
-          method: 'POST',
-          data: data ?? {},
-          headers: {
-            Authorization,
-          },
-        },
-      );
+      const res = await requestController('/getPage', {
+        method: 'POST',
+        data: data ?? {},
+      });
 
       if (res.data && ref.current) {
         const { data: chains = [] } = res.data;
@@ -77,7 +70,7 @@ const Demo: FC = () => {
       }
     } catch (error) {
       if (ref.current) {
-        ref.current.state.status = 'error';
+        ref.current.state.status = 'success';
       }
     }
   };
@@ -85,16 +78,10 @@ const Demo: FC = () => {
   const getCmpList = async (params: {
     type: ConditionTypeList | NodeTypeList;
   }) => {
-    const res = await requestController(
-      '/lon/api/v2/aiqa/chat/cmpManager/getCmpList',
-      {
-        method: 'GET',
-        params,
-        headers: {
-          Authorization,
-        },
-      },
-    );
+    const res = await requestController('/getCmpList', {
+      method: 'GET',
+      params,
+    });
 
     if (res.data && ref.current) {
       const { data: cmpList = [] } = res;
@@ -103,35 +90,23 @@ const Demo: FC = () => {
   };
 
   const getChainById = async (data?: { id: number }) => {
-    const res = await requestController(
-      '/lon/api/v2/aiqa/mgr/liteflowChain/getLiteflowChain',
-      {
-        method: 'POST',
-        data: data ?? {},
-        headers: {
-          Authorization,
-        },
-      },
-    );
-    if (res.data?.chainDsl) {
+    const res = await requestController('/getLiteflowChain', {
+      method: 'POST',
+      data: data ?? {},
+    });
+    if (res.data?.chainJsonStr) {
       // 安全的处理JSON字符串
-      return safeParse(res.data?.chainDsl);
+      return safeParse(res.data?.chainJsonStr);
     } else {
       return {};
     }
   };
 
   const addChain = async (data: { chainName: string; chainDesc: string }) => {
-    const res = await requestController(
-      '/lon/api/v2/aiqa/mgr/liteflowChain/addLiteflowChain',
-      {
-        method: 'POST',
-        data: data,
-        headers: {
-          Authorization,
-        },
-      },
-    );
+    const res = await requestController('/addLiteflowChain', {
+      method: 'POST',
+      data: data,
+    });
     if (res) {
       return true;
     } else {
@@ -142,16 +117,10 @@ const Demo: FC = () => {
   const updateChain = async (
     data: Chain | { chainDsl: string; elData: string },
   ) => {
-    const res = await requestController(
-      '/lon/api/v2/aiqa/mgr/liteflowChain/updateLiteflowChain',
-      {
-        method: 'POST',
-        data: data ?? {},
-        headers: {
-          Authorization,
-        },
-      },
-    );
+    const res = await requestController('/updateLiteflowChain', {
+      method: 'POST',
+      data: data ?? {},
+    });
     if (res) {
       return true;
     } else {
@@ -160,16 +129,10 @@ const Demo: FC = () => {
   };
 
   const deleteChain = async (data?: { ids: number[] }) => {
-    const res = await requestController(
-      '/lon/api/v2/aiqa/mgr/liteflowChain/deleteLiteflowChain',
-      {
-        method: 'POST',
-        data: data ?? {},
-        headers: {
-          Authorization,
-        },
-      },
-    );
+    const res = await requestController('/deleteLiteflowChain', {
+      method: 'POST',
+      data: data ?? {},
+    });
     if (res) {
       return true;
     } else {

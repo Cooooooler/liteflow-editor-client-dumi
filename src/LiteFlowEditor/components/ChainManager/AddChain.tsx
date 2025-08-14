@@ -55,6 +55,7 @@ const ChainSettings: React.FC<IProps> = ({
         chainDesc: string;
       };
       const { chainName, chainDesc } = values;
+      logger.info('addChain', values);
       const res = await addChain({
         chainDesc,
         chainName,

@@ -11,10 +11,10 @@ export default defineConfig({
 Powered by self`,
   },
   proxy: {
-    '/lon': {
-      target: 'https://cloud-mgr.lonsun.cn/',
+    '/api': {
+      target: 'http://localhost:8000',
       changeOrigin: true,
-      pathRewrite: { '^/lon': '' },
+      pathRewrite: { '^/api': '' },
     },
   },
 });
