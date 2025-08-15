@@ -8,7 +8,10 @@ import type { IGraphContext } from 'liteflow-editor-client/LiteFlowEditor/contex
 import { GraphContext } from 'liteflow-editor-client/LiteFlowEditor/context/GraphContext';
 import { getModel } from 'liteflow-editor-client/LiteFlowEditor/hooks';
 import { createStyles } from 'liteflow-editor-client/LiteFlowEditor/styles';
-import { safeStringify } from 'liteflow-editor-client/LiteFlowEditor/utils';
+import {
+  safeParse,
+  safeStringify,
+} from 'liteflow-editor-client/LiteFlowEditor/utils';
 import React, { FC, useContext, useState } from 'react';
 import { useSnapshot } from 'valtio';
 
@@ -34,9 +37,10 @@ const ChainManager: FC = () => {
   }, []);
 
   const { currentEditor } = useContext<IGraphContext>(GraphContext);
-  const handleOnChange = async (id: number) => {
-    setCurrentChain(snap.chains.find((chain) => chain.id === id));
-    const data = await getChainById({ id });
+  const handleOnChange = async (id: string) => {
+    const v = snap.chains.find((chain) => chain.id === id)!;
+    setCurrentChain(v);
+    const data = safeParse(v.chainDsl);
     currentEditor.fromJSON(data);
   };
 

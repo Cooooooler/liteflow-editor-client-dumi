@@ -58,8 +58,8 @@ const Demo: FC = () => {
 
   const getChainPage = async (data: undefined) => {
     try {
-      const res = await requestController('/getPage', {
-        method: 'POST',
+      const res = await requestController('/getLiteflowChain', {
+        method: 'GET',
         data: data ?? {},
       });
 
@@ -70,7 +70,7 @@ const Demo: FC = () => {
       }
     } catch (error) {
       if (ref.current) {
-        ref.current.state.status = 'success';
+        ref.current.state.status = 'error';
       }
     }
   };

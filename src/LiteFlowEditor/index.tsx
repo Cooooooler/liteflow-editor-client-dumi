@@ -47,10 +47,15 @@ export type LiteFlowEditorRef = {
 };
 
 export type Chain = {
-  id: number;
-  chainDesc: string;
+  id: string;
   chainId: string;
-  elJson: any;
+  chainName: string;
+  chainDesc: string;
+  chainDsl: string;
+  elData: string;
+  enable: number;
+  createTime: string;
+  updateTime: string;
 };
 
 export type CmpList = {

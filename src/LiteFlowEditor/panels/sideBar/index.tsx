@@ -12,7 +12,6 @@ import {
 } from 'liteflow-editor-client/LiteFlowEditor/cells';
 import { findViewsFromPoint } from 'liteflow-editor-client/LiteFlowEditor/common/events';
 import { history } from 'liteflow-editor-client/LiteFlowEditor/hooks/useHistory';
-import { logger } from 'liteflow-editor-client/LiteFlowEditor/logger';
 import ELBuilder from 'liteflow-editor-client/LiteFlowEditor/model/builder';
 import { INodeData } from 'liteflow-editor-client/LiteFlowEditor/model/node';
 import { createStyles } from 'liteflow-editor-client/LiteFlowEditor/styles';
@@ -123,13 +122,11 @@ const SideBar: React.FC<ISideBarProps> = (props) => {
   useEffect(() => {
     const handleSetLastEdge = (args: any) => {
       if (!lastEdgeRef.current) {
-        logger.info('handleSetLastEdge', args);
         // 保存边
         lastEdgeRef.current = args.edge;
       }
     };
     const handleResetLastEdge = () => {
-      logger.info('handleResetLastEdge');
       lastEdgeRef.current = null;
     };
     // 鼠标悬浮在边上时，设置 lastEdgeRef，用于从工具栏拖动节点到边上时，松开鼠标后，将节点添加到边上
