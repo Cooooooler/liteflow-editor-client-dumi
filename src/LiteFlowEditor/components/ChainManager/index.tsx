@@ -29,8 +29,7 @@ const ChainManager: FC = () => {
   const snap = useSnapshot(state);
   const [currentChain, setCurrentChain] = useState<Chain>();
   const { styles } = useStyles();
-  const { getChainPage, getChainById, updateChain, deleteChain } =
-    useContext(GraphContext);
+  const { getChainPage, updateChain, deleteChain } = useContext(GraphContext);
 
   useAsyncEffect(async () => {
     await getChainPage();
@@ -45,7 +44,7 @@ const ChainManager: FC = () => {
   };
 
   const handleSave = async () => {
-    const res = await updateChain({
+    await updateChain({
       ...currentChain,
       chainDsl: safeStringify(currentEditor.toJSON()),
       elData: getModel().toEL(' '),
@@ -57,8 +56,8 @@ const ChainManager: FC = () => {
       title: '操作确认',
       content: '请确认是否删除当前记录？',
       async onOk() {
-        await deleteChain({ ids: [currentChain?.id] });
-        setCurrentChain(undefined);
+        await deleteChain(currentChain);
+        setCurrentChain(void 0);
         currentEditor.fromJSON({});
       },
     });
@@ -89,7 +88,7 @@ const ChainManager: FC = () => {
             </LoadingButton>
           </>
         </Tooltip>
-        <Tooltip title="删除当前记录">
+        <Tooltip title="当前记录">
           <Button
             type="primary"
             danger

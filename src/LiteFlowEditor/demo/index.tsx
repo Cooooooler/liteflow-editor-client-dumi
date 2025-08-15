@@ -114,9 +114,7 @@ const Demo: FC = () => {
     }
   };
 
-  const updateChain = async (
-    data: Chain | { chainDsl: string; elData: string },
-  ) => {
+  const updateChain = async (data: Chain) => {
     const res = await requestController('/updateLiteflowChain', {
       method: 'POST',
       data: data ?? {},
@@ -128,7 +126,7 @@ const Demo: FC = () => {
     }
   };
 
-  const deleteChain = async (data?: { ids: number[] }) => {
+  const deleteChain = async (data?: { chainId: string; id: string }) => {
     const res = await requestController('/deleteLiteflowChain', {
       method: 'POST',
       data: data ?? {},
