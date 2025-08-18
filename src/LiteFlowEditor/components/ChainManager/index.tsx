@@ -1,12 +1,12 @@
 import { DeleteOutlined, SaveOutlined } from '@ant-design/icons';
 import { useAsyncEffect } from 'ahooks';
 import { Button, Modal, Select, Tooltip } from 'antd';
-import { Chain, state } from 'liteflow-editor-client';
 import { LoadingButton } from 'liteflow-editor-client/LiteFlowEditor/components';
 import AddChain from 'liteflow-editor-client/LiteFlowEditor/components/ChainManager/AddChain';
 import type { IGraphContext } from 'liteflow-editor-client/LiteFlowEditor/context/GraphContext';
 import { GraphContext } from 'liteflow-editor-client/LiteFlowEditor/context/GraphContext';
 import { getModel } from 'liteflow-editor-client/LiteFlowEditor/hooks';
+import { Chain, state } from 'liteflow-editor-client/LiteFlowEditor/moduls';
 import { createStyles } from 'liteflow-editor-client/LiteFlowEditor/styles';
 import {
   safeParse,
@@ -43,12 +43,17 @@ const ChainManager: FC = () => {
     currentEditor.fromJSON(data);
   };
 
-  const handleSave = async () => {
+  const updateAndRefresh = async () => {
     await updateChain({
       ...currentChain,
       chainDsl: safeStringify(currentEditor.toJSON()),
       elData: getModel().toEL(' '),
     });
+    await getChainPage();
+  };
+
+  const handleSave = async () => {
+    await updateAndRefresh();
   };
 
   const handleDelete = () => {
@@ -83,6 +88,9 @@ const ChainManager: FC = () => {
               requestApi={handleSave}
               disabled={!currentChain?.id}
               icon={<SaveOutlined />}
+              onSuccess={() => {
+                console.log('保存成功');
+              }}
             >
               保存
             </LoadingButton>

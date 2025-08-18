@@ -1,6 +1,6 @@
 import { useAsyncEffect } from 'ahooks';
 import FormRender, { Schema, useForm, WatchProperties } from 'form-render';
-import { state } from 'liteflow-editor-client/LiteFlowEditor';
+import { state } from 'liteflow-editor-client/LiteFlowEditor/moduls';
 import GraphContext from 'liteflow-editor-client/LiteFlowEditor/context/GraphContext';
 import { history } from 'liteflow-editor-client/LiteFlowEditor/hooks/useHistory';
 import ELNode from 'liteflow-editor-client/LiteFlowEditor/model/node';

@@ -9,7 +9,7 @@ export default {
     type: ConditionTypeEnum.THEN,
     children: [
       { type: NodeTypeEnum.COMMON, id: 'a', properties: { tag: 'dog' } },
-      { type: NodeTypeEnum.COMMON, id: 'b', position: { x: 100, y: 100 } },
+      { type: NodeTypeEnum.COMMON, id: 'b' },
       { type: NodeTypeEnum.COMMON, id: 'c' },
       { type: NodeTypeEnum.COMMON, id: 'd' },
     ],

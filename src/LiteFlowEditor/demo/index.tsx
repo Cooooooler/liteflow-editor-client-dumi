@@ -3,16 +3,13 @@
  * description: 指定高度即可开始使用，`api` 接口可以直接剥离。
  */
 
-import {
-  Chain,
-  LiteFlowEditor,
-  LiteFlowEditorRef,
-  setGlobalLogLevel,
-} from 'liteflow-editor-client';
+import { LiteFlowEditor, setGlobalLogLevel } from 'liteflow-editor-client';
+import { LiteFlowEditorRef } from 'liteflow-editor-client/LiteFlowEditor';
 import {
   ConditionTypeList,
   NodeTypeList,
 } from 'liteflow-editor-client/LiteFlowEditor/constant';
+import { Chain } from 'liteflow-editor-client/LiteFlowEditor/moduls';
 import { safeParse } from 'liteflow-editor-client/LiteFlowEditor/utils';
 import React, { FC, useRef } from 'react';
 import { extend } from 'umi-request';

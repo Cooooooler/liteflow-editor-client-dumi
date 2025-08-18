@@ -15,6 +15,10 @@ import {
   setModel,
 } from 'liteflow-editor-client/LiteFlowEditor/hooks/useModel';
 import ELBuilder from 'liteflow-editor-client/LiteFlowEditor/model/builder';
+import {
+  buttonStatus,
+  state,
+} from 'liteflow-editor-client/LiteFlowEditor/moduls';
 import Breadcrumb from 'liteflow-editor-client/LiteFlowEditor/panels/breadcrumb';
 import getContextMenu from 'liteflow-editor-client/LiteFlowEditor/panels/flowGraph/contextMenu';
 import createFlowGraph from 'liteflow-editor-client/LiteFlowEditor/panels/flowGraph/createFlowGraph';
@@ -36,7 +40,6 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import { proxy } from 'valtio';
 
 export type LiteFlowEditorRef = {
   getGraphInstance(): Graph | undefined;
@@ -45,27 +48,6 @@ export type LiteFlowEditorRef = {
   messageApi: MessageInstance;
   state: typeof state;
 };
-
-export type Chain = {
-  id: string;
-  chainId: string;
-  chainName: string;
-  chainDesc: string;
-  chainDsl: string;
-  elData: string;
-  enable: number;
-  createTime: string;
-  updateTime: string;
-};
-
-export type CmpList = {
-  cmpId: string;
-  cmpName: string;
-  type: string;
-  typeName: string;
-};
-
-export type Status = 'success' | 'error' | 'pending';
 
 interface ILiteFlowEditorProps {
   /**
@@ -108,16 +90,6 @@ interface ILiteFlowEditorProps {
    */
   [key: string]: any;
 }
-
-export const state = proxy<{
-  status: Status;
-  chains: Chain[];
-  cmpList: CmpList[];
-}>({
-  status: 'pending',
-  chains: [],
-  cmpList: [],
-});
 
 const defaultMenuInfo: IMenuScene = 'blank';
 
@@ -268,11 +240,10 @@ const LiteFlowEditor = forwardRef<LiteFlowEditorRef, ILiteFlowEditorProps>(
             flowGraph.startBatch('update');
             flowGraph.resetCells(modelJSON);
             // Apply layout method
-            await forceLayout(flowGraph).then(() => {
-              flowGraph.stopBatch('update');
-              flowGraph.trigger('model:changed');
-              flowGraph.zoomToFit({ minScale: MIN_ZOOM, maxScale: 1 });
-            });
+            await forceLayout(flowGraph, {}, buttonStatus.isFineTune);
+            flowGraph.stopBatch('update');
+            flowGraph.trigger('model:changed');
+            flowGraph.zoomToFit({ minScale: MIN_ZOOM, maxScale: 1 });
           },
         );
       }

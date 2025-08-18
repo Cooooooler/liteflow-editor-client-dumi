@@ -1,5 +1,5 @@
 import { Tag } from 'antd';
-import { state } from 'liteflow-editor-client/LiteFlowEditor';
+import { state } from 'liteflow-editor-client/LiteFlowEditor/moduls';
 import React from 'react';
 import { useSnapshot } from 'valtio';
 

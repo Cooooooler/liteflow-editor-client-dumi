@@ -2,6 +2,7 @@ import React from 'react';
 
 import { Graph } from '@antv/x6';
 
+import { FineTune } from 'liteflow-editor-client/LiteFlowEditor/panels/toolBar/widgets/fineTune';
 import FitWindow from 'liteflow-editor-client/LiteFlowEditor/panels/toolBar/widgets/fitWindow';
 import Fullscreen from 'liteflow-editor-client/LiteFlowEditor/panels/toolBar/widgets/fullscreen';
 import Mock from 'liteflow-editor-client/LiteFlowEditor/panels/toolBar/widgets/mock';
@@ -18,7 +19,7 @@ interface IProps {
 }
 
 const tools: React.FC<IProps>[][] = [
-  [ThemeSwitcher, Zoom],
+  [ThemeSwitcher, Zoom, FineTune],
   [FitWindow, Undo, Redo, Selection, Save, View, Fullscreen],
   [Mock],
 ];
