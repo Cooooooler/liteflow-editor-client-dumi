@@ -22,6 +22,8 @@ export interface IGraphContext {
   addChain: (data?: any) => Promise<any>;
   updateChain: (data?: any) => Promise<any>;
   deleteChain: (data?: any) => Promise<any>;
+  isFineTune: boolean;
+  setIsFineTune: (value: boolean) => void;
 }
 
 const defaultValue: IGraphContext = {} as any;

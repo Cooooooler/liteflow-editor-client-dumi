@@ -34,5 +34,3 @@ export const state = proxy<{
   chains: [],
   cmpList: [],
 });
-
-export const buttonStatus = proxy({ isFineTune: true });

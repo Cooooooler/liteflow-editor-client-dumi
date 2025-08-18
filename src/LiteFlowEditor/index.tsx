@@ -1,4 +1,5 @@
 import { Cell, Graph } from '@antv/x6';
+import { useUpdateEffect } from 'ahooks';
 import { Dropdown, message, Spin } from 'antd';
 import { MessageInstance } from 'antd/es/message/interface';
 import classNames from 'classnames';
@@ -14,11 +15,9 @@ import {
   getModel,
   setModel,
 } from 'liteflow-editor-client/LiteFlowEditor/hooks/useModel';
+import { logger } from 'liteflow-editor-client/LiteFlowEditor/logger';
 import ELBuilder from 'liteflow-editor-client/LiteFlowEditor/model/builder';
-import {
-  buttonStatus,
-  state,
-} from 'liteflow-editor-client/LiteFlowEditor/moduls';
+import { state } from 'liteflow-editor-client/LiteFlowEditor/moduls';
 import Breadcrumb from 'liteflow-editor-client/LiteFlowEditor/panels/breadcrumb';
 import getContextMenu from 'liteflow-editor-client/LiteFlowEditor/panels/flowGraph/contextMenu';
 import createFlowGraph from 'liteflow-editor-client/LiteFlowEditor/panels/flowGraph/createFlowGraph';
@@ -172,6 +171,7 @@ const LiteFlowEditor = forwardRef<LiteFlowEditorRef, ILiteFlowEditorProps>(
     const [contextMenuScene, setContextMenuScene] =
       useState<IMenuScene>(defaultMenuInfo);
     const [isLayouting, setIsLayouting] = useState(false);
+    const [isFineTune, setIsFineTune] = useState(false);
 
     // Memoize the currentEditor object to prevent unnecessary re-renders
     const currentEditor = useMemo(
@@ -240,14 +240,14 @@ const LiteFlowEditor = forwardRef<LiteFlowEditorRef, ILiteFlowEditorProps>(
             flowGraph.startBatch('update');
             flowGraph.resetCells(modelJSON);
             // Apply layout method
-            await forceLayout(flowGraph, {}, buttonStatus.isFineTune);
+            await forceLayout(flowGraph, {}, isFineTune);
             flowGraph.stopBatch('update');
             flowGraph.trigger('model:changed');
             flowGraph.zoomToFit({ minScale: MIN_ZOOM, maxScale: 1 });
           },
         );
       }
-    }, [flowGraph]);
+    }, [flowGraph, isFineTune]);
 
     // Memoize context menu handlers
     const showContextMenuHandler = useCallback(
@@ -283,6 +283,14 @@ const LiteFlowEditor = forwardRef<LiteFlowEditorRef, ILiteFlowEditorProps>(
       handleModelChange,
     ]);
 
+    useUpdateEffect(() => {
+      logger.info(`${isFineTune ? '开启' : '关闭'}智能布局`);
+      const model = getModel();
+      const modelJSON = model.toJSON();
+      currentEditor.fromJSON(modelJSON);
+      // flowGraph
+    }, [isFineTune]);
+
     // Memoize context value to prevent unnecessary re-renders
     const contextValue = useMemo(
       () => ({
@@ -291,6 +299,8 @@ const LiteFlowEditor = forwardRef<LiteFlowEditorRef, ILiteFlowEditorProps>(
         model: null,
         currentEditor,
         messageApi,
+        isFineTune,
+        setIsFineTune,
         getCmpList,
         getChainPage,
         getChainById,
@@ -302,6 +312,7 @@ const LiteFlowEditor = forwardRef<LiteFlowEditorRef, ILiteFlowEditorProps>(
         flowGraph,
         currentEditor,
         messageApi,
+        isFineTune,
         getCmpList,
         getChainPage,
         getChainById,

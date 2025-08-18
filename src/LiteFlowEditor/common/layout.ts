@@ -192,7 +192,7 @@ function fineTuneCatchNodes(flowGraph: Graph) {
 async function antvDagreLayout(
   flowGraph: Graph,
   cfg: any = {},
-  isFineTune: boolean = true,
+  isFineTune: boolean = false,
 ): Promise<void> {
   // 预先获取所有节点和边，避免重复查询
   const allNodes = flowGraph.getNodes();
@@ -266,7 +266,7 @@ async function antvDagreLayout(
 export const forceLayout = async (
   flowGraph: Graph,
   cfg: any = {},
-  isFineTune: boolean = true,
+  isFineTune: boolean = false,
 ): Promise<void> => {
   await antvDagreLayout(flowGraph, cfg, isFineTune);
 };
