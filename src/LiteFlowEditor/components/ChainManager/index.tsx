@@ -37,7 +37,7 @@ const ChainManager: FC = () => {
 
   const { currentEditor } = useContext<IGraphContext>(GraphContext);
   const handleOnChange = async (id: string) => {
-    const v = snap.chains.find((chain) => chain.id === id)!;
+    const v = state.chains.find((chain) => chain.id === id)!;
     setCurrentChain(v);
     const data = safeParse(v.chainDsl);
     currentEditor.fromJSON(data);
@@ -62,6 +62,7 @@ const ChainManager: FC = () => {
       content: '请确认是否删除当前记录？',
       async onOk() {
         await deleteChain(currentChain);
+        await getChainPage();
         setCurrentChain(void 0);
         currentEditor.fromJSON({});
       },
@@ -109,6 +110,7 @@ const ChainManager: FC = () => {
         <AddChain
           onSuccess={async () => {
             await getChainPage();
+            handleOnChange(state.chains[0].id);
           }}
         />
       </div>

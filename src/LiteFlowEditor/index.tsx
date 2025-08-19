@@ -45,7 +45,6 @@ export type LiteFlowEditorRef = {
   toJSON(): Record<string, any>;
   fromJSON(data: Record<string, any>): void;
   messageApi: MessageInstance;
-  state: typeof state;
 };
 
 interface ILiteFlowEditorProps {
@@ -189,7 +188,6 @@ const LiteFlowEditor = forwardRef<LiteFlowEditorRef, ILiteFlowEditorProps>(
           flowGraph?.zoomToFit({ minScale: MIN_ZOOM, maxScale: 1 });
         },
         messageApi,
-        state,
       }),
       [flowGraph],
     );

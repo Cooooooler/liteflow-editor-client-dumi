@@ -9,7 +9,7 @@ import {
   ConditionTypeList,
   NodeTypeList,
 } from 'liteflow-editor-client/LiteFlowEditor/constant';
-import { Chain } from 'liteflow-editor-client/LiteFlowEditor/moduls';
+import { Chain, state } from 'liteflow-editor-client/LiteFlowEditor/moduls';
 import { safeParse } from 'liteflow-editor-client/LiteFlowEditor/utils';
 import React, { FC, useRef } from 'react';
 import { extend } from 'umi-request';
@@ -62,13 +62,12 @@ const Demo: FC = () => {
 
       if (res.data && ref.current) {
         const { data: chains = [] } = res.data;
-        ref.current.state.chains = chains;
-        ref.current.state.status = 'success';
+        state.chains = chains;
+        state.status = 'success';
+        return res.data;
       }
     } catch (error) {
-      if (ref.current) {
-        ref.current.state.status = 'error';
-      }
+      state.status = 'error';
     }
   };
 
@@ -82,7 +81,7 @@ const Demo: FC = () => {
 
     if (res.data && ref.current) {
       const { data: cmpList = [] } = res;
-      ref.current.state.cmpList = cmpList;
+      state.cmpList = cmpList;
     }
   };
 
