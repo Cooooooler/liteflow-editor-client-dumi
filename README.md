@@ -36,6 +36,7 @@ import {
   Chain,
   LiteFlowEditor,
   LiteFlowEditorRef,
+  state,
 } from 'liteflow-editor-client';
 import {
   ConditionTypeList,
@@ -127,10 +128,10 @@ const Demo: FC = () => {
       },
     );
 
-    if (res.data && ref.current) {
+    if (res.data) {
       const { data: chains = [] } = res.data;
-      ref.current.state.chains = chains;
-      ref.current.state.status = 'success';
+      state.chains = chains;
+      state.status = 'success';
     }
   };
 
@@ -148,9 +149,9 @@ const Demo: FC = () => {
       },
     );
 
-    if (res.data && ref.current) {
+    if (res.data) {
       const { data: cmpList = [] } = res;
-      ref.current.state.cmpList = cmpList;
+      state.cmpList = cmpList;
     }
   };
 
