@@ -66,8 +66,8 @@ const ConditionPropertiesEditor: React.FC<IProps> = (props) => {
         widget: 'select',
         props: {
           options: snap.nodeList.map((item) => ({
-            label: item?.cmpName,
-            value: item?.cmpId,
+            label: item?.nodeName,
+            value: item?.nodeId,
           })),
         },
         required: true,
@@ -86,7 +86,7 @@ const ConditionPropertiesEditor: React.FC<IProps> = (props) => {
     tag: (val: string) => {
       form.setValueByPath(
         'id',
-        snap.nodeList.find((item) => item.cmpId === val)?.cmpId,
+        snap.nodeList.find((item) => item.nodeId === val)?.nodeId,
       );
     },
   };
@@ -104,18 +104,24 @@ const ConditionPropertiesEditor: React.FC<IProps> = (props) => {
     messageApi.success('操作成功');
   };
 
-  useEffect(() => {
+  const initForm = () => {
     form.setValues({
       data: '',
-      tag: '',
+      tag:
+        state.nodeList.find((item) => item.nodeId === model.id)?.nodeId ?? '',
       maxWaitSeconds: '',
       ...properties,
       id: model.id,
     });
+  };
+
+  useEffect(() => {
+    initForm();
   }, [model.id]);
 
   useAsyncEffect(async () => {
     await getNodeList({ nodeType: model.type });
+    initForm();
   }, [model.type]);
 
   return (
