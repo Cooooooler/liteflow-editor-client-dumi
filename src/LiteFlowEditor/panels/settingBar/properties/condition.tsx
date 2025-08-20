@@ -1,10 +1,10 @@
 import { useAsyncEffect } from 'ahooks';
 import FormRender, { Schema, useForm, WatchProperties } from 'form-render';
-import { state } from 'liteflow-editor-client/LiteFlowEditor/moduls';
 import { ConditionTypeEnum } from 'liteflow-editor-client/LiteFlowEditor/constant';
 import GraphContext from 'liteflow-editor-client/LiteFlowEditor/context/GraphContext';
 import { history } from 'liteflow-editor-client/LiteFlowEditor/hooks/useHistory';
 import ELNode from 'liteflow-editor-client/LiteFlowEditor/model/node';
+import { state } from 'liteflow-editor-client/LiteFlowEditor/moduls';
 import { createStyles } from 'liteflow-editor-client/LiteFlowEditor/styles';
 import React, { useContext, useEffect } from 'react';
 import { useSnapshot } from 'valtio';
@@ -35,7 +35,7 @@ const WHEN_ANY_FALSE: boolean = false;
 const ConditionPropertiesEditor: React.FC<IProps> = (props) => {
   const { styles } = useStyles();
   const { model } = props;
-  const { getCmpList, messageApi } = useContext(GraphContext);
+  const { getNodeList, messageApi } = useContext(GraphContext);
   const snap = useSnapshot(state);
   const properties = model.getProperties();
 
@@ -65,7 +65,7 @@ const ConditionPropertiesEditor: React.FC<IProps> = (props) => {
         type: 'string',
         widget: 'select',
         props: {
-          options: snap.cmpList.map((item) => ({
+          options: snap.nodeList.map((item) => ({
             label: item?.cmpName,
             value: item?.cmpId,
           })),
@@ -86,7 +86,7 @@ const ConditionPropertiesEditor: React.FC<IProps> = (props) => {
     tag: (val: string) => {
       form.setValueByPath(
         'id',
-        snap.cmpList.find((item) => item.cmpId === val)?.cmpId,
+        snap.nodeList.find((item) => item.cmpId === val)?.cmpId,
       );
     },
   };
@@ -115,7 +115,7 @@ const ConditionPropertiesEditor: React.FC<IProps> = (props) => {
   }, [model.id]);
 
   useAsyncEffect(async () => {
-    await getCmpList({ type: model.type });
+    await getNodeList({ nodeType: model.type });
   }, [model.type]);
 
   return (

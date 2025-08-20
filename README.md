@@ -135,11 +135,11 @@ const Demo: FC = () => {
     }
   };
 
-  const getCmpList = async (params: {
+  const getNodeList = async (params: {
     type: ConditionTypeList | NodeTypeList;
   }) => {
     const res = await requestController(
-      '/lon/api/v2/aiqa/chat/cmpManager/getCmpList',
+      '/lon/api/v2/aiqa/chat/cmpManager/getNodeList',
       {
         method: 'GET',
         params,
@@ -150,8 +150,8 @@ const Demo: FC = () => {
     );
 
     if (res.data) {
-      const { data: cmpList = [] } = res;
-      state.cmpList = cmpList;
+      const { data: nodeList = [] } = res;
+      state.nodeList = nodeList;
     }
   };
 
@@ -236,7 +236,7 @@ const Demo: FC = () => {
       style={{
         height: '800px',
       }}
-      getCmpList={getCmpList}
+      getNodeList={getNodeList}
       getChainPage={getChainPage}
       getChainById={getChainById}
       addChain={addChain}
@@ -257,7 +257,7 @@ export default Demo;
 | -------------- | ------------------------------------------------------------------------ | ---- | -------------------------- |
 | `style`        | `CSSProperties`                                                          | 否   | 编辑器容器的样式           |
 | `className`    | `string`                                                                 | 否   | 编辑器容器的样式           |
-| `getCmpList`   | `(data: undefined) => Promise<void>`                                     | 否   | 获取标签列表的接口         |
+| `getNodeList`  | `(data: undefined) => Promise<void>`                                     | 否   | 获取标签列表的接口         |
 | `getChainPage` | `(params: {type: ConditionTypeList \| NodeTypeList}) => Promise<void>`   | 否   | 获取链路分页数据的接口     |
 | `getChainById` | `(data?: {id: number}) => Promise<any>`                                  | 否   | 根据 ID 获取链路详情的接口 |
 | `addChain`     | `(data: {chainName: string;chainDesc: string}) => Promise<boolean>`      | 否   | 添加链路的接口             |
@@ -268,13 +268,13 @@ export default Demo;
 
 `LiteFlowEditor` 组件支持通过 `ref` 获取内部方法和状态，引用类型为 `LiteFlowEditorRef`：
 
-| 属性名               | 类型                                                  | 描述                                     |
-| -------------------- | ----------------------------------------------------- | ---------------------------------------- |
-| `getGraphInstance()` | `() => Graph \| undefined`                            | 获取内部 X6 图实例，用于操作流程图       |
-| `toJSON()`           | `() => Record<string, any>`                           | 获取当前编辑器的 JSON 表达形式           |
-| `fromJSON(data)`     | `(data: Record<string, any>) => void`                 | 将 JSON 数据导入为当前编辑器状态         |
-| `messageApi`         | `MessageInstance`                                     | Ant Design 的消息通知实例                |
-| `state`              | `{status: Status;chains: Chain[];cmpList: CmpList[]}` | 编辑器内部的运行状态对象，包含链路等信息 |
+| 属性名               | 类型                                                    | 描述                                     |
+| -------------------- | ------------------------------------------------------- | ---------------------------------------- |
+| `getGraphInstance()` | `() => Graph \| undefined`                              | 获取内部 X6 图实例，用于操作流程图       |
+| `toJSON()`           | `() => Record<string, any>`                             | 获取当前编辑器的 JSON 表达形式           |
+| `fromJSON(data)`     | `(data: Record<string, any>) => void`                   | 将 JSON 数据导入为当前编辑器状态         |
+| `messageApi`         | `MessageInstance`                                       | Ant Design 的消息通知实例                |
+| `state`              | `{status: Status;chains: Chain[];nodeList: NodeList[]}` | 编辑器内部的运行状态对象，包含链路等信息 |
 
 ## 特别注意 ⚠️
 

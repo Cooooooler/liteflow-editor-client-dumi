@@ -16,7 +16,7 @@ export interface IGraphContext {
     fromJSON(data: Record<string, any>): void;
   };
   messageApi: MessageInstance;
-  getCmpList: (data?: any) => Promise<any>;
+  getNodeList: (data?: any) => Promise<any>;
   getChainPage: (data?: any) => Promise<any>;
   getChainById: (data?: any) => Promise<any>;
   addChain: (data?: any) => Promise<any>;

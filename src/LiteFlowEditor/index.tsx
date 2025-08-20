@@ -17,7 +17,6 @@ import {
 } from 'liteflow-editor-client/LiteFlowEditor/hooks/useModel';
 import { logger } from 'liteflow-editor-client/LiteFlowEditor/logger';
 import ELBuilder from 'liteflow-editor-client/LiteFlowEditor/model/builder';
-import { state } from 'liteflow-editor-client/LiteFlowEditor/moduls';
 import Breadcrumb from 'liteflow-editor-client/LiteFlowEditor/panels/breadcrumb';
 import getContextMenu from 'liteflow-editor-client/LiteFlowEditor/panels/flowGraph/contextMenu';
 import createFlowGraph from 'liteflow-editor-client/LiteFlowEditor/panels/flowGraph/createFlowGraph';
@@ -71,7 +70,7 @@ interface ILiteFlowEditorProps {
    */
   children?: React.ReactNode;
 
-  getCmpList: (data?: any) => Promise<any>;
+  getNodeList: (data?: any) => Promise<any>;
 
   getChainPage: (data?: any) => Promise<any>;
 
@@ -142,7 +141,7 @@ const LiteFlowEditor = forwardRef<LiteFlowEditorRef, ILiteFlowEditorProps>(
       style,
       onReady,
       widgets,
-      getCmpList,
+      getNodeList,
       getChainPage,
       getChainById,
       addChain,
@@ -299,7 +298,7 @@ const LiteFlowEditor = forwardRef<LiteFlowEditorRef, ILiteFlowEditorProps>(
         messageApi,
         isFineTune,
         setIsFineTune,
-        getCmpList,
+        getNodeList,
         getChainPage,
         getChainById,
         addChain,
@@ -311,7 +310,7 @@ const LiteFlowEditor = forwardRef<LiteFlowEditorRef, ILiteFlowEditorProps>(
         currentEditor,
         messageApi,
         isFineTune,
-        getCmpList,
+        getNodeList,
         getChainPage,
         getChainById,
         addChain,

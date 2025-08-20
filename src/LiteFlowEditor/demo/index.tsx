@@ -71,17 +71,20 @@ const Demo: FC = () => {
     }
   };
 
-  const getCmpList = async (params: {
-    type: ConditionTypeList | NodeTypeList;
+  const getNodeList = async (params: {
+    nodeType: ConditionTypeList | NodeTypeList;
   }) => {
-    const res = await requestController('/getCmpList', {
-      method: 'GET',
-      params,
-    });
-
-    if (res.data && ref.current) {
-      const { data: cmpList = [] } = res;
-      state.cmpList = cmpList;
+    try {
+      const res = await requestController('/getNode', {
+        method: 'GET',
+        params,
+      });
+      if (res.data) {
+        const { data: nodeList = [] } = res.data;
+        state.nodeList = nodeList;
+      }
+    } catch (error) {
+      state.status = 'error';
     }
   };
 
@@ -140,7 +143,7 @@ const Demo: FC = () => {
       style={{
         height: '800px',
       }}
-      getCmpList={getCmpList}
+      getNodeList={getNodeList}
       getChainPage={getChainPage}
       getChainById={getChainById}
       addChain={addChain}

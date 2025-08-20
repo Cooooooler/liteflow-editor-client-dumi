@@ -16,11 +16,17 @@ export type Chain = {
   updateTime: string;
 };
 
-export type CmpList = {
-  cmpId: string;
-  cmpName: string;
-  type: string;
-  typeName: string;
+export type NodeList = {
+  id: string;
+  nodeId: string;
+  nodeName: string;
+  nodeType: string;
+  className: string;
+  scriptId: string;
+  nodeDesc: string;
+  enable: number;
+  createTime: string;
+  updateTime: string;
 };
 
 export type Status = 'success' | 'error' | 'pending';
@@ -28,9 +34,9 @@ export type Status = 'success' | 'error' | 'pending';
 export const state = proxy<{
   status: Status;
   chains: Chain[];
-  cmpList: CmpList[];
+  nodeList: NodeList[];
 }>({
   status: 'pending',
   chains: [],
-  cmpList: [],
+  nodeList: [],
 });

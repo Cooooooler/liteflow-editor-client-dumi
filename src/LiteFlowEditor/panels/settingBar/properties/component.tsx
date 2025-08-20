@@ -1,9 +1,9 @@
 import { useAsyncEffect } from 'ahooks';
 import FormRender, { Schema, useForm, WatchProperties } from 'form-render';
-import { state } from 'liteflow-editor-client/LiteFlowEditor/moduls';
 import GraphContext from 'liteflow-editor-client/LiteFlowEditor/context/GraphContext';
 import { history } from 'liteflow-editor-client/LiteFlowEditor/hooks/useHistory';
 import ELNode from 'liteflow-editor-client/LiteFlowEditor/model/node';
+import { state } from 'liteflow-editor-client/LiteFlowEditor/moduls';
 import { createStyles } from 'liteflow-editor-client/LiteFlowEditor/styles';
 import React, { useContext, useEffect } from 'react';
 import { useSnapshot } from 'valtio';
@@ -31,9 +31,9 @@ const useStyles = createStyles(({ token, css }) => {
 const ComponentPropertiesEditor: React.FC<IProps> = (props) => {
   const { styles } = useStyles();
   const { model } = props;
-  const { getCmpList, messageApi } = useContext(GraphContext);
-  const snap = useSnapshot(state);
+  const { getNodeList, messageApi } = useContext(GraphContext);
   const properties = model.getProperties();
+  const snap = useSnapshot(state);
 
   const schema: Schema = {
     type: 'object',
@@ -54,9 +54,9 @@ const ComponentPropertiesEditor: React.FC<IProps> = (props) => {
         type: 'string',
         widget: 'select',
         props: {
-          options: snap.cmpList.map((item) => ({
-            label: item?.cmpName,
-            value: item?.cmpId,
+          options: snap.nodeList.map((item) => ({
+            label: item?.nodeName,
+            value: item?.nodeId,
           })),
         },
         required: true,
@@ -75,7 +75,7 @@ const ComponentPropertiesEditor: React.FC<IProps> = (props) => {
     tag: (val: string) => {
       form.setValueByPath(
         'id',
-        snap.cmpList.find((item) => item.cmpId === val)?.cmpId,
+        state.nodeList.find((item) => item.nodeId === val)?.nodeId,
       );
     },
   };
@@ -93,18 +93,24 @@ const ComponentPropertiesEditor: React.FC<IProps> = (props) => {
     messageApi.success('操作成功');
   };
 
-  useEffect(() => {
+  const initForm = () => {
     form.setValues({
       data: '',
-      tag: '',
+      tag:
+        state.nodeList.find((item) => item.nodeId === model.id)?.nodeId ?? '',
       maxWaitSeconds: '',
       id: model.id,
       ...properties,
     });
+  };
+
+  useEffect(() => {
+    initForm();
   }, [model.id]);
 
   useAsyncEffect(async () => {
-    await getCmpList({ type: model.type });
+    await getNodeList({ nodeType: model.type });
+    initForm();
   }, [model.type]);
 
   return (
