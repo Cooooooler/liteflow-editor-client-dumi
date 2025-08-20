@@ -10,7 +10,6 @@ import {
   NodeTypeList,
 } from 'liteflow-editor-client/LiteFlowEditor/constant';
 import { Chain, state } from 'liteflow-editor-client/LiteFlowEditor/moduls';
-import { safeParse } from 'liteflow-editor-client/LiteFlowEditor/utils';
 import React, { FC, useRef } from 'react';
 import { extend } from 'umi-request';
 
@@ -88,19 +87,6 @@ const Demo: FC = () => {
     }
   };
 
-  const getChainById = async (data?: { id: number }) => {
-    const res = await requestController('/getLiteflowChain', {
-      method: 'POST',
-      data: data ?? {},
-    });
-    if (res.data?.chainJsonStr) {
-      // 安全的处理JSON字符串
-      return safeParse(res.data?.chainJsonStr);
-    } else {
-      return {};
-    }
-  };
-
   const addChain = async (data: { chainName: string; chainDesc: string }) => {
     const res = await requestController('/addLiteflowChain', {
       method: 'POST',
@@ -145,7 +131,6 @@ const Demo: FC = () => {
       }}
       getNodeList={getNodeList}
       getChainPage={getChainPage}
-      getChainById={getChainById}
       addChain={addChain}
       updateChain={updateChain}
       deleteChain={deleteChain}

@@ -18,7 +18,6 @@ export interface IGraphContext {
   messageApi: MessageInstance;
   getNodeList: (data?: any) => Promise<any>;
   getChainPage: (data?: any) => Promise<any>;
-  getChainById: (data?: any) => Promise<any>;
   addChain: (data?: any) => Promise<any>;
   updateChain: (data?: any) => Promise<any>;
   deleteChain: (data?: any) => Promise<any>;

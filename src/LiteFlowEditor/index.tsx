@@ -74,8 +74,6 @@ interface ILiteFlowEditorProps {
 
   getChainPage: (data?: any) => Promise<any>;
 
-  getChainById: (data?: any) => Promise<any>;
-
   addChain: (data?: any) => Promise<any>;
 
   updateChain: (data?: any) => Promise<any>;
@@ -143,7 +141,6 @@ const LiteFlowEditor = forwardRef<LiteFlowEditorRef, ILiteFlowEditorProps>(
       widgets,
       getNodeList,
       getChainPage,
-      getChainById,
       addChain,
       updateChain,
       deleteChain,
@@ -300,7 +297,6 @@ const LiteFlowEditor = forwardRef<LiteFlowEditorRef, ILiteFlowEditorProps>(
         setIsFineTune,
         getNodeList,
         getChainPage,
-        getChainById,
         addChain,
         updateChain,
         deleteChain,
@@ -312,7 +308,6 @@ const LiteFlowEditor = forwardRef<LiteFlowEditorRef, ILiteFlowEditorProps>(
         isFineTune,
         getNodeList,
         getChainPage,
-        getChainById,
         addChain,
         updateChain,
         deleteChain,

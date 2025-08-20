@@ -155,25 +155,6 @@ const Demo: FC = () => {
     }
   };
 
-  const getChainById = async (data?: { id: number }) => {
-    const res = await requestController(
-      '/lon/api/v2/aiqa/mgr/liteflowChain/getLiteflowChain',
-      {
-        method: 'POST',
-        data: data ?? {},
-        headers: {
-          Authorization,
-        },
-      },
-    );
-    if (res.data?.chainDsl) {
-      // 安全的处理JSON字符串
-      return safeParse(res.data?.chainDsl);
-    } else {
-      return {};
-    }
-  };
-
   const addChain = async (data: { chainName: string; chainDesc: string }) => {
     const res = await requestController(
       '/lon/api/v2/aiqa/mgr/liteflowChain/addLiteflowChain',
@@ -238,7 +219,6 @@ const Demo: FC = () => {
       }}
       getNodeList={getNodeList}
       getChainPage={getChainPage}
-      getChainById={getChainById}
       addChain={addChain}
       updateChain={updateChain}
       deleteChain={deleteChain}
@@ -253,16 +233,15 @@ export default Demo;
 
 ## ⚙️ Props 说明
 
-| Prop           | 类型                                                                     | 必填 | 描述                       |
-| -------------- | ------------------------------------------------------------------------ | ---- | -------------------------- |
-| `style`        | `CSSProperties`                                                          | 否   | 编辑器容器的样式           |
-| `className`    | `string`                                                                 | 否   | 编辑器容器的样式           |
-| `getNodeList`  | `(data: undefined) => Promise<void>`                                     | 否   | 获取标签列表的接口         |
-| `getChainPage` | `(params: {type: ConditionTypeList \| NodeTypeList}) => Promise<void>`   | 否   | 获取链路分页数据的接口     |
-| `getChainById` | `(data?: {id: number}) => Promise<any>`                                  | 否   | 根据 ID 获取链路详情的接口 |
-| `addChain`     | `(data: {chainName: string;chainDesc: string}) => Promise<boolean>`      | 否   | 添加链路的接口             |
-| `updateChain`  | `(data: Chain \| {chainDsl: string;elData: string}) => Promise<boolean>` | 否   | 更新链路的接口             |
-| `deleteChain`  | `(data?: {ids: number[]}) => Promise<boolean>`                           | 否   | 删除链路的接口             |
+| Prop           | 类型                                                                     | 必填 | 描述                   |
+| -------------- | ------------------------------------------------------------------------ | ---- | ---------------------- |
+| `style`        | `CSSProperties`                                                          | 否   | 编辑器容器的样式       |
+| `className`    | `string`                                                                 | 否   | 编辑器容器的样式       |
+| `getNodeList`  | `(data: undefined) => Promise<void>`                                     | 否   | 获取标签列表的接口     |
+| `getChainPage` | `(params: {type: ConditionTypeList \| NodeTypeList}) => Promise<void>`   | 否   | 获取链路分页数据的接口 |
+| `addChain`     | `(data: {chainName: string;chainDesc: string}) => Promise<boolean>`      | 否   | 添加链路的接口         |
+| `updateChain`  | `(data: Chain \| {chainDsl: string;elData: string}) => Promise<boolean>` | 否   | 更新链路的接口         |
+| `deleteChain`  | `(data?: {ids: number[]}) => Promise<boolean>`                           | 否   | 删除链路的接口         |
 
 ## ⚙️ ref 说明
 
