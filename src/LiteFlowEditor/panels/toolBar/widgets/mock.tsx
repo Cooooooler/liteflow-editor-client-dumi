@@ -79,6 +79,8 @@ const Mock: React.FC<IProps> = (props) => {
               { label: '捕获异常(CATCH)', value: ConditionTypeEnum.CATCH },
               { label: '与或非(AND_OR_NOT)', value: ConditionTypeEnum.AND },
               { label: '子流程(CHAIN)', value: ConditionTypeEnum.CHAIN },
+              { label: '大量复杂节点数据', value: 'LARGE_DATA' },
+              { label: '大量Common节点数据', value: 'LARGE_DATA_2' },
             ],
           },
         ]}
